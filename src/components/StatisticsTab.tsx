@@ -5,7 +5,7 @@ import { DateRangePicker } from "rsuite";
 import { useState, useEffect } from "react";
 import "rsuite/dist/rsuite.min.css";
 
-export function StatisticsTab({ events }: { events: Event[] }) {
+function StatisticsTab({ events }: { events: Event[] }) {
   const [dateRange, setDateRange] = useState<Date[]>(() => {
     const today = new Date();
     return [today, today];
@@ -130,3 +130,5 @@ export function StatisticsTab({ events }: { events: Event[] }) {
     </div>
   );
 }
+
+export default StatisticsTab;

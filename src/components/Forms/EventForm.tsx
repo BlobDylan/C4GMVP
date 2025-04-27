@@ -12,7 +12,7 @@ interface EventFormProps {
   editEvent?: Event;
 }
 
-export function EventForm({
+function EventForm({
   isOpen,
   onClose,
   onSubmit,
@@ -184,3 +184,5 @@ export function EventForm({
     </Dialog.Root>
   );
 }
+
+export default EventForm;
