@@ -1,126 +1,138 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Typography, Button, CircularProgress } from "@mui/material";
+import {
+  TextField,
+  Typography,
+  Button,
+  CircularProgress,
+  Box,
+} from "@mui/material";
 import { useAuth } from "../../hooks";
 import { SignupData } from "../../types";
 
 function SignUpForm() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState<SignupData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const { signup, isLoading, error, user } = useAuth();
+  const [disableSubmit, setDisableSubmit] = useState(true);
 
+  const { signup, isLoading } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isLoading && user && !error) {
-      navigate("/");
-    }
-    if (error) {
-      console.error("Signup error:", error);
-    }
-  }, [isLoading, error, navigate]);
-
-  const handleSignUp = () => {
-    const signupData: SignupData = {
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      password,
-      confirmPassword,
-    };
-    signup(signupData);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await signup(formData);
+    navigate("/");
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    switch (name) {
-      case "firstName":
-        setFirstName(value);
-        break;
-      case "lastName":
-        setLastName(value);
-        break;
-      case "email":
-        setEmail(value);
-        break;
-      case "phoneNumber":
-        setPhoneNumber(value);
-        break;
-      case "password":
-        setPassword(value);
-        break;
-      case "confirmPassword":
-        setConfirmPassword(value);
-        break;
-      default:
-        break;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (
+      formData.password === "" ||
+      formData.confirmPassword === "" ||
+      formData.password != formData.confirmPassword
+    ) {
+      setDisableSubmit(true);
+    } else {
+      setDisableSubmit(false);
     }
   };
 
   return (
-    <>
-      <Typography variant="h3">Welcome to Volunteer Manager</Typography>
-      <Typography variant="h4" sx={{ marginTop: 2, marginBottom: 2 }}>
-        Create Your Account
-      </Typography>
-      <TextField
-        label="First Name"
-        variant="outlined"
-        sx={{ marginBottom: 2 }}
-        onChange={handleChange}
-        fullWidth
-      />
-      <TextField
-        label="Last Name"
-        variant="outlined"
-        sx={{ marginBottom: 2 }}
-        onChange={handleChange}
-        fullWidth
-      />
-      <TextField
-        label="Email"
-        variant="outlined"
-        sx={{ marginBottom: 2 }}
-        onChange={handleChange}
-        fullWidth
-      />
-      <TextField
-        label="Phone Number"
-        variant="outlined"
-        sx={{ marginBottom: 2 }}
-        onChange={handleChange}
-        fullWidth
-      />
-      <TextField
-        label="Password"
-        type="password"
-        variant="outlined"
-        sx={{ marginBottom: 2 }}
-        onChange={handleChange}
-        fullWidth
-      />
-      <TextField
-        label="Confirm Password"
-        type="password"
-        variant="outlined"
-        sx={{ marginBottom: 2 }}
-        onChange={handleChange}
-        fullWidth
-      />
-      <Button variant="contained" onClick={handleSignUp} fullWidth>
-        {isLoading ? (
-          <CircularProgress size={24} sx={{ color: "white" }} />
-        ) : (
-          "Sign Up"
-        )}
-      </Button>
-    </>
+    <Box sx={{ mt: "25dvh" }}>
+      <form onSubmit={handleSubmit}>
+        <Typography variant="h4" gutterBottom>
+          Create Your Account
+        </Typography>
+
+        <TextField
+          name="firstName"
+          label="First Name"
+          value={formData.firstName}
+          onChange={handleChange}
+          fullWidth
+          required
+          margin="normal"
+        />
+
+        <TextField
+          name="lastName"
+          label="Last Name"
+          value={formData.lastName}
+          onChange={handleChange}
+          fullWidth
+          required
+          margin="normal"
+        />
+
+        <TextField
+          name="email"
+          type="email"
+          label="Email"
+          value={formData.email}
+          onChange={handleChange}
+          fullWidth
+          required
+          margin="normal"
+        />
+
+        <TextField
+          name="phoneNumber"
+          label="Phone Number"
+          value={formData.phoneNumber}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+
+        <TextField
+          name="password"
+          type="password"
+          label="Password"
+          value={formData.password}
+          onChange={handleChange}
+          fullWidth
+          required
+          margin="normal"
+        />
+
+        <TextField
+          name="confirmPassword"
+          type="password"
+          label="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          fullWidth
+          required
+          margin="normal"
+        />
+
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          disabled={isLoading || disableSubmit}
+          sx={{ mt: 2 }}
+        >
+          {isLoading ? <CircularProgress size={24} /> : "Sign Up"}
+        </Button>
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={() => navigate("/login")}
+          sx={{ mt: 2 }}
+        >
+          Already have an account? Log in
+        </Button>
+      </form>
+    </Box>
   );
 }
 

@@ -46,7 +46,7 @@ function Navbar() {
             </IconButton>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {user ? (
-                <Typography>{"Welcome, " + user.name}</Typography>
+                <Typography>{"Welcome, " + user.firstName}</Typography>
               ) : (
                 <IconButton
                   onClick={() => {

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
-import { LoginForm } from "../components";
+import { SignUpForm } from "../components";
 
-function Login() {
+function SignUpPage() {
   return (
     <Box
       sx={{
@@ -9,7 +9,7 @@ function Login() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        height: "90dvh",
+        height: "60dvh",
         width: "100dvw",
       }}
     >
@@ -19,14 +19,13 @@ function Login() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          height: "100vh",
-          width: "50vw",
+          width: "40dvw",
         }}
       >
-        <LoginForm />
+        <SignUpForm />
       </Box>
     </Box>
   );
 }
 
-export default Login;
+export default SignUpPage;

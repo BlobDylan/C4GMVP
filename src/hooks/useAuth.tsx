@@ -1,53 +1,88 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { User, SignupData } from "../types";
 
 interface AuthContextType {
   user: User | null;
   registeredEventIds: string[];
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   signup: (data: SignupData) => Promise<void>;
-  registerForEvent: (eventId: string) => Promise<void>;
   isLoading: boolean;
   error: string | null;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-const mockUsers: User[] = [
-  { id: "1", email: "test@test.com", name: "Test User" },
-];
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [registeredEventIds, setRegisteredEventIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [registrations, setRegistrations] = useState<
-    { userId: string; eventId: string }[]
-  >([]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        try {
+          setIsLoading(true);
+          const response = await fetch("http://localhost:5000/me", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const userData = await response.json();
+            setUser({
+              id: userData.id,
+              email: userData.email,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+            });
+          }
+        } catch (err) {
+          localStorage.removeItem("access_token");
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+    checkAuth();
+  }, []);
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Mock validation
-      const foundUser = mockUsers.find((u) => u.email === email);
-      if (!foundUser || password !== "password") {
+      if (!response.ok) {
         throw new Error("Invalid credentials");
       }
 
-      setUser(foundUser);
-      // Load user's registrations
-      const userRegistrations = registrations.filter(
-        (r) => r.userId === foundUser.id
-      );
-      setRegisteredEventIds(userRegistrations.map((r) => r.eventId));
+      const data = await response.json();
+
+      localStorage.setItem("access_token", data.access_token);
+
+      setUser({
+        id: data.user.id,
+        email: data.user.email,
+        firstName: data.user.firstName,
+        lastName: data.user.lastName,
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -55,49 +90,52 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signup = async (data: SignupData) => {
     setIsLoading(true);
+    console.log(data);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch("http://localhost:5000/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          password: data.password,
+        }),
+      });
 
-      if (mockUsers.some((u) => u.email === data.email)) {
-        throw new Error("Email already exists");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Signup failed");
       }
 
-      const newUser: User = {
-        id: String(mockUsers.length + 1),
-        email: data.email,
-        name: data.firstName,
-      };
-
-      mockUsers.push(newUser);
+      // Optional: Automatically login after signup
+      await login(data.email, data.password);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Signup failed");
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const registerForEvent = async (eventId: string) => {
-    if (!user) throw new Error("Not authenticated");
-    setIsLoading(true);
+  const logout = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      if (registeredEventIds.includes(eventId)) {
-        throw new Error("Already registered for this event");
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        await fetch("http://localhost:5000/logout", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
       }
-
-      setRegistrations((prev) => [...prev, { userId: user.id, eventId }]);
-      setRegisteredEventIds((prev) => [...prev, eventId]);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
-      setIsLoading(false);
+      localStorage.removeItem("access_token");
+      setUser(null);
+      setRegisteredEventIds([]);
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    setRegisteredEventIds([]);
   };
 
   return (
@@ -108,7 +146,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         login,
         logout,
         signup,
-        registerForEvent,
         isLoading,
         error,
       }}

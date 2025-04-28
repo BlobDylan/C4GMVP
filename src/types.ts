@@ -5,8 +5,9 @@ export enum EventStatus {
 
 export interface User {
   id: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  name: string;
 }
 
 export interface SignupData {
