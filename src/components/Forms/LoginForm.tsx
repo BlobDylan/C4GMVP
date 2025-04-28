@@ -1,73 +1,95 @@
-import { useState, useEffect } from "react";
-import { TextField, Typography, Button, CircularProgress } from "@mui/material";
-import { useAuth } from "../../hooks";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+  FormHelperText,
+} from "@mui/material";
+import { useAuth } from "../../hooks";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { login, isLoading, user, error } = useAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { login, isLoading, error } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isLoading && user && !error) {
-      navigate("/");
-    }
-    if (error) {
-      console.error("Login error:", error);
-    }
-  }, [isLoading, user, error, navigate]);
-
-  const handleLogin = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      await login(email, password);
+      await login(formData.email, formData.password);
+      navigate("/");
     } catch (err) {
-      console.error("Login error:", err);
+      // Error handling is already done in useAuth
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name === "email") {
-      setEmail(value);
-    } else if (name === "password") {
-      setPassword(value);
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   return (
-    <>
-      <Typography variant="h3">Welcome to Volunteer Manager</Typography>
-      <Typography variant="h4" sx={{ marginTop: 2, marginBottom: 2 }}>
+    <Box component="form" onSubmit={handleSubmit}>
+      <Typography variant="h4" component="h1" gutterBottom align="center">
+        Welcome to Volunteer Manager
+      </Typography>
+
+      <Typography variant="h5" gutterBottom align="center" sx={{ mb: 4 }}>
         Login to Your Account
       </Typography>
+
       <TextField
-        name="email"
+        fullWidth
+        type="email"
         label="Email"
-        variant="outlined"
-        value={email}
+        name="email"
+        value={formData.email}
         onChange={handleChange}
-        sx={{ marginBottom: 2 }}
-        fullWidth
+        margin="normal"
+        required
       />
+
       <TextField
-        name="password"
-        label="Password"
-        type="password"
-        variant="outlined"
-        value={password}
-        onChange={handleChange}
-        sx={{ marginBottom: 2 }}
         fullWidth
+        type="password"
+        label="Password"
+        name="password"
+        value={formData.password}
+        onChange={handleChange}
+        margin="normal"
+        required
       />
-      <Button variant="contained" onClick={handleLogin} fullWidth>
-        {isLoading ? (
-          <CircularProgress size={24} sx={{ color: "white" }} />
-        ) : (
-          "Login"
-        )}
+
+      {error && (
+        <FormHelperText error sx={{ mb: 2 }}>
+          {error}
+        </FormHelperText>
+      )}
+
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        size="large"
+        disabled={isLoading}
+        sx={{ mt: 2 }}
+      >
+        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Login"}
       </Button>
-    </>
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={() => navigate("/signup")}
+        sx={{ mt: 2 }}
+      >
+        Create an Account
+      </Button>
+    </Box>
   );
 }
 

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import theme from "./themes/Theme";
 import { Navbar } from "./components";
-import { LoginPage, EventBoardPage, AdminPage } from "./pages";
+import { LoginPage, SignUpPage, EventBoardPage, AdminPage } from "./pages";
 
 const MainLayout = () => {
   return (
@@ -13,6 +13,7 @@ const MainLayout = () => {
       <Routes>
         <Route path="/" element={<EventBoardPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </>
