@@ -1,6 +1,6 @@
 export enum EventStatus {
-  PENDING = "Pending",
-  APPROVED = "Approved",
+  PENDING = "pending",
+  APPROVED = "approved",
 }
 
 export interface User {
@@ -26,6 +26,15 @@ export interface Event {
   date: Date;
   location: string;
   status: EventStatus;
+  spotsAvailable: number;
+  assignedPeople?: string;
+}
+
+export interface CreateEventRequest {
+  title: string;
+  description: string;
+  date: Date;
+  location: string;
   spotsAvailable: number;
 }
 

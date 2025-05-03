@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PreviewIcon from "@mui/icons-material/Preview";
+import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 
-import { EventDialog } from "../";
+import { EventDialog, NewEventForm, AreYouSure } from "../";
 import { useEvents } from "../../hooks";
 import { Event } from "../../types";
 
@@ -24,17 +25,21 @@ export interface EventDialogProps {
   onClose: () => void;
 }
 
+export type DialogType = "none" | "view" | "new" | "delete";
+
 function UpcomingEvents() {
-  const [openDialog, setOpenDialog] = useState(false);
+  const [activeDialog, setActiveDialog] = useState<DialogType>("none");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
-  const handleEventClick = (event: Event) => {
-    setSelectedEvent(event);
-    setOpenDialog(true);
+  const handleOpenDialog = (type: DialogType, event?: Event) => {
+    setActiveDialog(type);
+    if (event) {
+      setSelectedEvent(event);
+    }
   };
   const handleClose = () => {
+    setActiveDialog("none");
     setSelectedEvent(null);
-    setOpenDialog(false);
   };
 
   const { events, isLoading, error } = useEvents();
@@ -59,9 +64,26 @@ function UpcomingEvents() {
             borderRadius: 2,
           }}
         >
-          <Typography variant="h3" sx={{ marginBottom: 2 }}>
-            Upcoming Events
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Typography variant="h3" sx={{ marginBottom: 2 }}>
+              Upcoming Events
+            </Typography>
+            <IconButton
+              aria-label="add"
+              size="large"
+              onClick={() => handleOpenDialog("new")}
+              sx={{ marginBottom: 2 }}
+            >
+              <AddIcon fontSize="inherit" />
+            </IconButton>
+          </Box>
           <TableContainer sx={{ maxHeight: 400, width: "100%" }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -93,11 +115,15 @@ function UpcomingEvents() {
                       <IconButton
                         aria-label="view"
                         size="small"
-                        onClick={() => handleEventClick(event)}
+                        onClick={() => handleOpenDialog("view", event)}
                       >
                         <PreviewIcon fontSize="inherit" />
                       </IconButton>
-                      <IconButton aria-label="delete" size="small">
+                      <IconButton
+                        aria-label="delete"
+                        size="small"
+                        onClick={() => handleOpenDialog("delete", event)}
+                      >
                         <DeleteIcon fontSize="inherit" />
                       </IconButton>
                     </TableCell>
@@ -108,8 +134,14 @@ function UpcomingEvents() {
           </TableContainer>
         </Box>
       </Box>
-      <Dialog open={openDialog} onClose={handleClose}>
+      <Dialog open={activeDialog === "view"} onClose={handleClose} fullWidth>
         <EventDialog event={selectedEvent} onClose={handleClose} />
+      </Dialog>
+      <Dialog open={activeDialog === "new"} onClose={handleClose} fullWidth>
+        <NewEventForm onClose={handleClose} />
+      </Dialog>
+      <Dialog open={activeDialog === "delete"} onClose={handleClose} fullWidth>
+        <AreYouSure event={selectedEvent} onClose={handleClose} />
       </Dialog>
     </>
   );

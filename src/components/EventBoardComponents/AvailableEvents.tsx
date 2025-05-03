@@ -3,7 +3,7 @@ import { EventBoardCard } from "../../components";
 import { useEvents } from "../../hooks";
 
 function AvailableEvents() {
-  const { events } = useEvents();
+  const { events, myEvents } = useEvents();
 
   return (
     <Box
@@ -32,11 +32,15 @@ function AvailableEvents() {
             justifyContent: "center",
           }}
         >
-          {events.map((event) => (
-            <Grid key={event.id} sx={{ xs: 12, sm: 6 }}>
-              <EventBoardCard {...event} />
-            </Grid>
-          ))}
+          {events
+            .filter(
+              (event) => !myEvents.some((myEvent) => myEvent.id === event.id)
+            )
+            .map((event) => (
+              <Grid key={event.id} sx={{ xs: 12, sm: 6 }}>
+                <EventBoardCard {...event} />
+              </Grid>
+            ))}
         </Grid>
       </Box>
     </Box>

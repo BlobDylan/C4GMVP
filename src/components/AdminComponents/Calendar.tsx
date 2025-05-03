@@ -102,9 +102,9 @@ function Calendar() {
             </Paper>
           ))}
           {days.map((day) => {
-            const dayEvents = events.filter((event) =>
-              isSameDay(new Date(event.date), day)
-            );
+            const dayEvents = events.filter((event) => {
+              return isSameDay(event.date, day);
+            });
 
             return (
               <Paper

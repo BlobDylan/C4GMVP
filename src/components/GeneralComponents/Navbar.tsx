@@ -5,11 +5,12 @@ import { useAuth } from "../../hooks";
 import HomeIcon from "@mui/icons-material/Home";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 function Navbar() {
   const navigate = useNavigate();
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <>
@@ -46,7 +47,17 @@ function Navbar() {
             </IconButton>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {user ? (
-                <Typography>{"Welcome, " + user.firstName}</Typography>
+                <>
+                  <Typography>{"Welcome, " + user.firstName}</Typography>
+                  <IconButton
+                    onClick={() => {
+                      logout();
+                      navigate("/login");
+                    }}
+                  >
+                    <LogoutIcon />
+                  </IconButton>
+                </>
               ) : (
                 <IconButton
                   onClick={() => {

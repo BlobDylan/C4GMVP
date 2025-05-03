@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { MyEventCardType, EventStatus } from "../../types";
+import { EventStatus, Event } from "../../types";
 
-function MyEventsCard(event: MyEventCardType) {
+function MyEventsCard(event: Event) {
   const { id, title, description, date, location, status } = event;
 
   return (

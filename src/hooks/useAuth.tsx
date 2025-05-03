@@ -9,7 +9,6 @@ import { User, SignupData } from "../types";
 
 interface AuthContextType {
   user: User | null;
-  registeredEventIds: string[];
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   signup: (data: SignupData) => Promise<void>;
@@ -21,7 +20,6 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [registeredEventIds, setRegisteredEventIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -134,7 +132,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       localStorage.removeItem("access_token");
       setUser(null);
-      setRegisteredEventIds([]);
     }
   };
 
@@ -142,7 +139,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
-        registeredEventIds,
         login,
         logout,
         signup,
