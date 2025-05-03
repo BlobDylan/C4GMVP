@@ -1,5 +1,6 @@
 import { Event, EventStatus } from "../../types";
 import { Box, Typography, Button } from "@mui/material";
+import { useEvents } from "../../hooks";
 
 interface EventDialogProps {
   event: Event | null;
@@ -8,6 +9,17 @@ interface EventDialogProps {
 
 function EventDialog({ event, onClose }: EventDialogProps) {
   if (!event) return null;
+
+  const { approveEvent, unapproveEvent } = useEvents();
+
+  const handleClick = async () => {
+    if (event.status === EventStatus.APPROVED) {
+      await unapproveEvent(event.id);
+    } else {
+      await approveEvent(event.id);
+    }
+    onClose();
+  };
 
   return (
     <Box sx={{ p: 3 }}>
@@ -39,6 +51,7 @@ function EventDialog({ event, onClose }: EventDialogProps) {
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Button
           variant="contained"
+          onClick={handleClick}
           sx={{
             backgroundColor:
               event.status === EventStatus.APPROVED

@@ -1,6 +1,7 @@
 import { Box, Typography, Stack } from "@mui/material";
 import { MyEventCardType, EventStatus } from "../../types";
 import { MyEventsCard } from "../../components";
+import { useEvents } from "../../hooks/useEvents";
 
 const myEventsSeed: MyEventCardType[] = [
   {
@@ -24,6 +25,8 @@ const myEventsSeed: MyEventCardType[] = [
 ];
 
 function MyEvents() {
+  const { myEvents } = useEvents();
+
   return (
     <Box
       sx={{
@@ -52,16 +55,8 @@ function MyEvents() {
             width: "100%",
           }}
         >
-          {myEventsSeed.map((event) => (
-            <MyEventsCard
-              key={event.id}
-              id={event.id}
-              title={event.title}
-              description={event.description}
-              date={event.date}
-              location={event.location}
-              status={event.status}
-            />
+          {myEvents.map((event) => (
+            <MyEventsCard key={event.id} {...event} />
           ))}
         </Stack>
       </Box>

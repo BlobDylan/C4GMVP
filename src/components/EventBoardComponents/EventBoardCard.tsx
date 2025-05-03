@@ -1,8 +1,10 @@
 import { Box, Typography, Button } from "@mui/material";
 import { EventCardType } from "../../types";
+import { useEvents } from "../../hooks";
 
 function EventBoardCard(event: EventCardType) {
-  const { title, description, date, location, spotsAvailable } = event;
+  const { registerToEvent } = useEvents();
+  const { id, title, description, date, location, spotsAvailable } = event;
 
   return (
     <Box
@@ -39,7 +41,9 @@ function EventBoardCard(event: EventCardType) {
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
         Spots Available: {spotsAvailable}
       </Typography>
-      <Button variant="contained">Register</Button>
+      <Button variant="contained" onClick={() => registerToEvent(id)}>
+        Register
+      </Button>
     </Box>
   );
 }
