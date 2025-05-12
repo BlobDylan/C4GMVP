@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -21,29 +21,52 @@ function SignUpForm() {
   });
 
   const [disableSubmit, setDisableSubmit] = useState(true);
+  const [passwordError, setPasswordError] = useState("");
 
   const { signup, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setPasswordError("Passwords do not match.");
+      return;
+    }
     await signup(formData);
     navigate("/");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (
-      formData.password === "" ||
-      formData.confirmPassword === "" ||
-      formData.password != formData.confirmPassword
-    ) {
-      setDisableSubmit(true);
-    } else {
-      setDisableSubmit(false);
+    const updatedFormData = { ...formData, [name]: value };
+    setFormData(updatedFormData);
+
+    if (name === "password" || name === "confirmPassword") {
+      setPasswordError("");
     }
   };
+
+  useEffect(() => {
+    if (
+      formData.password &&
+      formData.confirmPassword &&
+      formData.password === formData.confirmPassword
+    ) {
+      setDisableSubmit(false);
+      setPasswordError("");
+    } else {
+      setDisableSubmit(true);
+      if (
+        formData.password &&
+        formData.confirmPassword &&
+        formData.password !== formData.confirmPassword
+      ) {
+        setPasswordError("Passwords do not match.");
+      } else {
+        setPasswordError("");
+      }
+    }
+  }, [formData.password, formData.confirmPassword, formData]);
 
   return (
     <Box sx={{ mt: "25dvh" }}>
@@ -101,6 +124,7 @@ function SignUpForm() {
           fullWidth
           required
           margin="normal"
+          error={!!passwordError && formData.password !== ""}
         />
 
         <TextField
@@ -112,6 +136,8 @@ function SignUpForm() {
           fullWidth
           required
           margin="normal"
+          error={!!passwordError}
+          helperText={passwordError}
         />
 
         <Button
