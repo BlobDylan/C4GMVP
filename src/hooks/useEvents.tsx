@@ -6,7 +6,7 @@ import {
   ReactNode,
   useCallback,
 } from "react";
-import { Event, CreateEventRequest } from "../types";
+import { Event, CreateEventRequest } from "../types"; // Assuming CreateEventRequest is similar to Omit<Event, "id">
 import { useAuth } from "../hooks";
 
 interface EventsContextType {
@@ -21,6 +21,8 @@ interface EventsContextType {
   unapproveEvent: (eventId: string) => Promise<void>;
   registerToEvent: (eventId: string) => Promise<void>;
   unregisterFromEvent: (eventId: string) => Promise<void>;
+  refetchEvents: () => Promise<void>;
+  refetchMyEvents: () => Promise<void>;
 }
 
 const EventsContext = createContext<EventsContextType>({
@@ -35,10 +37,12 @@ const EventsContext = createContext<EventsContextType>({
   unapproveEvent: async () => {},
   registerToEvent: async () => {},
   unregisterFromEvent: async () => {},
+  refetchEvents: async () => {},
+  refetchMyEvents: async () => {},
 });
 
 export const EventsProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { user, isLoading: authIsLoading } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [myEvents, setMyEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,8 +52,10 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     try {
       const response = await fetch("http://localhost:5000/events");
-      if (!response.ok) throw new Error("Failed to fetch events");
-
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to fetch events");
+      }
       const data = await response.json();
       setEvents(
         data.events.map((event: any) => ({
@@ -67,17 +73,27 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const fetchMyEvents = useCallback(async () => {
+    console.log("Fetching my events...");
+    if (!user) {
+      setMyEvents([]);
+      return;
+    }
     setIsLoading(true);
     try {
       const token = localStorage.getItem("access_token");
-      if (!token) throw new Error("No token found");
+      if (!token) {
+        throw new Error("No token found for fetching user-specific events.");
+      }
       const response = await fetch("http://localhost:5000/me/events", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!response.ok) throw new Error("Failed to fetch my events");
-
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Failed to fetch my events:", response.status, errorData);
+        throw new Error(errorData.message || "Failed to fetch my events");
+      }
       const data = await response.json();
       setMyEvents(
         data.events.map((event: any) => ({
@@ -96,17 +112,24 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchEvents();
-    fetchMyEvents();
-  }, [user, fetchEvents, fetchMyEvents]);
+  }, [fetchEvents]);
+
+  useEffect(() => {
+    if (!authIsLoading) {
+      if (user) {
+        fetchMyEvents();
+      } else {
+        setMyEvents([]);
+      }
+    } else {
+    }
+  }, [user, authIsLoading, fetchMyEvents]);
 
   const createEvent = useCallback(
     async (eventData: CreateEventRequest) => {
-      console.log("Creating event: ", {
-        ...eventData,
-        date: eventData.date.toISOString(),
-      });
       try {
         const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
         const response = await fetch("http://localhost:5000/admin/new", {
           method: "POST",
           headers: {
@@ -119,19 +142,31 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           }),
         });
 
-        if (!response.ok) throw new Error("Failed to create event");
-        await Promise.all([fetchEvents(), fetchMyEvents()]);
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to create event" }));
+          throw new Error(errorBody.message);
+        }
+
+        await Promise.all([
+          fetchEvents(),
+          user ? fetchMyEvents() : Promise.resolve(),
+        ]);
       } catch (err) {
         throw err instanceof Error ? err : new Error("Failed to create event");
+      } finally {
+        setIsLoading(false);
       }
     },
-    [fetchEvents, fetchMyEvents]
+    [fetchEvents, fetchMyEvents, user]
   );
 
   const updateEvent = useCallback(
     async (eventId: string, eventData: Partial<Event>) => {
       try {
         const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
           `http://localhost:5000/admin/edit/${eventId}`,
           {
@@ -147,61 +182,21 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           }
         );
 
-        if (!response.ok) throw new Error("Failed to update event");
-        await fetchEvents();
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to update event" }));
+          throw new Error(errorBody.message);
+        }
+        await Promise.all([
+          fetchEvents(),
+          user ? fetchMyEvents() : Promise.resolve(),
+        ]);
       } catch (err) {
         throw err instanceof Error ? err : new Error("Failed to update event");
       }
     },
-    [fetchEvents]
-  );
-
-  const approveEvent = useCallback(
-    async (eventId: string) => {
-      try {
-        const token = localStorage.getItem("access_token");
-        const response = await fetch(
-          `http://localhost:5000/admin/approve/${eventId}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) throw new Error("Failed to approve event");
-        await fetchEvents();
-      } catch (err) {
-        throw err instanceof Error ? err : new Error("Failed to approve event");
-      }
-    },
-    [fetchEvents]
-  );
-
-  const unapproveEvent = useCallback(
-    async (eventId: string) => {
-      try {
-        const token = localStorage.getItem("access_token");
-        const response = await fetch(
-          `http://localhost:5000/admin/unapprove/${eventId}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) throw new Error("Failed to unapprove event");
-        await fetchEvents();
-      } catch (err) {
-        throw err instanceof Error
-          ? err
-          : new Error("Failed to unapprove event");
-      }
-    },
-    [fetchEvents]
+    [fetchEvents, fetchMyEvents, user]
   );
 
   const deleteEvent = useCallback(
@@ -209,6 +204,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       try {
         const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
           `http://localhost:5000/admin/delete/${eventId}`,
           {
@@ -218,33 +214,103 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             },
           }
         );
-
-        if (!response.ok) throw new Error("Failed to delete event");
-        await fetchEvents();
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to delete event" }));
+          throw new Error(errorBody.message);
+        }
+        await Promise.all([
+          fetchEvents(),
+          user ? fetchMyEvents() : Promise.resolve(),
+        ]);
       } catch (err) {
         throw err instanceof Error ? err : new Error("Failed to delete event");
       } finally {
         setIsLoading(false);
       }
     },
-    [fetchEvents]
+    [fetchEvents, fetchMyEvents, user]
+  );
+
+  const approveEvent = useCallback(
+    async (eventId: string) => {
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
+        const response = await fetch(
+          `http://localhost:5000/admin/approve/${eventId}`,
+          {
+            method: "PUT",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to approve event" }));
+          throw new Error(errorBody.message);
+        }
+        await Promise.all([
+          fetchEvents(),
+          user ? fetchMyEvents() : Promise.resolve(),
+        ]);
+      } catch (err) {
+        throw err instanceof Error ? err : new Error("Failed to approve event");
+      }
+    },
+    [fetchEvents, fetchMyEvents, user]
+  );
+
+  const unapproveEvent = useCallback(
+    async (eventId: string) => {
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
+        const response = await fetch(
+          `http://localhost:5000/admin/unapprove/${eventId}`,
+          {
+            method: "PUT",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to unapprove event" }));
+          throw new Error(errorBody.message);
+        }
+        await Promise.all([
+          fetchEvents(),
+          user ? fetchMyEvents() : Promise.resolve(),
+        ]);
+      } catch (err) {
+        throw err instanceof Error
+          ? err
+          : new Error("Failed to unapprove event");
+      }
+    },
+    [fetchEvents, fetchMyEvents, user]
   );
 
   const registerToEvent = useCallback(
     async (eventId: string) => {
       try {
         const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
           `http://localhost:5000/events/${eventId}/register`,
           {
             method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-
-        if (!response.ok) throw new Error("Failed to register to event");
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to register to event" }));
+          throw new Error(errorBody.message);
+        }
         await Promise.all([fetchEvents(), fetchMyEvents()]);
       } catch (err) {
         throw err instanceof Error
@@ -252,24 +318,27 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           : new Error("Failed to register to event");
       }
     },
-    [fetchMyEvents, fetchEvents]
+    [fetchEvents, fetchMyEvents]
   );
 
   const unregisterFromEvent = useCallback(
     async (eventId: string) => {
       try {
         const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
           `http://localhost:5000/events/${eventId}/unregister`,
           {
             method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-
-        if (!response.ok) throw new Error("Failed to unregister from event");
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to unregister from event" }));
+          throw new Error(errorBody.message);
+        }
         await Promise.all([fetchEvents(), fetchMyEvents()]);
       } catch (err) {
         throw err instanceof Error
@@ -277,7 +346,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           : new Error("Failed to unregister from event");
       }
     },
-    [fetchMyEvents, fetchEvents]
+    [fetchEvents, fetchMyEvents]
   );
 
   return (
@@ -294,6 +363,8 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         unapproveEvent,
         registerToEvent,
         unregisterFromEvent,
+        refetchEvents: fetchEvents,
+        refetchMyEvents: fetchMyEvents,
       }}
     >
       {children}
