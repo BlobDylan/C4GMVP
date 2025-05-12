@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@mui/material/styles";
 import { AppProvider } from "./hooks";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@mui/material";
 import theme from "./themes/Theme";
 import { Navbar } from "./components";
@@ -23,12 +24,14 @@ const MainLayout = () => {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <AppProvider>
-        <Router>
-          <CssBaseline />
-          <MainLayout />
-        </Router>
-      </AppProvider>
+      <SnackbarProvider maxSnack={3}>
+        <AppProvider>
+          <Router>
+            <CssBaseline />
+            <MainLayout />
+          </Router>
+        </AppProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

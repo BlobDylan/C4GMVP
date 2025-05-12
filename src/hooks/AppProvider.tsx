@@ -3,8 +3,8 @@ import { EventsProvider, AuthProvider } from "./";
 
 export default function AppProvider({ children }: { children: ReactNode }) {
   return (
-    <EventsProvider>
-      <AuthProvider>{children}</AuthProvider>
-    </EventsProvider>
+    <AuthProvider>
+      <EventsProvider>{children}</EventsProvider>
+    </AuthProvider>
   );
 }
