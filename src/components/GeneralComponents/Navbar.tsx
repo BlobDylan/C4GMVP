@@ -31,13 +31,15 @@ function Navbar() {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Stack direction={"row"} spacing={2}>
-            <IconButton
-              onClick={() => {
-                navigate("/Admin");
-              }}
-            >
-              <AdminPanelSettingsIcon />
-            </IconButton>
+            {user && user.permissions === "admin" && (
+              <IconButton
+                onClick={() => {
+                  navigate("/admin");
+                }}
+              >
+                <AdminPanelSettingsIcon />
+              </IconButton>
+            )}
             <IconButton
               onClick={() => {
                 navigate("/");
