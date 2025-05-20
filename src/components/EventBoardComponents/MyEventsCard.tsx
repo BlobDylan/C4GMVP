@@ -1,8 +1,13 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { EventStatus, Event } from "../../types";
+import { useEvents } from "../../hooks/useEvents";
 
 function MyEventsCard(event: Event) {
   const { id, title, description, date, location, status } = event;
+  const { unregisterFromEvent} = useEvents();
+  const handleUnregisterButton = () => {
+    unregisterFromEvent(id);
+  };
 
   return (
     <Box
@@ -21,6 +26,8 @@ function MyEventsCard(event: Event) {
         boxSizing: "border-box",
       }}
     >
+    
+      
       <Typography variant="h4" sx={{ marginBottom: 2 }}>
         {title}
       </Typography>
@@ -53,7 +60,11 @@ function MyEventsCard(event: Event) {
       >
         {status === EventStatus.APPROVED ? "Approved" : "Pending"}
       </Typography>
+        <Button variant="outlined"
+      onClick={handleUnregisterButton}
+      >Withdraw</Button>
     </Box>
+    
   );
 }
 
