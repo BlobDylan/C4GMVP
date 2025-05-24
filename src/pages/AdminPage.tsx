@@ -4,14 +4,13 @@ import { useEvents } from "../hooks";
 import { useSnackbar } from "notistack";
 
 function AdminPage() {
-  const { isLoading, error } = useEvents();
+  const { error } = useEvents();
   const { enqueueSnackbar } = useSnackbar();
 
   if (error) {
     enqueueSnackbar(error, { variant: "error" });
   }
 
-  if (isLoading) return <div>Loading...</div>;
   return (
     <Box
       sx={{
@@ -19,8 +18,8 @@ function AdminPage() {
         padding: 2,
       }}
     >
-      <Calendar />
       <UpcomingEvents />
+      <Calendar />
     </Box>
   );
 }

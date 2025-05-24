@@ -1,9 +1,9 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { EventCardType } from "../../types";
 import { useEvents } from "../../hooks";
 
 function EventBoardCard(event: EventCardType) {
-  const { registerToEvent } = useEvents();
+  const { registerToEvent, isLoadingRegisterID } = useEvents();
   const { id, title, description, date, location, spotsAvailable } = event;
 
   return (
@@ -41,8 +41,16 @@ function EventBoardCard(event: EventCardType) {
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
         Spots Available: {spotsAvailable}
       </Typography>
-      <Button variant="contained" onClick={() => registerToEvent(id)}>
-        Register
+      <Button
+        variant="contained"
+        disabled={isLoadingRegisterID === id}
+        onClick={() => registerToEvent(id)}
+      >
+        {isLoadingRegisterID === id ? (
+          <CircularProgress size={24} sx={{ color: "white" }} />
+        ) : (
+          "Register"
+        )}
       </Button>
     </Box>
   );

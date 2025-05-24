@@ -1,9 +1,10 @@
-import { Box, Grid, Typography } from "@mui/material";
-import { EventBoardCard } from "../../components";
+import { Box, Grid, Typography, Skeleton } from "@mui/material";
+import { EventBoardCard, EventBoardCardSkeleton } from "../../components";
 import { useEvents } from "../../hooks";
 
 function AvailableEvents() {
-  const { events, myEvents } = useEvents();
+  const { events, myEvents, isLoading } = useEvents();
+  const numCardsToLoad = 4;
 
   return (
     <Box
@@ -32,15 +33,22 @@ function AvailableEvents() {
             justifyContent: "center",
           }}
         >
-          {events
-            .filter(
-              (event) => !myEvents.some((myEvent) => myEvent.id === event.id)
-            )
-            .map((event) => (
-              <Grid key={event.id} sx={{ xs: 12, sm: 6 }}>
-                <EventBoardCard {...event} />
-              </Grid>
-            ))}
+          {isLoading
+            ? Array.from({ length: numCardsToLoad }, (_, index) => (
+                <Grid key={index} sx={{ xs: 12, sm: 6 }}>
+                  <EventBoardCardSkeleton />
+                </Grid>
+              ))
+            : events
+                .filter(
+                  (event) =>
+                    !myEvents.some((myEvent) => myEvent.id === event.id)
+                )
+                .map((event) => (
+                  <Grid key={event.id} sx={{ xs: 12, sm: 6 }}>
+                    <EventBoardCard {...event} />
+                  </Grid>
+                ))}
         </Grid>
       </Box>
     </Box>

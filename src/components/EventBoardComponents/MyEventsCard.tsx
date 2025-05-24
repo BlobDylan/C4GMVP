@@ -1,10 +1,10 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { EventStatus, Event } from "../../types";
 import { useEvents } from "../../hooks/useEvents";
 
 function MyEventsCard(event: Event) {
   const { id, title, description, date, location, status } = event;
-  const { unregisterFromEvent} = useEvents();
+  const { unregisterFromEvent, isLoadingUnregisterID } = useEvents();
   const handleUnregisterButton = () => {
     unregisterFromEvent(id);
   };
@@ -26,8 +26,6 @@ function MyEventsCard(event: Event) {
         boxSizing: "border-box",
       }}
     >
-    
-      
       <Typography variant="h4" sx={{ marginBottom: 2 }}>
         {title}
       </Typography>
@@ -49,22 +47,22 @@ function MyEventsCard(event: Event) {
         variant="body2"
         sx={{
           marginBottom: 2,
-          backgroundColor:
-            status === EventStatus.APPROVED
-              ? "custom.approved"
-              : "custom.pending",
-          color: "black",
-          padding: 1,
-          borderRadius: 1,
         }}
       >
         {status === EventStatus.APPROVED ? "Approved" : "Pending"}
       </Typography>
-        <Button variant="outlined"
-      onClick={handleUnregisterButton}
-      >Withdraw</Button>
+      <Button
+        variant="contained"
+        disabled={isLoadingUnregisterID === id}
+        onClick={handleUnregisterButton}
+      >
+        {isLoadingUnregisterID === id ? (
+          <CircularProgress size={24} sx={{ color: "white" }} />
+        ) : (
+          "Unregister"
+        )}
+      </Button>
     </Box>
-    
   );
 }
 
