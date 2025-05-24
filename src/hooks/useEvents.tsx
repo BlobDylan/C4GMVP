@@ -9,12 +9,14 @@ import {
 import { Event, CreateEventRequest } from "../types"; // Assuming CreateEventRequest is similar to Omit<Event, "id">
 import { useAuth } from "../hooks";
 import { set } from "date-fns";
+import { fi } from "date-fns/locale";
 
 interface EventsContextType {
   events: Event[];
   myEvents: Event[];
   isLoading: boolean;
-  isLoadingRegister: boolean;
+  isLoadingRegisterID: String | null;
+  isLoadingUnregisterID: String | null;
   error: string | null;
   createEvent: (eventData: Omit<Event, "id">) => Promise<void>;
   updateEvent: (eventId: string, eventData: Partial<Event>) => Promise<void>;
@@ -31,7 +33,8 @@ const EventsContext = createContext<EventsContextType>({
   events: [],
   myEvents: [],
   isLoading: true,
-  isLoadingRegister: false,
+  isLoadingRegisterID: null,
+  isLoadingUnregisterID: null,
   error: null,
   createEvent: async () => {},
   updateEvent: async () => {},
@@ -49,7 +52,11 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [myEvents, setMyEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingRegister, setIsLoadingRegister] = useState(false);
+  const [isLoadingRegisterID, setIsLoadingRegisterID] = useState<String | null>(
+    null
+  );
+  const [isLoadingUnregisterID, setIsLoadingUnregisterID] =
+    useState<String | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const fetchEvents = useCallback(async () => {
@@ -299,7 +306,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
 
   const registerToEvent = useCallback(
     async (eventId: string) => {
-      setIsLoadingRegister(true);
+      setIsLoadingRegisterID(eventId);
       try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
@@ -322,7 +329,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           ? err
           : new Error("Failed to register to event");
       } finally {
-        setIsLoadingRegister(false);
+        setIsLoadingRegisterID(null);
       }
     },
     [fetchMyEvents]
@@ -330,6 +337,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
 
   const unregisterFromEvent = useCallback(
     async (eventId: string) => {
+      setIsLoadingUnregisterID(eventId);
       try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
@@ -351,6 +359,8 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         throw err instanceof Error
           ? err
           : new Error("Failed to unregister from event");
+      } finally {
+        setIsLoadingUnregisterID(null);
       }
     },
     [fetchEvents, fetchMyEvents]
@@ -362,7 +372,8 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         events,
         myEvents,
         isLoading,
-        isLoadingRegister,
+        isLoadingRegisterID,
+        isLoadingUnregisterID,
         error,
         createEvent,
         updateEvent,
