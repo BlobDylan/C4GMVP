@@ -14,8 +14,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PreviewIcon from "@mui/icons-material/Preview";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
+import { useSnackbar } from "notistack";
 
-import { EventDialog, NewEventForm, AreYouSure } from "../";
+import {
+  EventDialog,
+  NewEventForm,
+  AreYouSure,
+  UpcomingEventRowSkeleton,
+} from "../";
 import { useEvents } from "../../hooks";
 import { Event } from "../../types";
 
@@ -28,6 +34,7 @@ export interface EventDialogProps {
 export type DialogType = "none" | "view" | "new" | "delete";
 
 function UpcomingEvents() {
+  const { enqueueSnackbar } = useSnackbar();
   const [activeDialog, setActiveDialog] = useState<DialogType>("none");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
@@ -43,8 +50,11 @@ function UpcomingEvents() {
   };
 
   const { events, isLoading, error } = useEvents();
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (error) {
+    enqueueSnackbar(error, { variant: "error" });
+  }
+
+  const numRowsToLoad = 4;
 
   return (
     <>
@@ -98,37 +108,41 @@ function UpcomingEvents() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {events.map((event) => (
-                  <TableRow key={event.id}>
-                    <TableCell>{event.title}</TableCell>
-                    <TableCell>{event.date.toLocaleDateString()}</TableCell>
-                    <TableCell>
-                      {event.date.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </TableCell>
-                    <TableCell>{event.location}</TableCell>
-                    <TableCell>{event.spotsAvailable}</TableCell>
-                    <TableCell>{event.status}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        aria-label="view"
-                        size="small"
-                        onClick={() => handleOpenDialog("view", event)}
-                      >
-                        <PreviewIcon fontSize="inherit" />
-                      </IconButton>
-                      <IconButton
-                        aria-label="delete"
-                        size="small"
-                        onClick={() => handleOpenDialog("delete", event)}
-                      >
-                        <DeleteIcon fontSize="inherit" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {isLoading
+                  ? Array.from({ length: numRowsToLoad }, (_, index) => (
+                      <UpcomingEventRowSkeleton key={index} />
+                    ))
+                  : events.map((event) => (
+                      <TableRow key={event.id}>
+                        <TableCell>{event.title}</TableCell>
+                        <TableCell>{event.date.toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          {event.date.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </TableCell>
+                        <TableCell>{event.location}</TableCell>
+                        <TableCell>{event.spotsAvailable}</TableCell>
+                        <TableCell>{event.status}</TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="view"
+                            size="small"
+                            onClick={() => handleOpenDialog("view", event)}
+                          >
+                            <PreviewIcon fontSize="inherit" />
+                          </IconButton>
+                          <IconButton
+                            aria-label="delete"
+                            size="small"
+                            onClick={() => handleOpenDialog("delete", event)}
+                          >
+                            <DeleteIcon fontSize="inherit" />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
               </TableBody>
             </Table>
           </TableContainer>

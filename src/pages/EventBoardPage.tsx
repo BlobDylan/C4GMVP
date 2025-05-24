@@ -4,13 +4,12 @@ import { useEvents } from "../hooks";
 import { useSnackbar } from "notistack";
 
 function EventBoardPage() {
-  const { isLoading, error } = useEvents();
+  const { error } = useEvents();
   const { enqueueSnackbar } = useSnackbar();
   if (error) {
     enqueueSnackbar(error, { variant: "error" });
   }
 
-  if (isLoading) return <div>Loading...</div>;
   return (
     <Box
       sx={{
@@ -18,8 +17,8 @@ function EventBoardPage() {
         padding: 2,
       }}
     >
-      <MyEvents />
       <AvailableEvents />
+      <MyEvents />
     </Box>
   );
 }
