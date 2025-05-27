@@ -25,9 +25,13 @@ export interface Event {
   title: string;
   description: string;
   date: Date;
+  channel: string;
+  language: string;
   location: string;
   status: EventStatus;
-  spotsAvailable: number;
+  group_size: number;
+  num_instructors_needed: number;
+  num_representatives_needed: number;
   assignedPeople?: string;
 }
 
@@ -35,24 +39,10 @@ export interface CreateEventRequest {
   title: string;
   description: string;
   date: Date;
+  channel: string;
+  language: string;
   location: string;
-  spotsAvailable: number;
-}
-
-export interface EventCardType {
-  id: string;
-  title: string;
-  description: string;
-  date: Date;
-  location: string;
-  spotsAvailable: number;
-}
-
-export interface MyEventCardType {
-  id: string;
-  title: string;
-  description: string;
-  date: Date;
-  location: string;
-  status: EventStatus;
+  group_size: number;
+  num_instructors_needed: number;
+  num_representatives_needed: number;
 }

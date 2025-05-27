@@ -3,10 +3,9 @@ import { EventStatus, Event } from "../../types";
 import { useEvents } from "../../hooks/useEvents";
 
 function MyEventsCard(event: Event) {
-  const { id, title, description, date, location, status } = event;
   const { unregisterFromEvent, isLoadingUnregisterID } = useEvents();
   const handleUnregisterButton = () => {
-    unregisterFromEvent(id);
+    unregisterFromEvent(event.id);
   };
 
   return (
@@ -27,21 +26,39 @@ function MyEventsCard(event: Event) {
       }}
     >
       <Typography variant="h4" sx={{ marginBottom: 2 }}>
-        {title}
+        {event.title}
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 2 }}>
-        {description}
+        {event.description}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Date: {date.toLocaleDateString()}
+        Date: {event.date.toLocaleDateString()}
       </Typography>
 
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
         Time:{" "}
-        {date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        {event.date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Location: {location}
+        Location: {event.location}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Channel: {event.channel}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Group Size: {event.group_size}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Language: {event.language}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Instructors Needed: {event.num_instructors_needed}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Representatives Needed: {event.num_representatives_needed}
       </Typography>
       <Typography
         variant="body2"
@@ -49,14 +66,14 @@ function MyEventsCard(event: Event) {
           marginBottom: 2,
         }}
       >
-        {status === EventStatus.APPROVED ? "Approved" : "Pending"}
+        Status: {event.status === EventStatus.APPROVED ? "Approved" : "Pending"}
       </Typography>
       <Button
         variant="contained"
-        disabled={isLoadingUnregisterID === id}
+        disabled={isLoadingUnregisterID === event.id}
         onClick={handleUnregisterButton}
       >
-        {isLoadingUnregisterID === id ? (
+        {isLoadingUnregisterID === event.id ? (
           <CircularProgress size={24} sx={{ color: "white" }} />
         ) : (
           "Unregister"

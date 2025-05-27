@@ -18,7 +18,7 @@ interface EventsContextType {
   isLoadingRegisterID: String | null;
   isLoadingUnregisterID: String | null;
   error: string | null;
-  createEvent: (eventData: Omit<Event, "id">) => Promise<void>;
+  createEvent: (eventData: CreateEventRequest) => Promise<void>;
   updateEvent: (eventId: string, eventData: Partial<Event>) => Promise<void>;
   deleteEvent: (eventId: string) => Promise<void>;
   approveEvent: (eventId: string) => Promise<void>;
