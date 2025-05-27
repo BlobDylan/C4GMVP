@@ -1,10 +1,9 @@
 import { Box, Typography, Button, CircularProgress } from "@mui/material";
-import { EventCardType } from "../../types";
+import { Event } from "../../types";
 import { useEvents } from "../../hooks";
 
-function EventBoardCard(event: EventCardType) {
+function EventBoardCard(event: Event) {
   const { registerToEvent, isLoadingRegisterID } = useEvents();
-  const { id, title, description, date, location, spotsAvailable } = event;
 
   return (
     <Box
@@ -22,31 +21,49 @@ function EventBoardCard(event: EventCardType) {
       }}
     >
       <Typography variant="h4" sx={{ marginBottom: 2 }}>
-        {title}
+        {event.title}
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 2 }}>
-        {description}
+        {event.description}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Date: {date.toLocaleDateString()}
+        Date: {event.date.toLocaleDateString()}
       </Typography>
 
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
         Time:{" "}
-        {date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        {event.date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Location: {location}
+        Location: {event.location}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Spots Available: {spotsAvailable}
+        Channel: {event.channel}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Group Size: {event.group_size}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Language: {event.language}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Instructors Needed: {event.num_instructors_needed}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Representatives Needed: {event.num_representatives_needed}
+      </Typography>
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        Status: {event.status}
       </Typography>
       <Button
         variant="contained"
-        disabled={isLoadingRegisterID === id}
-        onClick={() => registerToEvent(id)}
+        disabled={isLoadingRegisterID === event.id}
+        onClick={() => registerToEvent(event.id)}
       >
-        {isLoadingRegisterID === id ? (
+        {isLoadingRegisterID === event.id ? (
           <CircularProgress size={24} sx={{ color: "white" }} />
         ) : (
           "Register"

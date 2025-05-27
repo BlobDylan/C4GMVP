@@ -98,11 +98,15 @@ function UpcomingEvents() {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Event Name</TableCell>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Channel</TableCell>
+                  <TableCell>Language</TableCell>
                   <TableCell>Date</TableCell>
                   <TableCell>Time</TableCell>
                   <TableCell>Location</TableCell>
-                  <TableCell>Spots Available</TableCell>
+                  <TableCell>Group Size</TableCell>
+                  <TableCell>Instructors Needed</TableCell>
+                  <TableCell>Representatives Needed</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
@@ -115,6 +119,8 @@ function UpcomingEvents() {
                   : events.map((event) => (
                       <TableRow key={event.id}>
                         <TableCell>{event.title}</TableCell>
+                        <TableCell>{event.channel}</TableCell>
+                        <TableCell>{event.language}</TableCell>
                         <TableCell>{event.date.toLocaleDateString()}</TableCell>
                         <TableCell>
                           {event.date.toLocaleTimeString([], {
@@ -123,7 +129,11 @@ function UpcomingEvents() {
                           })}
                         </TableCell>
                         <TableCell>{event.location}</TableCell>
-                        <TableCell>{event.spotsAvailable}</TableCell>
+                        <TableCell>{event.group_size}</TableCell>
+                        <TableCell>{event.num_instructors_needed}</TableCell>
+                        <TableCell>
+                          {event.num_representatives_needed}
+                        </TableCell>
                         <TableCell>{event.status}</TableCell>
                         <TableCell>
                           <IconButton

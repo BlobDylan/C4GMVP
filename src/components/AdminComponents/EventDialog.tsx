@@ -40,13 +40,25 @@ function EventDialog({ event, onClose }: EventDialogProps) {
         })}
       </Typography>
       <Typography variant="body2" paragraph>
+        Channel: {event.channel}
+      </Typography>
+      <Typography variant="body2" paragraph>
+        Language: {event.language}
+      </Typography>
+      <Typography variant="body2" paragraph>
+        Group Size: {event.group_size}
+      </Typography>
+      <Typography variant="body2" paragraph>
+        Instructors Needed: {event.num_instructors_needed}
+      </Typography>
+      <Typography variant="body2" paragraph>
+        Representatives Needed: {event.num_representatives_needed}
+      </Typography>
+      <Typography variant="body2" paragraph>
         Location: {event.location}
       </Typography>
       <Typography variant="body2" paragraph>
         Status: {event.status}
-      </Typography>
-      <Typography variant="body2" paragraph>
-        Spots Available: {event.spotsAvailable}
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Button
