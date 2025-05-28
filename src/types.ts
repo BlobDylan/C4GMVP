@@ -32,17 +32,21 @@ export interface Event {
   group_size: number;
   num_instructors_needed: number;
   num_representatives_needed: number;
-  assignedPeople?: string;
+  target_audience: string;
+  group_description?: string;
+  additional_notes?: string;
 }
 
 export interface CreateEventRequest {
   title: string;
-  description: string;
   date: Date;
   channel: string;
   language: string;
   location: string;
+  target_audience: string;
   group_size: number;
   num_instructors_needed: number;
   num_representatives_needed: number;
+  group_description?: string;
+  additional_notes?: string;
 }

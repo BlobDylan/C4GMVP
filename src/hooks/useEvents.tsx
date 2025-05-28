@@ -62,21 +62,31 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
     try {
+      console.log("Fetching all events...");
       const response = await fetch("http://localhost:5000/events");
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Failed to fetch events");
-      }
       const data = await response.json();
-      setEvents(
-        data.events.map((event: any) => ({
-          ...event,
-          date: new Date(event.date),
-          id: event.id.toString(),
-        }))
-      );
+      console.log("Fetch events response:", {
+        status: response.status,
+        ok: response.ok,
+        data: data
+      });
+
+      if (!response.ok) {
+        console.error("Failed to fetch events:", response.status, data);
+        throw new Error(data.message || "Failed to fetch events");
+      }
+
+      const mappedEvents = data.events.map((event: any) => ({
+        ...event,
+        date: new Date(event.date),
+        id: event.id.toString(),
+      }));
+      console.log("Mapped events:", mappedEvents);
+      
+      setEvents(mappedEvents);
       setError(null);
     } catch (err) {
+      console.error("Error in fetchEvents:", err);
       setError(err instanceof Error ? err.message : "Failed to load events");
     } finally {
       setIsLoading(false);
@@ -86,6 +96,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const fetchMyEvents = useCallback(async () => {
     console.log("Fetching my events...");
     if (!user) {
+      console.log("No user found, clearing my events");
       setMyEvents([]);
       return;
     }
@@ -106,6 +117,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(errorData.message || "Failed to fetch my events");
       }
       const data = await response.json();
+      console.log("Received my events data:", data);
       setMyEvents(
         data.events.map((event: any) => ({
           ...event,
@@ -115,6 +127,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       );
       setError(null);
     } catch (err) {
+      console.error("Error in fetchMyEvents:", err);
       setError(err instanceof Error ? err.message : "Failed to load my events");
     } finally {
       setIsLoading(false);
@@ -141,6 +154,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
+        console.log("Creating event with data:", eventData);
         const response = await fetch("http://localhost:5000/admin/new", {
           method: "POST",
           headers: {
@@ -153,18 +167,26 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           }),
         });
 
+        const responseData = await response.json();
+        console.log("Create event response:", {
+          status: response.status,
+          ok: response.ok,
+          data: responseData
+        });
+
         if (!response.ok) {
-          const errorBody = await response
-            .json()
-            .catch(() => ({ message: "Failed to create event" }));
-          throw new Error(errorBody.message);
+          console.error("Failed to create event:", response.status, responseData);
+          throw new Error(responseData.message || "Failed to create event");
         }
 
+        console.log("Event created successfully, fetching updated events...");
         await Promise.all([
           fetchEvents(),
           user ? fetchMyEvents() : Promise.resolve(),
         ]);
+        console.log("Events updated successfully");
       } catch (err) {
+        console.error("Error in createEvent:", err);
         throw err instanceof Error ? err : new Error("Failed to create event");
       } finally {
         setIsLoading(false);
