@@ -13,28 +13,75 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
   const { createEvent } = useEvents();
 
   const channels = [
-    { label: "Example Channel 1", value: "Example Channel 1" },
-    { label: "Example Channel 2", value: "Example Channel 2" },
-    { label: "Example Channel 3", value: "Example Channel 3" },
+    { label: "Email", value: "Email" },
+    { label: "Phone", value: "Phone" },
+    { label: "WhatsApp", value: "WhatsApp" },
+    { label: "Telegram", value: "Telegram" },
+    { label: "Zoom", value: "Zoom" },
+    { label: "Other", value: "Other" },
   ];
 
   const languages = [
-    { label: "English", value: "en" },
-    { label: "Spanish", value: "es" },
-    { label: "French", value: "fr" },
-    { label: "German", value: "de" },
-    { label: "Hebrew", value: "zh" },
+    { label: "Hebrew", value: "Hebrew" },
+    { label: "English", value: "English" },
+    { label: "Arabic", value: "Arabic" },
+    { label: "Russian", value: "Russian" },
+    { label: "French", value: "French" },
+    { label: "Spanish", value: "Spanish" },
+    { label: "German", value: "German" },
+    { label: "Italian", value: "Italian" },
+    { label: "Portuguese", value: "Portuguese" },
+    { label: "Amharic", value: "Amharic" },
+    { label: "Tigrinya", value: "Tigrinya" },
+    { label: "Other", value: "Other" },
+  ];
+
+  const locations = [
+    { label: "Jerusalem", value: "Jerusalem" },
+    { label: "Tel Aviv", value: "Tel Aviv" },
+    { label: "Haifa", value: "Haifa" },
+    { label: "Be'er Sheva", value: "Be'er Sheva" },
+    { label: "North", value: "North" },
+    { label: "Center", value: "Center" },
+    { label: "South", value: "South" },
+    { label: "Judea and Samaria", value: "Judea and Samaria" },
+    { label: "Jezreel Valley", value: "Jezreel Valley" },
+    { label: "Galilee", value: "Galilee" },
+    { label: "Negev", value: "Negev" },
+    { label: "Other", value: "Other" },
+  ];
+
+  const targetAudiences = [
+    { label: "North American Community", value: "North American Community" },
+    { label: "Secular", value: "Secular" },
+    { label: "Traditional", value: "Traditional" },
+    { label: "Religious", value: "Religious" },
+    { label: "Ultra-Orthodox", value: "Ultra-Orthodox" },
+    { label: "New Immigrants", value: "New Immigrants" },
+    { label: "Ethiopian Community", value: "Ethiopian Community" },
+    { label: "Russian Community", value: "Russian Community" },
+    { label: "French Community", value: "French Community" },
+    { label: "Arabs", value: "Arabs" },
+    { label: "Druze", value: "Druze" },
+    { label: "Bedouin", value: "Bedouin" },
+    { label: "Youth", value: "Youth" },
+    { label: "Seniors", value: "Seniors" },
+    { label: "Families", value: "Families" },
+    { label: "Individuals", value: "Individuals" },
+    { label: "Other", value: "Other" },
   ];
 
   const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({
     title: "",
-    description: "",
     channel: channels[0].value,
     language: languages[0].value,
-    location: "",
+    location: locations[0].value,
+    target_audience: targetAudiences[0].value,
     group_size: 0,
     num_instructors_needed: 0,
     num_representatives_needed: 0,
+    group_description: "",
+    additional_notes: "",
   });
 
   const [eventDate, setEventDate] = useState<Dayjs>(dayjs());
@@ -157,10 +204,55 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         fullWidth
         label="Location"
         name="location"
+        select
+        value={formData.location}
+        onChange={handleChange}
+        required
+      >
+        {locations.map((l) => (
+          <MenuItem key={l.value} value={l.value}>
+            {l.label}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        fullWidth
+        label="Target Audience"
+        name="target_audience"
+        select
+        value={formData.target_audience}
+        onChange={handleChange}
+        required
+        margin="normal"
+      >
+        {targetAudiences.map((t) => (
+          <MenuItem key={t.value} value={t.value}>
+            {t.label}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        fullWidth
+        label="Group Description"
+        name="group_description"
         onChange={handleChange}
         margin="normal"
-        required
+        multiline
+        minRows={2}
       />
+
+      <TextField
+        fullWidth
+        label="Additional Notes"
+        name="additional_notes"
+        onChange={handleChange}
+        margin="normal"
+        multiline
+        minRows={2}
+      />
+
       <TextField
         fullWidth
         label="Group Size"
