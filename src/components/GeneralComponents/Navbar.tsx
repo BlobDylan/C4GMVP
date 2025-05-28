@@ -35,6 +35,10 @@ function Navbar() {
               (user.permissions === "admin" ||
                 user.permissions === "super_admin") && (
                 <IconButton
+                  sx={{
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
                   onClick={() => {
                     navigate("/admin");
                   }}
@@ -43,6 +47,10 @@ function Navbar() {
                 </IconButton>
               )}
             <IconButton
+              sx={{
+                color: "#fff",
+                "&:hover": { backgroundColor: "transparent" },
+              }}
               onClick={() => {
                 navigate("/");
               }}
@@ -54,6 +62,10 @@ function Navbar() {
                 <>
                   <Typography>{"Welcome, " + user.firstName}</Typography>
                   <IconButton
+                    sx={{
+                      color: "#fff",
+                      "&:hover": { backgroundColor: "transparent" },
+                    }}
                     onClick={() => {
                       logout();
                       navigate("/login");
@@ -64,6 +76,10 @@ function Navbar() {
                 </>
               ) : (
                 <IconButton
+                  sx={{
+                    color: "#fff",
+                    "&:hover": { backgroundColor: "transparent" },
+                  }}
                   onClick={() => {
                     navigate("/login");
                   }}

@@ -18,6 +18,7 @@ export interface SignupData {
   phoneNumber: string;
   password: string;
   confirmPassword: string;
+  preferredLanguages: string[];
 }
 
 export interface Event {

@@ -13,12 +13,11 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
   const { createEvent } = useEvents();
 
   const channels = [
-    { label: "Email", value: "Email" },
-    { label: "Phone", value: "Phone" },
-    { label: "WhatsApp", value: "WhatsApp" },
-    { label: "Telegram", value: "Telegram" },
-    { label: "Zoom", value: "Zoom" },
-    { label: "Other", value: "Other" },
+    { label: "Hostages Square", value: "Hostageas Square" },
+    { label: "Business Sector", value: "Business Sector" },
+    { label: "Donations", value: "Donations" },
+    { label: "Religious Zionism", value: "Religious Zionism" },
+    { label: "Virtual", value: "Virtual" },
   ];
 
   const languages = [
@@ -28,47 +27,28 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
     { label: "Russian", value: "Russian" },
     { label: "French", value: "French" },
     { label: "Spanish", value: "Spanish" },
-    { label: "German", value: "German" },
-    { label: "Italian", value: "Italian" },
-    { label: "Portuguese", value: "Portuguese" },
-    { label: "Amharic", value: "Amharic" },
-    { label: "Tigrinya", value: "Tigrinya" },
     { label: "Other", value: "Other" },
   ];
 
   const locations = [
-    { label: "Jerusalem", value: "Jerusalem" },
-    { label: "Tel Aviv", value: "Tel Aviv" },
-    { label: "Haifa", value: "Haifa" },
-    { label: "Be'er Sheva", value: "Be'er Sheva" },
+    { label: "Hostages Square", value: "Hostageas Square" },
+    { label: "Zoom", value: "Zoom" },
     { label: "North", value: "North" },
-    { label: "Center", value: "Center" },
     { label: "South", value: "South" },
-    { label: "Judea and Samaria", value: "Judea and Samaria" },
-    { label: "Jezreel Valley", value: "Jezreel Valley" },
-    { label: "Galilee", value: "Galilee" },
-    { label: "Negev", value: "Negev" },
-    { label: "Other", value: "Other" },
+    { label: "Offices", value: "Offices" },
+    { label: "Jerusalem", value: "Jerusalem" },
+    { label: "Center", value: "Center" },
+    { label: "Shfela", value: "Shfela" },
+    { label: "Across the green line", value: "Across the green line" },
   ];
 
   const targetAudiences = [
-    { label: "North American Community", value: "North American Community" },
-    { label: "Secular", value: "Secular" },
-    { label: "Traditional", value: "Traditional" },
-    { label: "Religious", value: "Religious" },
-    { label: "Ultra-Orthodox", value: "Ultra-Orthodox" },
-    { label: "New Immigrants", value: "New Immigrants" },
-    { label: "Ethiopian Community", value: "Ethiopian Community" },
-    { label: "Russian Community", value: "Russian Community" },
-    { label: "French Community", value: "French Community" },
-    { label: "Arabs", value: "Arabs" },
-    { label: "Druze", value: "Druze" },
-    { label: "Bedouin", value: "Bedouin" },
-    { label: "Youth", value: "Youth" },
-    { label: "Seniors", value: "Seniors" },
-    { label: "Families", value: "Families" },
-    { label: "Individuals", value: "Individuals" },
-    { label: "Other", value: "Other" },
+    { label: "Religious Sector", value: "Religious Sector" },
+    { label: "High Schools", value: "High Schools" },
+    { label: "Universities", value: "Universities" },
+    { label: "Business Sector", value: "Business Sector" },
+    { label: "Army", value: "Army" },
+    { label: "Donors", value: "Donors" },
   ];
 
   const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({

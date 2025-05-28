@@ -20,44 +20,71 @@ declare module "@mui/material/styles" {
 
 const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: "light",
     primary: {
-      main: "#000",
+      main: "#1976d2", // Classic blue instead of black
+      contrastText: "#fff",
     },
     secondary: {
-      main: "#fadf1c",
+      main: "#ff4081", // Vibrant pink instead of yellow
+      contrastText: "#fff",
     },
     background: {
-      default: "#121212",
-      paper: "#1e1e1e",
+      default: "#f5f5f5", // Light gray
+      paper: "#ffffff", // White
     },
     text: {
-      primary: "#fff",
-      secondary: "#b0bec5",
+      primary: "rgba(0, 0, 0, 0.87)", // Standard dark text
+      secondary: "rgba(0, 0, 0, 0.6)", // Slightly muted
     },
     custom: {
-      pending: "#ffdf20",
-      approved: "#86efac",
-      unassigned: "#f87171",
+      pending: "#ffb74d", // Soft orange
+      approved: "#81c784", // Soft green
+      unassigned: "#e57373", // Soft red
     },
   },
-
+  shape: {
+    borderRadius: 8, // Rounded corners
+  },
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontWeight: 500,
+      fontSize: "2.5rem",
+    },
+    h2: {
+      fontWeight: 500,
+      fontSize: "2rem",
+    },
+    button: {
+      textTransform: "none", // Buttons with normal case text
+      fontWeight: 500,
+    },
+  },
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#000",
+          backgroundColor: "#1976d2",
           color: "#fff",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          backgroundColor: "#fadf1c",
-          color: "#000",
+          padding: "8px 16px",
+          borderRadius: 8,
+          boxShadow: "none",
           "&:hover": {
-            backgroundColor: "#e8cf1a",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+          },
+        },
+        contained: {
+          boxShadow: "none",
+          "&:hover": {
+            boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
           },
         },
       },
@@ -65,32 +92,52 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: "#1e1e1e",
+          backgroundColor: "#ffffff",
           "& .MuiInputBase-root": {
-            color: "#fff",
+            color: "rgba(0, 0, 0, 0.87)",
           },
           "& .MuiInputLabel-root": {
-            color: "#fff",
+            color: "rgba(0, 0, 0, 0.6)",
           },
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#fff",
+            borderColor: "rgba(0, 0, 0, 0.23)",
           },
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#fff",
+            borderColor: "rgba(0, 0, 0, 0.5)",
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#fff",
-          },
-          "& .MuiInputBase-input": {
-            color: "#fff",
+            borderColor: "#1976d2",
+            borderWidth: 1,
           },
         },
       },
     },
-    MuiTypography: {
+    MuiCard: {
       styleOverrides: {
         root: {
-          color: "#fff",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          transition: "box-shadow 0.3s ease",
+          "&:hover": {
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "fff",
+          "&:hover": {
+            backgroundColor: "#fff",
+            color: "fff",
+          },
+        },
+      },
+    },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(0, 0, 0, 0.08)",
         },
       },
     },
