@@ -9,6 +9,7 @@ import {
   TableRow,
   IconButton,
   Dialog,
+  Tab,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PreviewIcon from "@mui/icons-material/Preview";
@@ -107,6 +108,7 @@ function UpcomingEvents() {
                   <TableCell>Group Size</TableCell>
                   <TableCell>Instructors Needed</TableCell>
                   <TableCell>Representatives Needed</TableCell>
+                  <TableCell>Target Audience</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
@@ -134,6 +136,7 @@ function UpcomingEvents() {
                         <TableCell>
                           {event.num_representatives_needed}
                         </TableCell>
+                        <TableCell>{event.target_audience}</TableCell>
                         <TableCell>{event.status}</TableCell>
                         <TableCell>
                           <IconButton

@@ -6,6 +6,9 @@ import {
   Button,
   CircularProgress,
   Box,
+  Checkbox,
+  Grid,
+  FormControlLabel,
 } from "@mui/material";
 import { useAuth } from "../../hooks";
 import { SignupData } from "../../types";
@@ -18,7 +21,18 @@ function SignUpForm() {
     phoneNumber: "",
     password: "",
     confirmPassword: "",
+    preferredLanguages: [],
   });
+
+  const languages = [
+    { label: "Hebrew", value: "Hebrew" },
+    { label: "English", value: "English" },
+    { label: "Arabic", value: "Arabic" },
+    { label: "Russian", value: "Russian" },
+    { label: "French", value: "French" },
+    { label: "Spanish", value: "Spanish" },
+    { label: "Other", value: "Other" },
+  ];
 
   const [disableSubmit, setDisableSubmit] = useState(true);
   const [passwordError, setPasswordError] = useState("");
@@ -28,22 +42,42 @@ function SignUpForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match.");
       return;
     }
-    await signup(formData);
+
+    // Create sanitized payload
+    const payload = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      password: formData.password,
+      preferredLanguages: formData.preferredLanguages,
+    } as SignupData;
+
+    await signup(payload);
     navigate("/");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const updatedFormData = { ...formData, [name]: value };
-    setFormData(updatedFormData);
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (name === "password" || name === "confirmPassword") {
       setPasswordError("");
     }
+  };
+
+  const handleLanguageChange = (languageValue: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      preferredLanguages: prev.preferredLanguages.includes(languageValue)
+        ? prev.preferredLanguages.filter((lang) => lang !== languageValue)
+        : [...prev.preferredLanguages, languageValue],
+    }));
   };
 
   useEffect(() => {
@@ -66,10 +100,19 @@ function SignUpForm() {
         setPasswordError("");
       }
     }
-  }, [formData.password, formData.confirmPassword, formData]);
+  }, [formData.password, formData.confirmPassword]);
+
+  // Split languages into two arrays for two columns
+  const firstColumnLanguages = languages.slice(
+    0,
+    Math.ceil(languages.length / 2)
+  );
+  const secondColumnLanguages = languages.slice(
+    Math.ceil(languages.length / 2)
+  );
 
   return (
-    <Box sx={{ mt: "25dvh" }}>
+    <Box sx={{ mt: "50dvh" }}>
       <form onSubmit={handleSubmit}>
         <Typography variant="h4" gutterBottom>
           Create Your Account
@@ -139,6 +182,42 @@ function SignUpForm() {
           error={!!passwordError}
           helperText={passwordError}
         />
+
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Preferred Languages:
+        </Typography>
+
+        <Grid container spacing={5} sx={{ mt: 1 }}>
+          <Grid sx={{ xs: 6 }}>
+            {firstColumnLanguages.map((lang) => (
+              <Box
+                key={lang.value}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                <Checkbox
+                  checked={formData.preferredLanguages.includes(lang.value)}
+                  onChange={() => handleLanguageChange(lang.value)}
+                />
+                <Typography>{lang.label}</Typography>
+              </Box>
+            ))}
+          </Grid>
+
+          <Grid sx={{ xs: 6 }}>
+            {secondColumnLanguages.map((lang) => (
+              <Box
+                key={lang.value}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
+                <Checkbox
+                  checked={formData.preferredLanguages.includes(lang.value)}
+                  onChange={() => handleLanguageChange(lang.value)}
+                />
+                <Typography>{lang.label}</Typography>
+              </Box>
+            ))}
+          </Grid>
+        </Grid>
 
         <Button
           type="submit"

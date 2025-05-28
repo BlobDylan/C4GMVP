@@ -95,13 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const response = await fetch("http://localhost:5000/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          password: data.password,
-        }),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
@@ -109,7 +103,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(errorData.message || "Signup failed");
       }
 
-      // Optional: Automatically login after signup
       await login(data.email, data.password);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Signup failed");

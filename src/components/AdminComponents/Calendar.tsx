@@ -69,6 +69,7 @@ function Calendar() {
           sx={{
             display: "flex",
             flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
             backgroundColor: "background.paper",
             padding: 4,
@@ -78,11 +79,15 @@ function Calendar() {
           <Typography variant="h3" sx={{ marginBottom: 2 }}>
             Weekly Calendar
           </Typography>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={2}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              mb: 2,
+            }}
           >
             <Typography variant="h6" color="white">
               {format(weekStart, "MMMM d")} - {format(weekEnd, "MMMM d, yyyy")}
@@ -94,7 +99,6 @@ function Calendar() {
               <Button
                 onClick={() => onWeekChange(new Date())}
                 variant="contained"
-                color="warning"
               >
                 Today
               </Button>
@@ -102,7 +106,7 @@ function Calendar() {
                 <ChevronRightIcon />
               </IconButton>
             </Stack>
-          </Stack>
+          </Box>
 
           <Box className="grid grid-cols-7 gap-1">
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
