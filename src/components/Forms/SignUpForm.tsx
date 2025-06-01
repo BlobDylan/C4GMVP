@@ -107,9 +107,9 @@ function SignUpForm() {
   const languageColumns = Array.from({ length: columns }, (_, i) =>
     languages.slice(i * columnSize, (i + 1) * columnSize)
   );
-
   return (
     <Box sx={{ mt: "30dvh" }}>
+
       <form onSubmit={handleSubmit}>
         <Typography variant="h4" gutterBottom>
           Create Your Account
@@ -220,6 +220,7 @@ function SignUpForm() {
               ))}
             </Grid>
           ))}
+
         </Grid>
 
         <Button

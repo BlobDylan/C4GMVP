@@ -63,6 +63,7 @@ function Navbar() {
                 color: "#fff",
                 "&:hover": { backgroundColor: "transparent" },
               }}
+
               onClick={() => {
                 navigate("/");
               }}
