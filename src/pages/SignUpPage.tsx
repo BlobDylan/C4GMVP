@@ -10,7 +10,7 @@ function SignUpPage() {
         alignItems: "center",
         justifyContent: "center",
         height: "60dvh",
-        width: "100dvw",
+        width: "100",
       }}
     >
       <Box
@@ -19,7 +19,7 @@ function SignUpPage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          width: "40dvw",
+          width: "45dvw",
         }}
       >
         <SignUpForm />
