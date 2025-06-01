@@ -8,7 +8,7 @@ import {
   Box,
   Checkbox,
   Grid,
-  FormControlLabel,
+  Stack,
 } from "@mui/material";
 import { useAuth } from "../../hooks";
 import { SignupData } from "../../types";
@@ -102,46 +102,48 @@ function SignUpForm() {
     }
   }, [formData.password, formData.confirmPassword]);
 
-  // Split languages into two arrays for two columns
-  const firstColumnLanguages = languages.slice(
-    0,
-    Math.ceil(languages.length / 2)
+  const columns = 4;
+  const columnSize = Math.ceil(languages.length / columns);
+  const languageColumns = Array.from({ length: columns }, (_, i) =>
+    languages.slice(i * columnSize, (i + 1) * columnSize)
   );
-  const secondColumnLanguages = languages.slice(
-    Math.ceil(languages.length / 2)
-  );
-
   return (
-    <Box sx={{ mt: "50dvh" }}>
+    <Box sx={{ mt: "30dvh" }}>
+
       <form onSubmit={handleSubmit}>
         <Typography variant="h4" gutterBottom>
           Create Your Account
         </Typography>
 
-        <TextField
-          name="firstName"
-          label="First Name"
-          value={formData.firstName}
-          onChange={handleChange}
-          fullWidth
-          required
-          margin="normal"
-        />
+        <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+          <TextField
+            name="firstName"
+            label="First Name"
+            size="small"
+            value={formData.firstName}
+            onChange={handleChange}
+            fullWidth
+            required
+            margin="normal"
+          />
 
-        <TextField
-          name="lastName"
-          label="Last Name"
-          value={formData.lastName}
-          onChange={handleChange}
-          fullWidth
-          required
-          margin="normal"
-        />
+          <TextField
+            name="lastName"
+            label="Last Name"
+            size="small"
+            value={formData.lastName}
+            onChange={handleChange}
+            fullWidth
+            required
+            margin="normal"
+          />
+        </Stack>
 
         <TextField
           name="email"
           type="email"
           label="Email"
+          size="small"
           value={formData.email}
           onChange={handleChange}
           fullWidth
@@ -152,6 +154,7 @@ function SignUpForm() {
         <TextField
           name="phoneNumber"
           label="Phone Number"
+          size="small"
           value={formData.phoneNumber}
           onChange={handleChange}
           fullWidth
@@ -162,6 +165,7 @@ function SignUpForm() {
           name="password"
           type="password"
           label="Password"
+          size="small"
           value={formData.password}
           onChange={handleChange}
           fullWidth
@@ -174,6 +178,7 @@ function SignUpForm() {
           name="confirmPassword"
           type="password"
           label="Confirm Password"
+          size="small"
           value={formData.confirmPassword}
           onChange={handleChange}
           fullWidth
@@ -187,36 +192,35 @@ function SignUpForm() {
           Preferred Languages:
         </Typography>
 
-        <Grid container spacing={5} sx={{ mt: 1 }}>
-          <Grid sx={{ xs: 6 }}>
-            {firstColumnLanguages.map((lang) => (
-              <Box
-                key={lang.value}
-                sx={{ display: "flex", alignItems: "center" }}
-              >
-                <Checkbox
-                  checked={formData.preferredLanguages.includes(lang.value)}
-                  onChange={() => handleLanguageChange(lang.value)}
-                />
-                <Typography>{lang.label}</Typography>
-              </Box>
-            ))}
-          </Grid>
+        <Grid
+          container
+          spacing={2}
+          sx={{ mt: 1 }}
+          justifyContent="space-between"
+        >
+          {languageColumns.map((column, columnIndex) => (
+            <Grid
+              sx={{
+                xs: 12,
+                sm: 6,
+              }}
+              key={`column-${columnIndex}`}
+            >
+              {column.map((lang) => (
+                <Box
+                  key={lang.value}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <Checkbox
+                    checked={formData.preferredLanguages.includes(lang.value)}
+                    onChange={() => handleLanguageChange(lang.value)}
+                  />
+                  <Typography>{lang.label}</Typography>
+                </Box>
+              ))}
+            </Grid>
+          ))}
 
-          <Grid sx={{ xs: 6 }}>
-            {secondColumnLanguages.map((lang) => (
-              <Box
-                key={lang.value}
-                sx={{ display: "flex", alignItems: "center" }}
-              >
-                <Checkbox
-                  checked={formData.preferredLanguages.includes(lang.value)}
-                  onChange={() => handleLanguageChange(lang.value)}
-                />
-                <Typography>{lang.label}</Typography>
-              </Box>
-            ))}
-          </Grid>
         </Grid>
 
         <Button
