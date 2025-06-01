@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks";
 import HomeIcon from "@mui/icons-material/Home";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import EventIcon from "@mui/icons-material/Event";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 
@@ -46,6 +47,17 @@ function Navbar() {
                   <AdminPanelSettingsIcon />
                 </IconButton>
               )}
+            <IconButton
+              sx={{
+                color: "#fff",
+                "&:hover": { backgroundColor: "transparent" },
+              }}
+              onClick={() => {
+                navigate("/available-events");
+              }}
+            >
+              <EventIcon />
+            </IconButton>
             <IconButton
               sx={{
                 color: "#fff",

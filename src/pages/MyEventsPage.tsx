@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { AvailableEvents } from "../components";
+import { MyEvents } from "../components";
 import { useEvents } from "../hooks";
 import { useSnackbar } from "notistack";
 
@@ -17,7 +17,7 @@ function EventBoardPage() {
         padding: 2,
       }}
     >
-      <AvailableEvents />
+      <MyEvents />
     </Box>
   );
 }
