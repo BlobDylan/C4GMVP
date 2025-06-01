@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Skeleton } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { EventBoardCard, EventBoardCardSkeleton } from "../../components";
 import { useEvents } from "../../hooks";
 
