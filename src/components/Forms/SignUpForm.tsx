@@ -31,7 +31,6 @@ function SignUpForm() {
     { label: "Russian", value: "Russian" },
     { label: "French", value: "French" },
     { label: "Spanish", value: "Spanish" },
-    { label: "Other", value: "Other" },
   ];
 
   const [disableSubmit, setDisableSubmit] = useState(true);
@@ -109,7 +108,6 @@ function SignUpForm() {
   );
   return (
     <Box sx={{ mt: "30dvh" }}>
-
       <form onSubmit={handleSubmit}>
         <Typography variant="h4" gutterBottom>
           Create Your Account
@@ -220,7 +218,6 @@ function SignUpForm() {
               ))}
             </Grid>
           ))}
-
         </Grid>
 
         <Button

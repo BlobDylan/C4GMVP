@@ -9,48 +9,42 @@ function AvailableEvents() {
   return (
     <Box
       sx={{
-        width: "100%",
-        padding: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        backgroundColor: "background.paper",
+        padding: 4,
+        borderRadius: 2,
       }}
     >
-      <Box
+      <Typography variant="h3" sx={{ marginBottom: 2 }}>
+        Available Events
+      </Typography>
+      <Grid
+        container
+        columns={{ xs: 12 }}
+        spacing={2}
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          backgroundColor: "background.paper",
-          padding: 4,
-          borderRadius: 2,
+          width: "100%",
+          flexGrow: 1,
         }}
       >
-        <Typography variant="h3" sx={{ marginBottom: 2 }}>
-          Available Events
-        </Typography>
-        <Grid
-          container
-          spacing={3}
-          sx={{
-            justifyContent: "center",
-          }}
-        >
-          {isLoading
-            ? Array.from({ length: numCardsToLoad }, (_, index) => (
-                <Grid key={index} sx={{ xs: 12, sm: 6 }}>
-                  <EventBoardCardSkeleton />
+        {isLoading
+          ? Array.from({ length: numCardsToLoad }, (_, index) => (
+              <Grid key={index}>
+                <EventBoardCardSkeleton />
+              </Grid>
+            ))
+          : events
+              .filter(
+                (event) => !myEvents.some((myEvent) => myEvent.id === event.id)
+              )
+              .map((event) => (
+                <Grid key={event.id} size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
+                  <EventBoardCard {...event} />
                 </Grid>
-              ))
-            : events
-                .filter(
-                  (event) =>
-                    !myEvents.some((myEvent) => myEvent.id === event.id)
-                )
-                .map((event) => (
-                  <Grid key={event.id} sx={{ xs: 12, sm: 6 }}>
-                    <EventBoardCard {...event} />
-                  </Grid>
-                ))}
-        </Grid>
-      </Box>
+              ))}
+      </Grid>
     </Box>
   );
 }
