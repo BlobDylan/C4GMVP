@@ -31,7 +31,6 @@ function SignUpForm() {
     { label: "Russian", value: "Russian" },
     { label: "French", value: "French" },
     { label: "Spanish", value: "Spanish" },
-    { label: "Other", value: "Other" },
   ];
 
   const [disableSubmit, setDisableSubmit] = useState(true);
