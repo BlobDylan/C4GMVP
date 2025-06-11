@@ -5,11 +5,18 @@ import {
   useEffect,
   ReactNode,
   useCallback,
+  useMemo,
 } from "react";
 import { Event, CreateEventRequest } from "../types"; // Assuming CreateEventRequest is similar to Omit<Event, "id">
 import { useAuth } from "../hooks";
 import { set } from "date-fns";
 import { fi } from "date-fns/locale";
+
+export interface FilterOptions {
+  channels?: string[];
+  languages?: string[];
+  locations?: string[];
+}
 
 interface EventsContextType {
   events: Event[];
@@ -18,6 +25,11 @@ interface EventsContextType {
   isLoadingRegisterID: String | null;
   isLoadingUnregisterID: String | null;
   error: string | null;
+  channels: string[];
+  languages: string[];
+  locations: string[];
+  filteredEvents: Event[];
+  filters: FilterOptions;
   createEvent: (eventData: CreateEventRequest) => Promise<void>;
   updateEvent: (eventId: string, eventData: Partial<Event>) => Promise<void>;
   deleteEvent: (eventId: string) => Promise<void>;
@@ -27,6 +39,8 @@ interface EventsContextType {
   unregisterFromEvent: (eventId: string) => Promise<void>;
   refetchEvents: () => Promise<void>;
   refetchMyEvents: () => Promise<void>;
+  filterEvents: (filters: FilterOptions) => void;
+  resetFilters: () => void;
 }
 
 const EventsContext = createContext<EventsContextType>({
@@ -36,6 +50,11 @@ const EventsContext = createContext<EventsContextType>({
   isLoadingRegisterID: null,
   isLoadingUnregisterID: null,
   error: null,
+  channels: [],
+  languages: [],
+  locations: [],
+  filteredEvents: [],
+  filters: {},
   createEvent: async () => {},
   updateEvent: async () => {},
   deleteEvent: async () => {},
@@ -45,6 +64,8 @@ const EventsContext = createContext<EventsContextType>({
   unregisterFromEvent: async () => {},
   refetchEvents: async () => {},
   refetchMyEvents: async () => {},
+  filterEvents: (events) => events,
+  resetFilters: () => {},
 });
 
 export const EventsProvider = ({ children }: { children: ReactNode }) => {
@@ -58,6 +79,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const [isLoadingUnregisterID, setIsLoadingUnregisterID] =
     useState<String | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<FilterOptions>({});
 
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
@@ -68,7 +90,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       console.log("Fetch events response:", {
         status: response.status,
         ok: response.ok,
-        data: data
+        data: data,
       });
 
       if (!response.ok) {
@@ -82,7 +104,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         id: event.id.toString(),
       }));
       console.log("Mapped events:", mappedEvents);
-      
+
       setEvents(mappedEvents);
       setError(null);
     } catch (err) {
@@ -171,11 +193,15 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         console.log("Create event response:", {
           status: response.status,
           ok: response.ok,
-          data: responseData
+          data: responseData,
         });
 
         if (!response.ok) {
-          console.error("Failed to create event:", response.status, responseData);
+          console.error(
+            "Failed to create event:",
+            response.status,
+            responseData
+          );
           throw new Error(responseData.message || "Failed to create event");
         }
 
@@ -388,6 +414,68 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
     [fetchEvents, fetchMyEvents]
   );
 
+  const channelOptions = [
+    { label: "Hostages Square", value: "Hostages Square" },
+    { label: "Business Sector", value: "Business Sector" },
+    { label: "Donations", value: "Donations" },
+    { label: "Religious Zionism", value: "Religious Zionism" },
+    { label: "Virtual", value: "Virtual" },
+  ];
+
+  const languageOptions = [
+    { label: "Hebrew", value: "Hebrew" },
+    { label: "English", value: "English" },
+    { label: "Arabic", value: "Arabic" },
+    { label: "Russian", value: "Russian" },
+    { label: "French", value: "French" },
+    { label: "Spanish", value: "Spanish" },
+    { label: "Other", value: "Other" },
+  ];
+
+  const locationOptions = [
+    { label: "Hostages Square", value: "Hostages Square" },
+    { label: "Zoom", value: "Zoom" },
+    { label: "North", value: "North" },
+    { label: "South", value: "South" },
+    { label: "Offices", value: "Offices" },
+    { label: "Jerusalem", value: "Jerusalem" },
+    { label: "Center", value: "Center" },
+    { label: "Shfela", value: "Shfela" },
+    { label: "Across the green line", value: "Across the green line" },
+  ];
+
+  const channels = channelOptions.map((opt) => opt.value);
+  const languages = languageOptions.map((opt) => opt.value);
+  const locations = locationOptions.map((opt) => opt.value);
+
+  const filteredEvents = useMemo(() => {
+    return events.filter((event) => {
+      const {
+        channels: filterChannels,
+        languages: filterLanguages,
+        locations: filterLocations,
+      } = filters;
+
+      if (filterChannels?.length && !filterChannels.includes(event.channel))
+        return false;
+      if (filterLanguages?.length && !filterLanguages.includes(event.language))
+        return false;
+      if (filterLocations?.length && !filterLocations.includes(event.location))
+        return false;
+
+      return true;
+    });
+  }, [events, filters]); // Recompute when events or filters change
+
+  // Update filter function to set filters
+  const filterEvents = (newFilters: FilterOptions) => {
+    setFilters(newFilters);
+  };
+
+  const resetFilters = useCallback(() => {
+    setFilters({});
+  }, []);
+
   return (
     <EventsContext.Provider
       value={{
@@ -397,6 +485,11 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         isLoadingRegisterID,
         isLoadingUnregisterID,
         error,
+        channels,
+        languages,
+        locations,
+        filteredEvents,
+        filters,
         createEvent,
         updateEvent,
         deleteEvent,
@@ -406,6 +499,8 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         unregisterFromEvent,
         refetchEvents: fetchEvents,
         refetchMyEvents: fetchMyEvents,
+        filterEvents: filterEvents,
+        resetFilters,
       }}
     >
       {children}

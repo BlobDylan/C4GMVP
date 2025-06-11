@@ -13,3 +13,4 @@ export { default as EventDialog } from "./AdminComponents/EventDialog";
 export { default as StatisticsTab } from "./StatisticsTab";
 export { default as Navbar } from "./GeneralComponents/Navbar";
 export { default as AreYouSure } from "./GeneralComponents/AreYouSure";
+export { default as FilterBar } from "./GeneralComponents/FIlterBar";
