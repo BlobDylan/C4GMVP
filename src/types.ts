@@ -9,6 +9,7 @@ export interface User {
   lastName: string;
   email: string;
   permissions: string;
+  role: "Family Representative" | "Guide";
 }
 
 export interface SignupData {
@@ -19,6 +20,7 @@ export interface SignupData {
   password: string;
   confirmPassword: string;
   preferredLanguages: string[];
+  role: "Family Representative" | "Guide";
 }
 
 export interface Event {

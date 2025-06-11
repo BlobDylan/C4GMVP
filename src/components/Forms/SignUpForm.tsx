@@ -9,6 +9,8 @@ import {
   Checkbox,
   Grid,
   Stack,
+  ToggleButton,
+  ToggleButtonGroup
 } from "@mui/material";
 import { useAuth } from "../../hooks";
 import { SignupData } from "../../types";
@@ -22,6 +24,7 @@ function SignUpForm() {
     password: "",
     confirmPassword: "",
     preferredLanguages: [],
+    role: "Family Representative",
   });
 
   const languages = [
@@ -31,7 +34,6 @@ function SignUpForm() {
     { label: "Russian", value: "Russian" },
     { label: "French", value: "French" },
     { label: "Spanish", value: "Spanish" },
-    { label: "Other", value: "Other" },
   ];
 
   const [disableSubmit, setDisableSubmit] = useState(true);
@@ -56,6 +58,7 @@ function SignUpForm() {
       phoneNumber: formData.phoneNumber,
       password: formData.password,
       preferredLanguages: formData.preferredLanguages,
+      role: formData.role,
     } as SignupData;
 
     await signup(payload);
@@ -186,7 +189,25 @@ function SignUpForm() {
           error={!!passwordError}
           helperText={passwordError}
         />
+        <Typography variant="subtitle1" sx={{ mt: 2 }}>
+          Role:
+        </Typography>
 
+        <ToggleButtonGroup
+          color="primary"
+          value={formData.role}
+          exclusive
+          onChange={(e, newRole) => {
+            if (newRole !== null) {
+              setFormData((prev) => ({ ...prev, role: newRole }));
+            }
+          }}
+          aria-label="Role"
+          sx={{ my: 1 }}
+        >
+          <ToggleButton value="Family Representative">Family Rep</ToggleButton>
+          <ToggleButton value="Guide">Guide</ToggleButton>
+        </ToggleButtonGroup>
         <Typography variant="subtitle1" sx={{ mt: 2 }}>
           Preferred Languages:
         </Typography>
