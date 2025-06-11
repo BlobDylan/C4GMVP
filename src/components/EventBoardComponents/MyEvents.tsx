@@ -1,9 +1,17 @@
 import { Box, Typography, Stack } from "@mui/material";
 import { MyEventsCard } from "../../components";
-import { useEvents } from "../../hooks/useEvents";
+import { useEvents, FilterOptions } from "../../hooks/useEvents";
 
 function MyEvents() {
-  const { myEvents } = useEvents();
+  const { myEvents, filterEvents } = useEvents();
+
+  const constantFilters: FilterOptions = {
+    languages: ["Hebrew"],
+    locations: ["Hostages Square"],
+    // Add other filters as needed:
+    channels: ["Hostages Square"],
+    // targetAudiences: ["Universities"]
+  };
 
   return (
     <Box

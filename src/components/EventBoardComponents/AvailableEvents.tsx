@@ -1,9 +1,13 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { EventBoardCard, EventBoardCardSkeleton } from "../../components";
+import {
+  EventBoardCard,
+  EventBoardCardSkeleton,
+  FilterBar,
+} from "../../components";
 import { useEvents } from "../../hooks";
 
 function AvailableEvents() {
-  const { events, myEvents, isLoading } = useEvents();
+  const { events, myEvents, isLoading, filteredEvents } = useEvents();
   const numCardsToLoad = 4;
 
   return (
@@ -20,6 +24,7 @@ function AvailableEvents() {
       <Typography variant="h3" sx={{ marginBottom: 2 }}>
         Available Events
       </Typography>
+      <FilterBar />
       <Grid
         container
         columns={{ xs: 12 }}
@@ -35,7 +40,7 @@ function AvailableEvents() {
                 <EventBoardCardSkeleton />
               </Grid>
             ))
-          : events
+          : filteredEvents
               .filter(
                 (event) => !myEvents.some((myEvent) => myEvent.id === event.id)
               )
