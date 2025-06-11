@@ -22,6 +22,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { EventStatus, Event } from "../../types";
 import { useState } from "react";
 import { useEvents } from "../../hooks";
+import { he } from "date-fns/locale";
 
 import { EventDialog } from "../";
 
@@ -77,7 +78,7 @@ function Calendar() {
           }}
         >
           <Typography variant="h3" sx={{ marginBottom: 2 }}>
-            Weekly Calendar
+            לוח שבועי
           </Typography>
           <Box
             sx={{
@@ -90,7 +91,7 @@ function Calendar() {
             }}
           >
             <Typography variant="h6" color="white">
-              {format(weekStart, "MMMM d")} - {format(weekEnd, "MMMM d, yyyy")}
+              {format(weekStart, "d MMMM", { locale: he })} - {format(weekEnd, "d MMMM, yyyy", { locale: he })}
             </Typography>
             <Stack direction="row" spacing={1}>
               <IconButton onClick={handlePreviousWeek}>
@@ -100,7 +101,7 @@ function Calendar() {
                 onClick={() => onWeekChange(new Date())}
                 variant="contained"
               >
-                Today
+                היום
               </Button>
               <IconButton onClick={handleNextWeek}>
                 <ChevronRightIcon />
@@ -109,7 +110,7 @@ function Calendar() {
           </Box>
 
           <Box className="grid grid-cols-7 gap-1">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+            {["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ש'"].map((day) => (
               <Paper
                 key={day}
                 sx={{

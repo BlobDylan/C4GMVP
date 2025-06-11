@@ -61,7 +61,7 @@ function StatisticsTab({ events }: { events: Event[] }) {
 
   return (
     <div className="bg-black p-4 rounded-lg">
-      <h2 className="text-lg font-semibold text-white mb-4">Statistics</h2>
+      <h2 className="text-lg font-semibold text-white mb-4">סטטיסטיקות</h2>
       <Stack spacing={4} alignItems="center" justifyContent="center">
         <Stack spacing={2} width="100%" maxWidth={300}>
           <DateRangePicker
@@ -72,7 +72,7 @@ function StatisticsTab({ events }: { events: Event[] }) {
             className="bg-yellow-300 text-black p-2 rounded hover:bg-yellow-400 w-full"
             onClick={handleApply}
           >
-            Apply
+            החל
           </button>
         </Stack>
 
@@ -82,7 +82,7 @@ function StatisticsTab({ events }: { events: Event[] }) {
             0
           ) === 0 ? (
             <Typography variant="body2" color="white" textAlign="center">
-              No data available for the selected date range.
+              אין נתונים בטווח התאריכים שנבחר.
             </Typography>
           ) : (
             <PieChart

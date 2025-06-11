@@ -84,7 +84,7 @@ function UpcomingEvents() {
             }}
           >
             <Typography variant="h3" sx={{ marginBottom: 2 }}>
-              Upcoming Events
+              אירועים קרובים
             </Typography>
             <IconButton
               aria-label="add"
@@ -99,18 +99,18 @@ function UpcomingEvents() {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Channel</TableCell>
-                  <TableCell>Language</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Time</TableCell>
-                  <TableCell>Location</TableCell>
-                  <TableCell>Group Size</TableCell>
-                  <TableCell>Instructors Needed</TableCell>
-                  <TableCell>Representatives Needed</TableCell>
-                  <TableCell>Target Audience</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell>כותרת</TableCell>
+                  <TableCell>ערוץ</TableCell>
+                  <TableCell>שפה</TableCell>
+                  <TableCell>תאריך</TableCell>
+                  <TableCell>שעה</TableCell>
+                  <TableCell>מיקום</TableCell>
+                  <TableCell>גודל קבוצה</TableCell>
+                  <TableCell>מספר מדריכים נדרש</TableCell>
+                  <TableCell>מספר נציגים נדרש</TableCell>
+                  <TableCell>קהל יעד</TableCell>
+                  <TableCell>סטטוס</TableCell>
+                  <TableCell>פעולות</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

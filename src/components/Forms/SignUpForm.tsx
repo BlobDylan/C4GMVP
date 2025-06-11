@@ -25,7 +25,7 @@ function SignUpForm() {
   });
 
   const languages = [
-    { label: "Hebrew", value: "Hebrew" },
+    { label: "עברית", value: "Hebrew" },
     { label: "English", value: "English" },
     { label: "Arabic", value: "Arabic" },
     { label: "Russian", value: "Russian" },
@@ -43,7 +43,7 @@ function SignUpForm() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      setPasswordError("Passwords do not match.");
+      setPasswordError("סיסמאות לא תואמות");
       return;
     }
 
@@ -110,13 +110,13 @@ function SignUpForm() {
     <Box sx={{ mt: "30dvh" }}>
       <form onSubmit={handleSubmit}>
         <Typography variant="h4" gutterBottom>
-          Create Your Account
+          צור חשבון חדש
         </Typography>
 
         <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
           <TextField
             name="firstName"
-            label="First Name"
+            label="שם פרטי"
             size="small"
             value={formData.firstName}
             onChange={handleChange}
@@ -127,7 +127,7 @@ function SignUpForm() {
 
           <TextField
             name="lastName"
-            label="Last Name"
+            label="שם משפחה"
             size="small"
             value={formData.lastName}
             onChange={handleChange}
@@ -140,7 +140,7 @@ function SignUpForm() {
         <TextField
           name="email"
           type="email"
-          label="Email"
+          label="אימייל"
           size="small"
           value={formData.email}
           onChange={handleChange}
@@ -151,7 +151,7 @@ function SignUpForm() {
 
         <TextField
           name="phoneNumber"
-          label="Phone Number"
+          label="מספר טלפון"
           size="small"
           value={formData.phoneNumber}
           onChange={handleChange}
@@ -162,7 +162,7 @@ function SignUpForm() {
         <TextField
           name="password"
           type="password"
-          label="Password"
+          label="סיסמה"
           size="small"
           value={formData.password}
           onChange={handleChange}
@@ -175,7 +175,7 @@ function SignUpForm() {
         <TextField
           name="confirmPassword"
           type="password"
-          label="Confirm Password"
+          label="אשר סיסמה"
           size="small"
           value={formData.confirmPassword}
           onChange={handleChange}
@@ -187,7 +187,7 @@ function SignUpForm() {
         />
 
         <Typography variant="subtitle1" sx={{ mt: 2 }}>
-          Preferred Languages:
+          שפות מועדפות:
         </Typography>
 
         <Grid
@@ -227,7 +227,7 @@ function SignUpForm() {
           disabled={isLoading || disableSubmit}
           sx={{ mt: 2 }}
         >
-          {isLoading ? <CircularProgress size={24} /> : "Sign Up"}
+          {isLoading ? <CircularProgress size={24} /> : "הרשמה"}
         </Button>
         <Button
           variant="contained"
@@ -235,7 +235,7 @@ function SignUpForm() {
           onClick={() => navigate("/login")}
           sx={{ mt: 2 }}
         >
-          Already have an account? Log in
+          כבר יש לך חשבון? התחבר
         </Button>
       </form>
     </Box>

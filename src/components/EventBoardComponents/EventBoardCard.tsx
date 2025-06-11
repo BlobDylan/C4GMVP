@@ -83,16 +83,16 @@ function EventBoardCard(event: Event) {
         }}
       >
         <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          Location: {event.location}
+          מיקום: {event.location}
         </Typography>
         <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          Channel: {event.channel}
+          ערוץ: {event.channel}
         </Typography>
         <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          Group Size: {event.group_size}
+          גודל קבוצה: {event.group_size}
         </Typography>
         <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          Language: {event.language}
+          שפה: {event.language}
         </Typography>
       </Box>
 
@@ -111,7 +111,7 @@ function EventBoardCard(event: Event) {
         {isLoadingRegisterID === event.id ? (
           <CircularProgress size={24} sx={{ color: "white" }} />
         ) : (
-          "Register"
+          "הרשמה"
         )}
       </Button>
     </Box>

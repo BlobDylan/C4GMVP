@@ -30,35 +30,35 @@ function EventDialog({ event, onClose }: EventDialogProps) {
         {event.description}
       </Typography>
       <Typography variant="body2">
-        Date: {event.date.toLocaleDateString()}
+        תאריך: {event.date.toLocaleDateString()}
       </Typography>
       <Typography variant="body2" paragraph>
-        Time:{" "}
+        שעה:{" "}
         {event.date.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         })}
       </Typography>
       <Typography variant="body2" paragraph>
-        Channel: {event.channel}
+        ערוץ: {event.channel}
       </Typography>
       <Typography variant="body2" paragraph>
-        Language: {event.language}
+        שפה: {event.language}
       </Typography>
       <Typography variant="body2" paragraph>
-        Group Size: {event.group_size}
+        גודל קבוצה: {event.group_size}
       </Typography>
       <Typography variant="body2" paragraph>
-        Instructors Needed: {event.num_instructors_needed}
+        כמות מדריכים נדרשת: {event.num_instructors_needed}
       </Typography>
       <Typography variant="body2" paragraph>
-        Representatives Needed: {event.num_representatives_needed}
+        כמות נציגים נדרשת: {event.num_representatives_needed}
       </Typography>
       <Typography variant="body2" paragraph>
-        Location: {event.location}
+        מיקום: {event.location}
       </Typography>
       <Typography variant="body2" paragraph>
-        Status: {event.status}
+        סטטוס: {event.status}
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Button
@@ -71,10 +71,10 @@ function EventDialog({ event, onClose }: EventDialogProps) {
                 : "custom.approved",
           }}
         >
-          {event.status === EventStatus.APPROVED ? "Unapprove" : "Approve"}
+          {event.status === EventStatus.APPROVED ? "הסר אישור" : "אשר"}
         </Button>
         <Button variant="contained" onClick={onClose}>
-          Close
+          סגור
         </Button>
       </Box>
     </Box>

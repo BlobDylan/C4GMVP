@@ -36,17 +36,17 @@ function LoginForm() {
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <Typography variant="h4" component="h1" gutterBottom align="center">
-        Welcome to Volunteer Manager
+        ברוכים הבאים למערכת ההתנדבות
       </Typography>
 
       <Typography variant="h5" gutterBottom align="center" sx={{ mb: 4 }}>
-        Login to Your Account
+        התחברות לחשבון
       </Typography>
 
       <TextField
         fullWidth
         type="email"
-        label="Email"
+        label="אימייל"
         name="email"
         value={formData.email}
         onChange={handleChange}
@@ -57,7 +57,7 @@ function LoginForm() {
       <TextField
         fullWidth
         type="password"
-        label="Password"
+        label="סיסמה"
         name="password"
         value={formData.password}
         onChange={handleChange}
@@ -79,7 +79,7 @@ function LoginForm() {
         disabled={isLoading}
         sx={{ mt: 2 }}
       >
-        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+        {isLoading ? <CircularProgress size={24} color="inherit" /> : "התחבר"}
       </Button>
       <Button
         variant="contained"
@@ -87,7 +87,7 @@ function LoginForm() {
         onClick={() => navigate("/signup")}
         sx={{ mt: 2 }}
       >
-        Create an Account
+        צור חשבון חדש
       </Button>
     </Box>
   );
