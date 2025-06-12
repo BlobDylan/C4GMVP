@@ -28,7 +28,7 @@ function Navbar() {
               fontSize: "1.5rem",
             }}
           >
-            Volunteer Manager
+            מערכת ניהול התנדבות
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Stack direction={"row"} spacing={2}>
@@ -72,7 +72,7 @@ function Navbar() {
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {user ? (
                 <>
-                  <Typography>{"Welcome, " + user.firstName}</Typography>
+                  <Typography>{"ברוך הבא, " + user.firstName}</Typography>
                   <IconButton
                     sx={{
                       color: "#fff",

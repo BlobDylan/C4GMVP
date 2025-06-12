@@ -32,33 +32,33 @@ function MyEventsCard(event: Event) {
         {event.description}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Date: {event.date.toLocaleDateString()}
+        תאריך: {event.date.toLocaleDateString()}
       </Typography>
 
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Time:{" "}
+        שעה:{" "}
         {event.date.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         })}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Location: {event.location}
+        מיקום: {event.location}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Channel: {event.channel}
+        ערוץ: {event.channel}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Group Size: {event.group_size}
+        גודל קבוצה: {event.group_size}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Language: {event.language}
+        שפה: {event.language}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Instructors Needed: {event.num_instructors_needed}
+        כמות מדריכים נדרשת: {event.num_instructors_needed}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Representatives Needed: {event.num_representatives_needed}
+        כמות נציגים נדרשת: {event.num_representatives_needed}
       </Typography>
       <Typography
         variant="body2"
@@ -66,7 +66,7 @@ function MyEventsCard(event: Event) {
           marginBottom: 2,
         }}
       >
-        Status: {event.status === EventStatus.APPROVED ? "Approved" : "Pending"}
+        Status: {event.status === EventStatus.APPROVED ? "מאושר" : "ממתין"}
       </Typography>
       <Button
         variant="contained"
@@ -76,7 +76,7 @@ function MyEventsCard(event: Event) {
         {isLoadingUnregisterID === event.id ? (
           <CircularProgress size={24} sx={{ color: "white" }} />
         ) : (
-          "Unregister"
+          "בטל הרשמה"
         )}
       </Button>
     </Box>

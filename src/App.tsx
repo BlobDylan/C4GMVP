@@ -12,6 +12,9 @@ import {
   AdminPage,
   MyEventsPage,
 } from "./pages";
+import rtlTheme, { cacheRtl } from "./themes/rtlTheme";
+import { CacheProvider } from "@emotion/react";
+
 
 const MainLayout = () => {
   return (
@@ -31,7 +34,8 @@ const MainLayout = () => {
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <CacheProvider value={cacheRtl}>
+    <ThemeProvider theme={rtlTheme}>
       <SnackbarProvider maxSnack={3}>
         <AppProvider>
           <Router>
@@ -41,6 +45,7 @@ function App() {
         </AppProvider>
       </SnackbarProvider>
     </ThemeProvider>
+  </CacheProvider>
   );
 }
 

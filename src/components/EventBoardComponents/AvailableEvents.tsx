@@ -22,7 +22,7 @@ function AvailableEvents() {
       }}
     >
       <Typography variant="h3" sx={{ marginBottom: 2 }}>
-        Available Events
+        אירועים זמינים
       </Typography>
       <FilterBar />
       <Grid

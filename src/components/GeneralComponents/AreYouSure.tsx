@@ -23,14 +23,14 @@ function AreYouSure({ event, onClose }: DeleteDialogProps) {
       {!isLoading && (
         <>
           <Typography variant="h4" gutterBottom>
-            Are you sure?
+          האם אתה בטוח ?
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
             <Button variant="contained" onClick={onClose}>
-              Cancel
+              בטל
             </Button>
             <Button variant="contained" color="error" onClick={handleDelete}>
-              Yes
+              כן
             </Button>
           </Box>
         </>

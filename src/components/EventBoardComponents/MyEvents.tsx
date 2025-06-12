@@ -31,7 +31,7 @@ function MyEvents() {
         }}
       >
         <Typography variant="h3" sx={{ marginBottom: 2 }}>
-          My Events
+           האירועים שלי
         </Typography>
         <Stack
           spacing={3}
