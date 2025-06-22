@@ -7,10 +7,9 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import { Event, CreateEventRequest } from "../types"; // Assuming CreateEventRequest is similar to Omit<Event, "id">
+import { Event, CreateEventRequest } from "../types";
 import { useAuth } from "../hooks";
-import { set } from "date-fns";
-import { fi } from "date-fns/locale";
+import { BACKEND_URL } from "../config";
 
 export interface FilterOptions {
   channels?: string[];
@@ -84,17 +83,10 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
     try {
-      console.log("Fetching all events...");
-      const response = await fetch("http://localhost:5000/events");
+      const response = await fetch(`${BACKEND_URL}/events`);
       const data = await response.json();
-      console.log("Fetch events response:", {
-        status: response.status,
-        ok: response.ok,
-        data: data,
-      });
 
       if (!response.ok) {
-        console.error("Failed to fetch events:", response.status, data);
         throw new Error(data.message || "Failed to fetch events");
       }
 
@@ -103,12 +95,10 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         date: new Date(event.date),
         id: event.id.toString(),
       }));
-      console.log("Mapped events:", mappedEvents);
 
       setEvents(mappedEvents);
       setError(null);
     } catch (err) {
-      console.error("Error in fetchEvents:", err);
       setError(err instanceof Error ? err.message : "Failed to load events");
     } finally {
       setIsLoading(false);
@@ -116,30 +106,27 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const fetchMyEvents = useCallback(async () => {
-    console.log("Fetching my events...");
     if (!user) {
-      console.log("No user found, clearing my events");
       setMyEvents([]);
       return;
     }
     setIsLoading(true);
     try {
       const token = localStorage.getItem("access_token");
-      if (!token) {
-        throw new Error("No token found for fetching user-specific events.");
-      }
-      const response = await fetch("http://localhost:5000/me/events", {
+      if (!token) throw new Error("No token found for fetching user events.");
+
+      const response = await fetch(`${BACKEND_URL}/me/events`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error("Failed to fetch my events:", response.status, errorData);
         throw new Error(errorData.message || "Failed to fetch my events");
       }
+
       const data = await response.json();
-      console.log("Received my events data:", data);
       setMyEvents(
         data.events.map((event: any) => ({
           ...event,
@@ -149,7 +136,6 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       );
       setError(null);
     } catch (err) {
-      console.error("Error in fetchMyEvents:", err);
       setError(err instanceof Error ? err.message : "Failed to load my events");
     } finally {
       setIsLoading(false);
@@ -162,12 +148,8 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!authIsLoading) {
-      if (user) {
-        fetchMyEvents();
-      } else {
-        setMyEvents([]);
-      }
-    } else {
+      if (user) fetchMyEvents();
+      else setMyEvents([]);
     }
   }, [user, authIsLoading, fetchMyEvents]);
 
@@ -176,8 +158,8 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
-        console.log("Creating event with data:", eventData);
-        const response = await fetch("http://localhost:5000/admin/new", {
+
+        const response = await fetch(`${BACKEND_URL}/admin/new`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -190,29 +172,15 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         });
 
         const responseData = await response.json();
-        console.log("Create event response:", {
-          status: response.status,
-          ok: response.ok,
-          data: responseData,
-        });
-
         if (!response.ok) {
-          console.error(
-            "Failed to create event:",
-            response.status,
-            responseData
-          );
           throw new Error(responseData.message || "Failed to create event");
         }
 
-        console.log("Event created successfully, fetching updated events...");
         await Promise.all([
           fetchEvents(),
           user ? fetchMyEvents() : Promise.resolve(),
         ]);
-        console.log("Events updated successfully");
       } catch (err) {
-        console.error("Error in createEvent:", err);
         throw err instanceof Error ? err : new Error("Failed to create event");
       } finally {
         setIsLoading(false);
@@ -226,8 +194,9 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
+
         const response = await fetch(
-          `http://localhost:5000/admin/edit/${eventId}`,
+          `${BACKEND_URL}/admin/edit/${eventId}`,
           {
             method: "PUT",
             headers: {
@@ -247,6 +216,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             .catch(() => ({ message: "Failed to update event" }));
           throw new Error(errorBody.message);
         }
+
         await Promise.all([
           fetchEvents(),
           user ? fetchMyEvents() : Promise.resolve(),
@@ -265,7 +235,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/delete/${eventId}`,
+          `${BACKEND_URL}/admin/delete/${eventId}`,
           {
             method: "DELETE",
             headers: {
@@ -298,7 +268,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/approve/${eventId}`,
+          `${BACKEND_URL}/admin/approve/${eventId}`,
           {
             method: "PUT",
             headers: { Authorization: `Bearer ${token}` },
@@ -327,7 +297,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/unapprove/${eventId}`,
+          `${BACKEND_URL}/admin/unapprove/${eventId}`,
           {
             method: "PUT",
             headers: { Authorization: `Bearer ${token}` },
@@ -359,7 +329,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/events/${eventId}/register`,
+          `${BACKEND_URL}/events/${eventId}/register`,
           {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
@@ -371,7 +341,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             .catch(() => ({ message: "Failed to register to event" }));
           throw new Error(errorBody.message);
         }
-        await Promise.all([fetchMyEvents()]);
+        await fetchMyEvents();
       } catch (err) {
         throw err instanceof Error
           ? err
@@ -390,7 +360,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/events/${eventId}/unregister`,
+          `${BACKEND_URL}/events/${eventId}/unregister`,
           {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
@@ -465,9 +435,8 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
 
       return true;
     });
-  }, [events, filters]); // Recompute when events or filters change
+  }, [events, filters]);
 
-  // Update filter function to set filters
   const filterEvents = (newFilters: FilterOptions) => {
     setFilters(newFilters);
   };

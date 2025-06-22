@@ -6,6 +6,7 @@ import {
   useEffect,
 } from "react";
 import { User, SignupData } from "../types";
+import { BACKEND_URL } from "../config"; // ✅ הוספנו
 
 interface AuthContextType {
   user: User | null;
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (token) {
         try {
           setIsLoading(true);
-          const response = await fetch("http://localhost:5000/me", {
+          const response = await fetch(`${BACKEND_URL}/me`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -43,6 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               firstName: userData.firstName,
               lastName: userData.lastName,
               permissions: userData.permissions,
+              role: userData.role,
             });
           }
         } catch (err) {
@@ -59,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${BACKEND_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -79,6 +81,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         firstName: data.user.firstName,
         lastName: data.user.lastName,
         permissions: data.user.permissions,
+        role: data.user.role
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
@@ -92,7 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     console.log(data);
     try {
-      const response = await fetch("http://localhost:5000/signup", {
+      const response = await fetch(`${BACKEND_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -116,7 +119,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const token = localStorage.getItem("access_token");
       if (token) {
-        await fetch("http://localhost:5000/logout", {
+        await fetch(`${BACKEND_URL}/logout`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
