@@ -28,7 +28,7 @@ function AvailableEvents() {
       <Grid
         container
         columns={{ xs: 12 }}
-        spacing={2}
+        spacing={3}
         sx={{
           width: "100%",
           flexGrow: 1,
@@ -36,13 +36,18 @@ function AvailableEvents() {
       >
         {isLoading
           ? Array.from({ length: numCardsToLoad }, (_, index) => (
-              <Grid key={index}>
+              <Grid key={index} size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
                 <EventBoardCardSkeleton />
               </Grid>
             ))
           : filteredEvents
               .filter(
-                (event) => !myEvents.some((myEvent) => myEvent.id === event.id)
+                (event) =>
+                  !myEvents.some(
+                    (myEvent) =>
+                      myEvent.id === event.id &&
+                      myEvent.registrationStatus === 'approved'
+                  )
               )
               .map((event) => (
                 <Grid key={event.id} size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>

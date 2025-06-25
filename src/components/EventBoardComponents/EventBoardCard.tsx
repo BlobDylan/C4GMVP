@@ -2,10 +2,16 @@ import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { Event } from "../../types";
 import { useEvents } from "../../hooks";
 import { useState } from "react";
+import { useSnackbar } from "notistack";
 
 function EventBoardCard(event: Event) {
-  const { registerToEvent, isLoadingRegisterID } = useEvents();
+  const { registerToEvent, isLoadingRegisterID, pendingRegistrations } = useEvents();
   const [isHovered, setIsHovered] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const isPending = pendingRegistrations.some(
+    (reg) => reg.eventId === event.id && reg.status === 'pending'
+  );
 
   const truncateDescription = (text: string, maxLength: number = 60) => {
     return text.length > maxLength
@@ -96,24 +102,50 @@ function EventBoardCard(event: Event) {
         </Typography>
       </Box>
 
-      <Button
-        variant="contained"
-        disabled={isLoadingRegisterID === event.id}
-        onClick={() => registerToEvent(event.id)}
-        sx={{
-          marginTop: isHovered ? 2 : "auto",
-          opacity: isHovered ? 1 : 0,
-          transform: isHovered ? "translateY(0)" : "translateY(10px)",
-          transition: "opacity 0.6s ease, transform 0.6s ease",
-          pointerEvents: isHovered ? "auto" : "none",
-        }}
-      >
-        {isLoadingRegisterID === event.id ? (
-          <CircularProgress size={24} sx={{ color: "white" }} />
-        ) : (
-          "Register"
-        )}
-      </Button>
+      {isPending ? (
+        <Typography
+          sx={{
+            marginTop: isHovered ? 2 : "auto",
+            opacity: isHovered ? 1 : 0,
+            color: 'orange',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            transition: "opacity 0.6s ease, transform 0.6s ease",
+            pointerEvents: isHovered ? "auto" : "none",
+          }}
+        >
+          Pending
+        </Typography>
+      ) : (
+        <Button
+          variant="contained"
+          disabled={isLoadingRegisterID === event.id}
+          onClick={async () => {
+            try {
+              const status = await registerToEvent(event.id);
+              enqueueSnackbar(
+                status === 'pending' ? 'Your registration is pending approval.' : 'Registered successfully!',
+                { variant: 'success' }
+              );
+            } catch (err: unknown) {
+              enqueueSnackbar(err instanceof Error ? err.message : 'Failed to register.', { variant: 'error' });
+            }
+          }}
+          sx={{
+            marginTop: isHovered ? 2 : "auto",
+            opacity: isHovered ? 1 : 0,
+            transform: isHovered ? "translateY(0)" : "translateY(10px)",
+            transition: "opacity 0.6s ease, transform 0.6s ease",
+            pointerEvents: isHovered ? "auto" : "none",
+          }}
+        >
+          {isLoadingRegisterID === event.id ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "Register"
+          )}
+        </Button>
+      )}
     </Box>
   );
 }

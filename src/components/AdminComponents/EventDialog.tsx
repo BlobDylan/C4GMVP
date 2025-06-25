@@ -1,13 +1,29 @@
+import { useState } from "react";
 import { Event, EventStatus } from "../../types";
 import { Box, Typography, Button } from "@mui/material";
 import { useEvents } from "../../hooks";
+import { useAuth } from "../../hooks/useAuth";
+import RegistrationDialog from "./RegistrationApprovalDialog";
 
 interface EventDialogProps {
   event: Event | null;
   onClose: () => void;
 }
 
+
 function EventDialog({ event, onClose }: EventDialogProps) {
+
+  const { user } = useAuth();
+  const [isRegistrationDialogOpen, setIsRegistrationDialogOpen] = useState(false);
+
+  const handleOpenRegistrationDialog = () => {
+    setIsRegistrationDialogOpen(true);
+  };
+
+  const handleCloseRegistrationDialog = () => {
+    setIsRegistrationDialogOpen(false);
+  };
+  
   if (!event) return null;
 
   const { approveEvent, unapproveEvent } = useEvents();
@@ -60,23 +76,37 @@ function EventDialog({ event, onClose }: EventDialogProps) {
       <Typography variant="body2" paragraph>
         Status: {event.status}
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-        <Button
-          variant="contained"
-          onClick={handleClick}
-          sx={{
-            backgroundColor:
-              event.status === EventStatus.APPROVED
-                ? "custom.unassigned"
-                : "custom.approved",
-          }}
-        >
-          {event.status === EventStatus.APPROVED ? "Unapprove" : "Approve"}
-        </Button>
-        <Button variant="contained" onClick={onClose}>
-          Close
-        </Button>
-      </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, gap: 2 }}>
+              {user && ['admin', 'super_admin'].includes(user.permissions) && (
+                <>
+                  <Button
+                    variant="contained"
+                    onClick={handleClick}
+                    sx={{
+                      backgroundColor:
+                        event.status === EventStatus.APPROVED
+                          ? "custom.unassigned"
+                          : "custom.approved",
+                    }}
+                  >
+                    {event.status === EventStatus.APPROVED ? "Unapprove" : "Approve"}
+                  </Button>
+                  <Button variant="contained" onClick={handleOpenRegistrationDialog}>
+                    Manage Registrations
+                  </Button>
+                </>
+              )}
+              <Button variant="contained" onClick={onClose}>
+                Close
+              </Button>
+            </Box>
+            {user && ['admin', 'super_admin'].includes(user.permissions) && (
+              <RegistrationDialog
+                open={isRegistrationDialogOpen}
+                eventId={event.id}
+                onClose={handleCloseRegistrationDialog}
+              />
+            )}
     </Box>
   );
 }

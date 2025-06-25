@@ -7,7 +7,7 @@ import {
   useCallback,
   useMemo,
 } from "react";
-import { Event, CreateEventRequest } from "../types"; // Assuming CreateEventRequest is similar to Omit<Event, "id">
+import { Event, CreateEventRequest, Registration } from "../types";
 import { useAuth } from "../hooks";
 import { set } from "date-fns";
 import { fi } from "date-fns/locale";
@@ -21,6 +21,8 @@ export interface FilterOptions {
 interface EventsContextType {
   events: Event[];
   myEvents: Event[];
+  pendingRegistrations: { eventId: string; status: string }[];
+  eventPendingRegistrations: Registration[];
   isLoading: boolean;
   isLoadingRegisterID: String | null;
   isLoadingUnregisterID: String | null;
@@ -35,17 +37,23 @@ interface EventsContextType {
   deleteEvent: (eventId: string) => Promise<void>;
   approveEvent: (eventId: string) => Promise<void>;
   unapproveEvent: (eventId: string) => Promise<void>;
-  registerToEvent: (eventId: string) => Promise<void>;
+  registerToEvent: (eventId: string) => Promise<string>;
   unregisterFromEvent: (eventId: string) => Promise<void>;
   refetchEvents: () => Promise<void>;
   refetchMyEvents: () => Promise<void>;
+  refetchPendingRegistrations: () => Promise<void>;
+  refetchEventPendingRegistrations: (eventId: string) => Promise<void>;
   filterEvents: (filters: FilterOptions) => void;
   resetFilters: () => void;
+  approveRegistration: (eventId: string, userId: string) => Promise<void>;
+  rejectRegistration: (eventId: string, userId: string) => Promise<void>;
 }
 
 const EventsContext = createContext<EventsContextType>({
   events: [],
   myEvents: [],
+  pendingRegistrations: [],
+  eventPendingRegistrations: [],
   isLoading: true,
   isLoadingRegisterID: null,
   isLoadingUnregisterID: null,
@@ -60,24 +68,27 @@ const EventsContext = createContext<EventsContextType>({
   deleteEvent: async () => {},
   approveEvent: async () => {},
   unapproveEvent: async () => {},
-  registerToEvent: async () => {},
+  registerToEvent: async (eventId: string): Promise<string> => { return "approved"; },
   unregisterFromEvent: async () => {},
   refetchEvents: async () => {},
   refetchMyEvents: async () => {},
+  refetchPendingRegistrations: async () => {},
+  refetchEventPendingRegistrations: async () => {},
   filterEvents: (events) => events,
   resetFilters: () => {},
+  approveRegistration: async () => {},
+  rejectRegistration: async () => {},
 });
 
 export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const { user, isLoading: authIsLoading } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [myEvents, setMyEvents] = useState<Event[]>([]);
+  const [pendingRegistrations, setPendingRegistrations] = useState<{ eventId: string; status: string }[]>([]);
+  const [eventPendingRegistrations, setEventPendingRegistrations] = useState<Registration[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingRegisterID, setIsLoadingRegisterID] = useState<String | null>(
-    null
-  );
-  const [isLoadingUnregisterID, setIsLoadingUnregisterID] =
-    useState<String | null>(null);
+  const [isLoadingRegisterID, setIsLoadingRegisterID] = useState<string | null>(null);
+  const [isLoadingUnregisterID, setIsLoadingUnregisterID] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<FilterOptions>({});
 
@@ -118,8 +129,9 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const fetchMyEvents = useCallback(async () => {
     console.log("Fetching my events...");
     if (!user) {
-      console.log("No user found, clearing my events");
+      console.log("No user found, clearing my events and pending registrations");
       setMyEvents([]);
+      setPendingRegistrations([]);
       return;
     }
     setIsLoading(true);
@@ -145,7 +157,16 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           ...event,
           date: new Date(event.date),
           id: event.id.toString(),
+          registrationStatus: event.registration_status,
         }))
+      );
+      setPendingRegistrations(
+        data.events
+          .filter((event: any) => event.registration_status === 'pending')
+          .map((event: any) => ({
+            eventId: event.id.toString(),
+            status: event.registration_status,
+          }))
       );
       setError(null);
     } catch (err) {
@@ -156,6 +177,45 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
+  const fetchPendingRegistrations = useCallback(async () => {
+  console.log("Fetching pending registrations...");
+  if (!user) {
+    console.log("No user found, clearing pending registrations");
+    setPendingRegistrations([]);
+    return;
+  }
+  try {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      throw new Error("No token found for fetching pending registrations.");
+    }
+    const response = await fetch("http://localhost:5000/me/events", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("Failed to fetch pending registrations:", response.status, errorData);
+      throw new Error(errorData.message || "Failed to fetch pending registrations");
+    }
+    const data = await response.json();
+    console.log("Received pending registrations data:", data);
+    setPendingRegistrations(
+      data.events
+        .filter((event: any) => event.registration_status === 'pending')
+        .map((event: any) => ({
+          eventId: event.id.toString(),
+          status: event.registration_status,
+        }))
+    );
+    setError(null);
+  } catch (err) {
+    console.error("Error in fetchPendingRegistrations:", err);
+    setError(err instanceof Error ? err.message : "Failed to load pending registrations");
+  }
+}, [user]);
+
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
@@ -163,13 +223,19 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!authIsLoading) {
       if (user) {
-        fetchMyEvents();
+        Promise.all([fetchMyEvents(), fetchPendingRegistrations()])
+          .catch((err) => {
+            setError(
+              err instanceof Error ? err.message : "Failed to fetch events or registrations"
+            );
+          });
       } else {
         setMyEvents([]);
+        setPendingRegistrations([]);
+        setEventPendingRegistrations([]);
       }
-    } else {
     }
-  }, [user, authIsLoading, fetchMyEvents]);
+  }, [user, authIsLoading, fetchMyEvents, fetchPendingRegistrations]);
 
   const createEvent = useCallback(
     async (eventData: CreateEventRequest) => {
@@ -353,7 +419,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const registerToEvent = useCallback(
-    async (eventId: string) => {
+    async (eventId: string): Promise<string> => {
       setIsLoadingRegisterID(eventId);
       try {
         const token = localStorage.getItem("access_token");
@@ -371,7 +437,9 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
             .catch(() => ({ message: "Failed to register to event" }));
           throw new Error(errorBody.message);
         }
-        await Promise.all([fetchMyEvents()]);
+        const responseData = await response.json();
+        await Promise.all([fetchMyEvents(), fetchPendingRegistrations()]);
+        return responseData.status as string;
       } catch (err) {
         throw err instanceof Error
           ? err
@@ -380,7 +448,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         setIsLoadingRegisterID(null);
       }
     },
-    [fetchMyEvents]
+    [fetchMyEvents, fetchPendingRegistrations]
   );
 
   const unregisterFromEvent = useCallback(
@@ -413,6 +481,112 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
     },
     [fetchEvents, fetchMyEvents]
   );
+
+const fetchEventPendingRegistrations = useCallback(async (eventId: string) => {
+  console.log(`Fetching pending registrations for event ${eventId}...`);
+  if (!user || !['admin', 'super_admin'].includes(user.permissions)) {
+    console.log("User not admin, clearing event pending registrations");
+    setEventPendingRegistrations([]);
+    return;
+  }
+  setIsLoading(true);
+  try {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      throw new Error("No token found for fetching event pending registrations.");
+    }
+    const response = await fetch(`http://localhost:5000/events/${eventId}/registrations/pending`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("Failed to fetch event pending registrations:", response.status, errorData);
+      throw new Error(errorData.message || "Failed to fetch event pending registrations");
+    }
+    const data = await response.json();
+    console.log("Received event pending registrations data:", data);
+    setEventPendingRegistrations(
+      data.registrations.map((reg: any) => ({
+        user_id: reg.user_id.toString(),
+        user_email: reg.user_email,
+        user_role: reg.user_role,
+        event_id: reg.event_id.toString(),
+        event_title: reg.event_title,
+        event_date: new Date(reg.event_date),
+        event_channel: reg.event_channel,
+        event_language: reg.event_language,
+        event_location: reg.event_location,
+        status: reg.status,
+      }))
+    );
+    setError(null);
+  } catch (err) {
+    console.error("Error in fetchEventPendingRegistrations:", err);
+    setError(err instanceof Error ? err.message : "Failed to load event pending registrations");
+  } finally {
+    setIsLoading(false);
+  }
+}, [user]);
+
+const approveRegistration = useCallback(
+  async (eventId: string, userId: string) => {
+    console.log(`Approving registration for event ${eventId}, user ${userId}...`);
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) throw new Error("Authentication token not found.");
+      const response = await fetch(`http://localhost:5000/admin/approve-registration/${eventId}/${userId}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({ message: "Failed to approve registration" }));
+        console.error("Failed to approve registration:", response.status, errorBody);
+        throw new Error(errorBody.message);
+      }
+      console.log("Registration approved successfully");
+      await Promise.all([
+        fetchEvents(),
+        user ? fetchMyEvents() : Promise.resolve(),
+        user ? fetchPendingRegistrations() : Promise.resolve(),
+        user ? fetchEventPendingRegistrations(eventId) : Promise.resolve(),
+      ]);
+    } catch (err) {
+      console.error("Error in approveRegistration:", err);
+      throw err instanceof Error ? err : new Error("Failed to approve registration");
+    }
+  },
+  [fetchEvents, fetchMyEvents, fetchPendingRegistrations, fetchEventPendingRegistrations, user]
+);
+
+const rejectRegistration = useCallback(
+  async (eventId: string, userId: string) => {
+    console.log(`Rejecting registration for event ${eventId}, user ${userId}...`);
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) throw new Error("Authentication token not found.");
+      const response = await fetch(`http://localhost:5000/admin/reject-registration/${eventId}/${userId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({ message: "Failed to reject registration" }));
+        console.error("Failed to reject registration:", response.status, errorBody);
+        throw new Error(errorBody.message);
+      }
+      console.log("Registration rejected successfully");
+      await Promise.all([
+        fetchEvents(),
+        user ? fetchMyEvents() : Promise.resolve(),
+        user ? fetchPendingRegistrations() : Promise.resolve(),
+        user ? fetchEventPendingRegistrations(eventId) : Promise.resolve(),
+      ]);
+    } catch (err) {
+      console.error("Error in rejectRegistration:", err);
+      throw err instanceof Error ? err : new Error("Failed to reject registration");
+    }
+  },
+  [fetchEvents, fetchMyEvents, fetchPendingRegistrations, fetchEventPendingRegistrations, user]
+);
 
   const channelOptions = [
     { label: "Hostages Square", value: "Hostages Square" },
@@ -481,6 +655,8 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       value={{
         events,
         myEvents,
+        pendingRegistrations,
+        eventPendingRegistrations,
         isLoading,
         isLoadingRegisterID,
         isLoadingUnregisterID,
@@ -499,8 +675,12 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         unregisterFromEvent,
         refetchEvents: fetchEvents,
         refetchMyEvents: fetchMyEvents,
+        refetchPendingRegistrations: fetchPendingRegistrations,
+        refetchEventPendingRegistrations: fetchEventPendingRegistrations,
         filterEvents: filterEvents,
         resetFilters,
+        approveRegistration,
+        rejectRegistration,
       }}
     >
       {children}

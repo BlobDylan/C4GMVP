@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
-import { EventsProvider, AuthProvider } from "./";
+import { AuthProvider } from "./useAuth";
+import { EventsProvider } from "./useEvents";
 
 export default function AppProvider({ children }: { children: ReactNode }) {
   return (
