@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               firstName: userData.firstName,
               lastName: userData.lastName,
               permissions: userData.permissions,
+              role: userData.role,
             });
           }
         } catch (err) {
@@ -79,6 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         firstName: data.user.firstName,
         lastName: data.user.lastName,
         permissions: data.user.permissions,
+        role: data.user.role,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");

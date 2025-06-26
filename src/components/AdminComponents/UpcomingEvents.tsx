@@ -9,7 +9,6 @@ import {
   TableRow,
   IconButton,
   Dialog,
-  Tab,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PreviewIcon from "@mui/icons-material/Preview";
@@ -22,6 +21,7 @@ import {
   NewEventForm,
   AreYouSure,
   UpcomingEventRowSkeleton,
+  FilterBar,
 } from "../";
 import { useEvents } from "../../hooks";
 import { Event } from "../../types";
@@ -50,7 +50,7 @@ function UpcomingEvents() {
     setSelectedEvent(null);
   };
 
-  const { events, isLoading, error } = useEvents();
+  const { filteredEvents, isLoading, error } = useEvents();
   if (error) {
     enqueueSnackbar(error, { variant: "error" });
   }
@@ -86,6 +86,7 @@ function UpcomingEvents() {
             <Typography variant="h3" sx={{ marginBottom: 2 }}>
               Upcoming Events
             </Typography>
+            <FilterBar />
             <IconButton
               aria-label="add"
               size="large"
@@ -118,7 +119,7 @@ function UpcomingEvents() {
                   ? Array.from({ length: numRowsToLoad }, (_, index) => (
                       <UpcomingEventRowSkeleton key={index} />
                     ))
-                  : events.map((event) => (
+                  : filteredEvents.map((event) => (
                       <TableRow key={event.id}>
                         <TableCell>{event.title}</TableCell>
                         <TableCell>{event.channel}</TableCell>

@@ -38,6 +38,7 @@ export interface Event {
   target_audience: string;
   group_description?: string;
   additional_notes?: string;
+  registrationStatus?: 'pending' | 'approved';
 }
 
 export interface CreateEventRequest {
@@ -52,4 +53,17 @@ export interface CreateEventRequest {
   num_representatives_needed: number;
   group_description?: string;
   additional_notes?: string;
+}
+
+export interface Registration {
+  user_id: string;
+  user_email: string;
+  user_role: string;
+  event_id: string;
+  event_title: string;
+  event_date: Date;
+  event_channel: string;
+  event_language: string;
+  event_location: string;
+  status: string;
 }
