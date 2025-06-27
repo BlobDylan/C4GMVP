@@ -53,7 +53,7 @@ function Navbar() {
                 "&:hover": { backgroundColor: "transparent" },
               }}
               onClick={() => {
-                navigate("/available-events");
+                navigate("/my-events");
               }}
             >
               <EventIcon />
