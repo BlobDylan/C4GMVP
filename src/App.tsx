@@ -18,7 +18,7 @@ const MainLayout = () => {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<MyEventsPage />} />
+        <Route path="/" element={<EventBoardPage />} />
         <Route path="/available-events" element={<EventBoardPage />} />
         <Route path="/my-events" element={<MyEventsPage />} />
         <Route path="/login" element={<LoginPage />} />

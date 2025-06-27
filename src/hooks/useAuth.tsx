@@ -45,6 +45,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               permissions: userData.permissions,
               role: userData.role,
             });
+          } else {
+            setUser(null);
           }
         } catch (err) {
           localStorage.removeItem("access_token");
@@ -92,7 +94,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signup = async (data: SignupData) => {
     setIsLoading(true);
-    console.log(data);
     try {
       const response = await fetch("http://localhost:5000/signup", {
         method: "POST",
