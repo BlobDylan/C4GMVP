@@ -8,47 +8,49 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { useEvents } from "../../hooks";
 import { CreateEventRequest } from "../../types";
+import { useTranslation } from "react-i18next";
 
 function NewEventForm({ onClose }: { onClose: () => void }) {
+  const { t } = useTranslation();
   const { createEvent } = useEvents();
 
   const channels = [
-    { label: "Hostages Square", value: "Hostageas Square" },
-    { label: "Business Sector", value: "Business Sector" },
-    { label: "Donations", value: "Donations" },
-    { label: "Religious Zionism", value: "Religious Zionism" },
-    { label: "Virtual", value: "Virtual" },
+    { label: t("newEvent.channels.hostagesSquare"), value: "Hostages Square" },
+    { label: t("newEvent.channels.businessSector"), value: "Business Sector" },
+    { label: t("newEvent.channels.donations"), value: "Donations" },
+    { label: t("newEvent.channels.religiousZionism"), value: "Religious Zionism" },
+    { label: t("newEvent.channels.virtual"), value: "Virtual" },
   ];
 
   const languages = [
-    { label: "Hebrew", value: "Hebrew" },
-    { label: "English", value: "English" },
-    { label: "Arabic", value: "Arabic" },
-    { label: "Russian", value: "Russian" },
-    { label: "French", value: "French" },
-    { label: "Spanish", value: "Spanish" },
-    { label: "Other", value: "Other" },
+    { label: t("newEvent.languages.hebrew"), value: "Hebrew" },
+    { label: t("newEvent.languages.english"), value: "English" },
+    { label: t("newEvent.languages.arabic"), value: "Arabic" },
+    { label: t("newEvent.languages.russian"), value: "Russian" },
+    { label: t("newEvent.languages.french"), value: "French" },
+    { label: t("newEvent.languages.spanish"), value: "Spanish" },
+    { label: t("newEvent.languages.other"), value: "Other" },
   ];
 
   const locations = [
-    { label: "Hostages Square", value: "Hostageas Square" },
-    { label: "Zoom", value: "Zoom" },
-    { label: "North", value: "North" },
-    { label: "South", value: "South" },
-    { label: "Offices", value: "Offices" },
-    { label: "Jerusalem", value: "Jerusalem" },
-    { label: "Center", value: "Center" },
-    { label: "Shfela", value: "Shfela" },
-    { label: "Across the green line", value: "Across the green line" },
+    { label: t("newEvent.locations.hostagesSquare"), value: "Hostages Square" },
+    { label: t("newEvent.locations.zoom"), value: "Zoom" },
+    { label: t("newEvent.locations.north"), value: "North" },
+    { label: t("newEvent.locations.south"), value: "South" },
+    { label: t("newEvent.locations.offices"), value: "Offices" },
+    { label: t("newEvent.locations.jerusalem"), value: "Jerusalem" },
+    { label: t("newEvent.locations.center"), value: "Center" },
+    { label: t("newEvent.locations.shfela"), value: "Shfela" },
+    { label: t("newEvent.locations.acrossGreenLine"), value: "Across the green line" },
   ];
 
   const targetAudiences = [
-    { label: "Religious Sector", value: "Religious Sector" },
-    { label: "High Schools", value: "High Schools" },
-    { label: "Universities", value: "Universities" },
-    { label: "Business Sector", value: "Business Sector" },
-    { label: "Army", value: "Army" },
-    { label: "Donors", value: "Donors" },
+    { label: t("newEvent.targetAudiences.religiousSector"), value: "Religious Sector" },
+    { label: t("newEvent.targetAudiences.highSchools"), value: "High Schools" },
+    { label: t("newEvent.targetAudiences.universities"), value: "Universities" },
+    { label: t("newEvent.targetAudiences.businessSector"), value: "Business Sector" },
+    { label: t("newEvent.targetAudiences.army"), value: "Army" },
+    { label: t("newEvent.targetAudiences.donors"), value: "Donors" },
   ];
 
   const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({
@@ -108,12 +110,12 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
   return (
     <Box component="form" onSubmit={handleSubmit} p={3}>
       <Typography variant="h4" component="h1" gutterBottom align="center">
-        Create a New Event
+        {t("newEvent.createNewEvent")}
       </Typography>
 
       <TextField
         fullWidth
-        label="Title"
+        label={t("newEvent.title")}
         name="title"
         onChange={handleChange}
         margin="normal"
@@ -121,7 +123,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
       />
       <TextField
         fullWidth
-        label="Description"
+        label={t("newEvent.description")}
         name="description"
         onChange={handleChange}
         margin="normal"
@@ -132,13 +134,13 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box sx={{ display: "flex", gap: 2, my: 2 }}>
           <DatePicker
-            label="Date"
+            label={t("newEvent.date")}
             value={eventDate}
             onChange={handleDateChange}
             sx={{ flex: 1 }}
           />
           <TimePicker
-            label="Time"
+            label={t("newEvent.time")}
             value={eventDate}
             onChange={handleTimeChange}
             sx={{ flex: 1 }}
@@ -149,7 +151,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
       <Box sx={{ display: "flex", gap: 2, my: 2 }}>
         <TextField
           fullWidth
-          label="Channel"
+          label={t("newEvent.channel")}
           name="channel"
           select
           value={formData.channel}
@@ -165,7 +167,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
 
         <TextField
           fullWidth
-          label="Language"
+          label={t("newEvent.language")}
           name="language"
           select
           value={formData.language}
@@ -182,7 +184,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
 
       <TextField
         fullWidth
-        label="Location"
+        label={t("newEvent.location")}
         name="location"
         select
         value={formData.location}
@@ -198,7 +200,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
 
       <TextField
         fullWidth
-        label="Target Audience"
+        label={t("newEvent.targetAudience")}
         name="target_audience"
         select
         value={formData.target_audience}
@@ -206,16 +208,16 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         required
         margin="normal"
       >
-        {targetAudiences.map((t) => (
-          <MenuItem key={t.value} value={t.value}>
-            {t.label}
+        {targetAudiences.map((tgt) => (
+          <MenuItem key={tgt.value} value={tgt.value}>
+            {tgt.label}
           </MenuItem>
         ))}
       </TextField>
 
       <TextField
         fullWidth
-        label="Group Description"
+        label={t("newEvent.groupDescription")}
         name="group_description"
         onChange={handleChange}
         margin="normal"
@@ -225,7 +227,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
 
       <TextField
         fullWidth
-        label="Additional Notes"
+        label={t("newEvent.additionalNotes")}
         name="additional_notes"
         onChange={handleChange}
         margin="normal"
@@ -235,7 +237,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
 
       <TextField
         fullWidth
-        label="Group Size"
+        label={t("newEvent.groupSize")}
         name="group_size"
         type="number"
         onChange={handleChange}
@@ -244,7 +246,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
       />
       <TextField
         fullWidth
-        label="Number of Instructors Needed"
+        label={t("newEvent.numInstructorsNeeded")}
         name="num_instructors_needed"
         type="number"
         onChange={handleChange}
@@ -253,7 +255,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
       />
       <TextField
         fullWidth
-        label="Number of Representatives Needed"
+        label={t("newEvent.numRepresentativesNeeded")}
         name="num_representatives_needed"
         type="number"
         onChange={handleChange}
@@ -268,7 +270,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         size="large"
         sx={{ mt: 2 }}
       >
-        Submit
+        {t("newEvent.submit")}
       </Button>
     </Box>
   );

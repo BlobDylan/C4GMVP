@@ -9,6 +9,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { useAuth } from "../../hooks";
+import { useTranslation } from "react-i18next";
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ function LoginForm() {
 
   const { login, isLoading, error } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,17 +38,17 @@ function LoginForm() {
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <Typography variant="h4" component="h1" gutterBottom align="center">
-        Welcome to Volunteer Manager
+        {t("login.title")}
       </Typography>
 
       <Typography variant="h5" gutterBottom align="center" sx={{ mb: 4 }}>
-        Login to Your Account
+        {t("login.subtitle")}
       </Typography>
 
       <TextField
         fullWidth
         type="email"
-        label="Email"
+        label={t("login.email")}
         name="email"
         value={formData.email}
         onChange={handleChange}
@@ -57,7 +59,7 @@ function LoginForm() {
       <TextField
         fullWidth
         type="password"
-        label="Password"
+        label={t("login.password")}
         name="password"
         value={formData.password}
         onChange={handleChange}
@@ -79,15 +81,16 @@ function LoginForm() {
         disabled={isLoading}
         sx={{ mt: 2 }}
       >
-        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+        {isLoading ? <CircularProgress size={24} color="inherit" /> : t("login.loginButton")}
       </Button>
+
       <Button
         variant="contained"
         fullWidth
         onClick={() => navigate("/signup")}
         sx={{ mt: 2 }}
       >
-        Create an Account
+        {t("login.signupButton")}
       </Button>
     </Box>
   );

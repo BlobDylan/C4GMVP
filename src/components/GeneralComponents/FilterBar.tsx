@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useEvents } from "../../hooks";
+import { useTranslation } from "react-i18next";
 
 // Define filter options structure
 interface SelectedFilters {
@@ -21,13 +22,13 @@ interface SelectedFilters {
 }
 
 function FilterBar() {
+  const { t } = useTranslation();
   const { channels, languages, locations, filterEvents, resetFilters } =
     useEvents();
   const [currentDialog, setCurrentDialog] = useState<
     "channels" | "languages" | "locations" | null
   >(null);
 
-  // Track selected filters for ALL categories
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     channels: [],
     languages: [],
@@ -43,7 +44,6 @@ function FilterBar() {
   };
 
   const handleApply = () => {
-    // Apply all selected filters
     filterEvents(selectedFilters);
     setCurrentDialog(null);
   };
@@ -51,7 +51,6 @@ function FilterBar() {
   const handleToggleFilter = (value: string) => {
     if (!currentDialog) return;
 
-    // Update filters for the current category
     setSelectedFilters((prev) => ({
       ...prev,
       [currentDialog]: prev[currentDialog].includes(value)
@@ -74,11 +73,23 @@ function FilterBar() {
   };
 
   useEffect(() => {
-    // Reset filters when component unmounts
     return () => {
       resetFilters();
     };
   }, [resetFilters]);
+
+  const getDialogTitle = () => {
+    switch (currentDialog) {
+      case "channels":
+        return t("filters.channels");
+      case "languages":
+        return t("filters.languages");
+      case "locations":
+        return t("filters.locations");
+      default:
+        return "";
+    }
+  };
 
   return (
     <>
@@ -87,49 +98,48 @@ function FilterBar() {
         spacing={2}
         sx={{ width: "100%", justifyContent: "center" }}
       >
-        {/* Channel Filter Button */}
         <IconButton
           color="primary"
-          aria-label="filter channel"
+          aria-label={t("filters.filterByChannel")}
           size="large"
           onClick={() => handleOpen("channels")}
         >
           <FilterListIcon fontSize="inherit" />
           <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
-            Channel
+            {t("filters.channels")}
           </Typography>
         </IconButton>
 
-        {/* Language Filter Button */}
         <IconButton
           color="primary"
-          aria-label="filter language"
+          aria-label={t("filters.filterByLanguage")}
           size="large"
           onClick={() => handleOpen("languages")}
         >
           <FilterListIcon fontSize="inherit" />
           <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
-            Language
+            {t("filters.languages")}
           </Typography>
         </IconButton>
 
-        {/* Location Filter Button */}
         <IconButton
           color="primary"
-          aria-label="filter location"
+          aria-label={t("filters.filterByLocation")}
           size="large"
           onClick={() => handleOpen("locations")}
         >
           <FilterListIcon fontSize="inherit" />
           <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
-            Location
+            {t("filters.locations")}
           </Typography>
         </IconButton>
       </Stack>
 
-      {/* Filter Dialog */}
       <Dialog open={!!currentDialog} onClose={handleCancel}>
         <Box sx={{ width: "100%", padding: 2 }}>
+          <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+            {getDialogTitle()}
+          </Typography>
           <Stack direction="column" spacing={2}>
             {getCurrentChoices().map((choice, index) => (
               <FormControlLabel
@@ -153,10 +163,10 @@ function FilterBar() {
         </Box>
         <DialogActions>
           <Button onClick={handleCancel} color="secondary">
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button onClick={handleApply} color="primary">
-            Apply Filters
+            {t("filters.apply")}
           </Button>
         </DialogActions>
       </Dialog>

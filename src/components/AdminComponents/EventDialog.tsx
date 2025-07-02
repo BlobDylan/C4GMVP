@@ -4,15 +4,15 @@ import { Box, Typography, Button } from "@mui/material";
 import { useEvents } from "../../hooks";
 import { useAuth } from "../../hooks/useAuth";
 import RegistrationDialog from "./RegistrationApprovalDialog";
+import { useTranslation } from "react-i18next";
 
 interface EventDialogProps {
   event: Event | null;
   onClose: () => void;
 }
 
-
 function EventDialog({ event, onClose }: EventDialogProps) {
-
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [isRegistrationDialogOpen, setIsRegistrationDialogOpen] = useState(false);
 
@@ -23,7 +23,7 @@ function EventDialog({ event, onClose }: EventDialogProps) {
   const handleCloseRegistrationDialog = () => {
     setIsRegistrationDialogOpen(false);
   };
-  
+
   if (!event) return null;
 
   const { approveEvent, unapproveEvent } = useEvents();
@@ -46,67 +46,69 @@ function EventDialog({ event, onClose }: EventDialogProps) {
         {event.description}
       </Typography>
       <Typography variant="body2">
-        Date: {event.date.toLocaleDateString()}
+        {t("eventDialog.date")}: {event.date.toLocaleDateString()}
       </Typography>
       <Typography variant="body2" paragraph>
-        Time:{" "}
+        {t("eventDialog.time")}:{" "}
         {event.date.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         })}
       </Typography>
       <Typography variant="body2" paragraph>
-        Channel: {event.channel}
+        {t("eventDialog.channel")}: {event.channel}
       </Typography>
       <Typography variant="body2" paragraph>
-        Language: {event.language}
+        {t("eventDialog.language")}: {event.language}
       </Typography>
       <Typography variant="body2" paragraph>
-        Group Size: {event.group_size}
+        {t("eventDialog.groupSize")}: {event.group_size}
       </Typography>
       <Typography variant="body2" paragraph>
-        Instructors Needed: {event.num_instructors_needed}
+        {t("eventDialog.instructorsNeeded")}: {event.num_instructors_needed}
       </Typography>
       <Typography variant="body2" paragraph>
-        Representatives Needed: {event.num_representatives_needed}
+        {t("eventDialog.representativesNeeded")}: {event.num_representatives_needed}
       </Typography>
       <Typography variant="body2" paragraph>
-        Location: {event.location}
+        {t("eventDialog.location")}: {event.location}
       </Typography>
       <Typography variant="body2" paragraph>
-        Status: {event.status}
+        {t("eventDialog.status")}: {event.status}
       </Typography>
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, gap: 2 }}>
-              {user && ['admin', 'super_admin'].includes(user.permissions) && (
-                <>
-                  <Button
-                    variant="contained"
-                    onClick={handleClick}
-                    sx={{
-                      backgroundColor:
-                        event.status === EventStatus.APPROVED
-                          ? "custom.unassigned"
-                          : "custom.approved",
-                    }}
-                  >
-                    {event.status === EventStatus.APPROVED ? "Unapprove" : "Approve"}
-                  </Button>
-                  <Button variant="contained" onClick={handleOpenRegistrationDialog}>
-                    Manage Registrations
-                  </Button>
-                </>
-              )}
-              <Button variant="contained" onClick={onClose}>
-                Close
-              </Button>
-            </Box>
-            {user && ['admin', 'super_admin'].includes(user.permissions) && (
-              <RegistrationDialog
-                open={isRegistrationDialogOpen}
-                eventId={event.id}
-                onClose={handleCloseRegistrationDialog}
-              />
-            )}
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, gap: 2 }}>
+        {user && ["admin", "super_admin"].includes(user.permissions) && (
+          <>
+            <Button
+              variant="contained"
+              onClick={handleClick}
+              sx={{
+                backgroundColor:
+                  event.status === EventStatus.APPROVED
+                    ? "custom.unassigned"
+                    : "custom.approved",
+              }}
+            >
+              {event.status === EventStatus.APPROVED
+                ? t("eventDialog.unapprove")
+                : t("eventDialog.approve")}
+            </Button>
+            <Button variant="contained" onClick={handleOpenRegistrationDialog}>
+              {t("eventDialog.manageRegistrations")}
+            </Button>
+          </>
+        )}
+        <Button variant="contained" onClick={onClose}>
+          {t("common.close")}
+        </Button>
+      </Box>
+      {user && ["admin", "super_admin"].includes(user.permissions) && (
+        <RegistrationDialog
+          open={isRegistrationDialogOpen}
+          eventId={event.id}
+          onClose={handleCloseRegistrationDialog}
+        />
+      )}
     </Box>
   );
 }

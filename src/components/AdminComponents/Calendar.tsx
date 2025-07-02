@@ -8,6 +8,7 @@ import {
   isSameDay,
   isToday,
 } from "date-fns";
+import { he, enUS } from "date-fns/locale";
 import {
   IconButton,
   Button,
@@ -22,10 +23,11 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { EventStatus, Event } from "../../types";
 import { useState } from "react";
 import { useEvents } from "../../hooks";
-
 import { EventDialog } from "../";
+import { useTranslation } from "react-i18next";
 
 function Calendar() {
+  const { t, i18n } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 });
   const weekEnd = endOfWeek(currentDate, { weekStartsOn: 0 });
@@ -57,14 +59,21 @@ function Calendar() {
 
   const { events } = useEvents();
 
+  // קובע את ה־locale לפי השפה הפעילה
+  const getLocale = () => {
+    switch (i18n.language) {
+      case "he":
+        return he;
+      case "en":
+        return enUS;
+      default:
+        return enUS;
+    }
+  };
+
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          padding: 2,
-        }}
-      >
+      <Box sx={{ width: "100%", padding: 2 }}>
         <Box
           sx={{
             display: "flex",
@@ -77,7 +86,7 @@ function Calendar() {
           }}
         >
           <Typography variant="h3" sx={{ marginBottom: 2 }}>
-            Weekly Calendar
+            {t("calendar.weeklyCalendar")}
           </Typography>
           <Box
             sx={{
@@ -90,17 +99,15 @@ function Calendar() {
             }}
           >
             <Typography variant="h6" color="white">
-              {format(weekStart, "MMMM d")} - {format(weekEnd, "MMMM d, yyyy")}
+              {format(weekStart, "d MMMM", { locale: getLocale() })} -{" "}
+              {format(weekEnd, "d MMMM yyyy", { locale: getLocale() })}
             </Typography>
             <Stack direction="row" spacing={1}>
               <IconButton onClick={handlePreviousWeek}>
                 <ChevronLeftIcon />
               </IconButton>
-              <Button
-                onClick={() => onWeekChange(new Date())}
-                variant="contained"
-              >
-                Today
+              <Button onClick={() => onWeekChange(new Date())} variant="contained">
+                {t("calendar.today")}
               </Button>
               <IconButton onClick={handleNextWeek}>
                 <ChevronRightIcon />
@@ -109,22 +116,24 @@ function Calendar() {
           </Box>
 
           <Box className="grid grid-cols-7 gap-1">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-              <Paper
-                key={day}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  minWidth: "13dvw",
-                }}
-              >
-                {day}
-              </Paper>
-            ))}
+            {t("calendar.days", { returnObjects: true }).map(
+              (day: string, index: number) => (
+                <Paper
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    minWidth: "13dvw",
+                  }}
+                >
+                  {day}
+                </Paper>
+              )
+            )}
             {days.map((day) => {
-              const dayEvents = events.filter((event) => {
-                return isSameDay(event.date, day);
-              });
+              const dayEvents = events.filter((event) =>
+                isSameDay(event.date, day)
+              );
 
               return (
                 <Paper
@@ -138,7 +147,9 @@ function Calendar() {
                   }}
                   elevation={3}
                 >
-                  <Typography>{format(day, "d")}</Typography>
+                  <Typography>
+                    {format(day, "d", { locale: getLocale() })}
+                  </Typography>
                   <Box>
                     {dayEvents
                       .sort((a, b) => a.date.getTime() - b.date.getTime())
@@ -158,7 +169,9 @@ function Calendar() {
                           className="cursor-pointer"
                         >
                           <Typography color="black">
-                            {format(new Date(event.date), "HH:mm")}
+                            {format(new Date(event.date), "HH:mm", {
+                              locale: getLocale(),
+                            })}
                           </Typography>
                           <Typography color="black">{event.title}</Typography>
                         </Box>
@@ -170,6 +183,7 @@ function Calendar() {
           </Box>
         </Box>
       </Box>
+
       <Dialog open={openDialog} onClose={handleClose} fullWidth>
         <EventDialog event={selectedEvent} onClose={handleClose} />
       </Dialog>

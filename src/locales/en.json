@@ -1,0 +1,243 @@
+{
+  "common": {
+    "close": "Close",
+    "view": "View",
+    "delete": "Delete",
+    "add": "Add",
+    "approve": "Approve",
+    "reject": "Reject",
+    "cancel": "Cancel"
+  },
+  "calendar": {
+    "weeklyCalendar": "Weekly Calendar",
+    "today": "Today",
+    "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+  },
+  "eventDialog": {
+    "date": "Date",
+    "time": "Time",
+    "channel": "Channel",
+    "language": "Language",
+    "groupSize": "Group Size",
+    "instructorsNeeded": "Instructors Needed",
+    "representativesNeeded": "Representatives Needed",
+    "location": "Location",
+    "status": "Status",
+    "approve": "Approve",
+    "unapprove": "Unapprove",
+    "manageRegistrations": "Manage Registrations"
+  },
+  "upcomingEvents": {
+    "title": "Upcoming Events",
+    "table": {
+      "title": "Title",
+      "channel": "Channel",
+      "language": "Language",
+      "date": "Date",
+      "time": "Time",
+      "location": "Location",
+      "groupSize": "Group Size",
+      "instructorsNeeded": "Instructors Needed",
+      "representativesNeeded": "Representatives Needed",
+      "targetAudience": "Target Audience",
+      "status": "Status",
+      "actions": "Actions"
+    }
+  },
+  "registrationDialog": {
+    "title": "Pending Registrations",
+    "noPending": "There are no pending registrations for this event.",
+    "approvedSuccess": "Registration approved successfully!",
+    "rejectedSuccess": "Registration rejected successfully!",
+    "approveFail": "Failed to approve registration",
+    "rejectFail": "Failed to reject registration",
+    "table": {
+      "userEmail": "User Email",
+      "userRole": "User Role",
+      "eventTitle": "Event Title",
+      "date": "Date",
+      "channel": "Channel",
+      "language": "Language",
+      "location": "Location",
+      "status": "Status",
+      "actions": "Actions"
+    }
+  },
+  "navbar": {
+    "title": "Volunteer Manager",
+    "adminPanel": "Admin Panel",
+    "myEvents": "My Events",
+    "home": "Home",
+    "login": "Login",
+    "logout": "Logout",
+    "welcome": "Welcome"
+  },
+  "filters": {
+    "channels": "Channels",
+    "languages": "Languages",
+    "locations": "Locations",
+    "filterByChannel": "Filter by Channel",
+    "filterByLanguage": "Filter by Language",
+    "filterByLocation": "Filter by Location",
+    "apply": "Apply Filters"
+  },
+  "areYouSure": {
+  "title": "Are you sure?",
+  "confirm": "Yes"
+},
+"login": {
+  "title": "Welcome to Volunteer Manager",
+  "subtitle": "Login to Your Account",
+  "email": "Email",
+  "password": "Password",
+  "loginButton": "Login",
+  "signupButton": "Create an Account"
+},
+
+"newEvent": {
+    "createNewEvent": "Create a New Event",
+    "title": "Title",
+    "description": "Description",
+    "date": "Date",
+    "time": "Time",
+    "channel": "Channel",
+    "language": "Language",
+    "location": "Location",
+    "targetAudience": "Target Audience",
+    "groupDescription": "Group Description",
+    "additionalNotes": "Additional Notes",
+    "groupSize": "Group Size",
+    "numInstructorsNeeded": "Number of Instructors Needed",
+    "numRepresentativesNeeded": "Number of Representatives Needed",
+    "submit": "Submit",
+    "channels": {
+      "hostagesSquare": "Hostages Square",
+      "businessSector": "Business Sector",
+      "donations": "Donations",
+      "religiousZionism": "Religious Zionism",
+      "virtual": "Virtual"
+    },
+    "languages": {
+      "hebrew": "Hebrew",
+      "english": "English",
+      "arabic": "Arabic",
+      "russian": "Russian",
+      "french": "French",
+      "spanish": "Spanish",
+      "other": "Other"
+    },
+    "locations": {
+      "hostagesSquare": "Hostages Square",
+      "zoom": "Zoom",
+      "north": "North",
+      "south": "South",
+      "offices": "Offices",
+      "jerusalem": "Jerusalem",
+      "center": "Center",
+      "shfela": "Shfela",
+      "acrossGreenLine": "Across the Green Line"
+    },
+    "targetAudiences": {
+      "religiousSector": "Religious Sector",
+      "highSchools": "High Schools",
+      "universities": "Universities",
+      "businessSector": "Business Sector",
+      "army": "Army",
+      "donors": "Donors"
+    }
+
+},
+
+"signUp": {
+    "title": "Create Your Account",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "role": "Role",
+    "roles": {
+      "familyRep": "Family Representative",
+      "guide": "Guide"
+    },
+    "preferredLanguages": "Preferred Languages",
+    "signUpButton": "Sign Up",
+    "alreadyHaveAccount": "Already have an account? Log in",
+    "errors": {
+      "passwordMismatch": "Passwords do not match."
+    },
+    "languages": {
+      "hebrew": "Hebrew",
+      "english": "English",
+      "arabic": "Arabic",
+      "russian": "Russian",
+      "french": "French",
+      "spanish": "Spanish"
+    }
+  
+},
+  "availableEvents": {
+    "title": "Available Events"
+},
+  "eventBoard": {
+    "location": "Location",
+    "channel": "Channel",
+    "groupSize": "Group Size",
+    "language": "Language",
+    "pending": "Pending",
+    "register": "Register",
+    "notifications": {
+      "pendingApproval": "Your registration is pending approval.",
+      "registeredSuccess": "Registered successfully!",
+      "registerFailed": "Failed to register."
+    }
+  },
+  "myEvents": {
+    "title": "My Events",
+    "noEventsRegistered": "No events registered."
+  },
+  
+  "myEventsCard": {
+    "date": "Date",
+    "time": "Time",
+    "location": "Location",
+    "channel": "Channel",
+    "groupSize": "Group Size",
+    "language": "Language",
+    "instructorsNeeded": "Instructors Needed",
+    "representativesNeeded": "Representatives Needed",
+    "eventStatus": "Event Status",
+    "unregister": "Unregister",
+    "myRegistrationStatus": "My Registration Status",
+    "pendingApproval": "Pending Approval",
+    "notifications": {
+      "unregisteredSuccess": "Unregistered successfully!",
+      "unregisterFailed": "Failed to unregister."
+    },
+  "common": {
+    "approved": "Approved",
+    "pending": "Pending"
+  }
+},
+
+  "statistics": {
+    "title": "Statistics",
+    "apply": "Apply",
+    "noData": "No data available for the selected date range.",
+    "labels": {
+      "approved": "Approved",
+      "pending": "Pending",
+      "unassigned": "Unassigned"
+    }
+  },
+  
+  "adminPage": {
+    "viewMode": "View mode",
+    "calendarView": "Calendar view",
+    "listView": "List view"
+  
+}
+
+}
+

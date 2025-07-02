@@ -20,6 +20,7 @@ import { useSnackbar } from "notistack";
 import { useEvents } from "../../hooks/useEvents";
 import { Registration } from "../../types";
 import { RegistrationManagementRowSkeleton } from "./RegistrationManagementRowSkeleton";
+import { useTranslation } from "react-i18next";
 
 interface RegistrationDialogProps {
   open: boolean;
@@ -27,8 +28,14 @@ interface RegistrationDialogProps {
   onClose: () => void;
 }
 
-export default function RegistrationDialog({ open, eventId, onClose }: RegistrationDialogProps) {
+export default function RegistrationApprovalDialog({
+  open,
+  eventId,
+  onClose,
+}: RegistrationDialogProps) {
   const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslation();
+
   const {
     eventPendingRegistrations,
     isLoading,
@@ -40,9 +47,9 @@ export default function RegistrationDialog({ open, eventId, onClose }: Registrat
 
   useEffect(() => {
     if (open && eventId) {
-        refetchEventPendingRegistrations(eventId);
+      refetchEventPendingRegistrations(eventId);
     }
-    }, [open, eventId, refetchEventPendingRegistrations]);
+  }, [open, eventId, refetchEventPendingRegistrations]);
 
   if (error) {
     enqueueSnackbar(error, { variant: "error" });
@@ -52,11 +59,11 @@ export default function RegistrationDialog({ open, eventId, onClose }: Registrat
     if (!eventId) return;
     try {
       await approveRegistration(eventId, userId);
-      enqueueSnackbar("Registration approved successfully!", { variant: "success" });
+      enqueueSnackbar(t("registrationDialog.approvedSuccess"), { variant: "success" });
       await refetchEventPendingRegistrations(eventId);
     } catch (err) {
       enqueueSnackbar(
-        err instanceof Error ? err.message : "Failed to approve registration",
+        err instanceof Error ? err.message : t("registrationDialog.approveFail"),
         { variant: "error" }
       );
     }
@@ -66,11 +73,11 @@ export default function RegistrationDialog({ open, eventId, onClose }: Registrat
     if (!eventId) return;
     try {
       await rejectRegistration(eventId, userId);
-      enqueueSnackbar("Registration rejected successfully!", { variant: "success" });
+      enqueueSnackbar(t("registrationDialog.rejectedSuccess"), { variant: "success" });
       await refetchEventPendingRegistrations(eventId);
     } catch (err) {
       enqueueSnackbar(
-        err instanceof Error ? err.message : "Failed to reject registration",
+        err instanceof Error ? err.message : t("registrationDialog.rejectFail"),
         { variant: "error" }
       );
     }
@@ -78,33 +85,33 @@ export default function RegistrationDialog({ open, eventId, onClose }: Registrat
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>Pending Registrations</DialogTitle>
+      <DialogTitle>{t("registrationDialog.title")}</DialogTitle>
       <DialogContent>
         <Box sx={{ p: 2 }}>
           <TableContainer sx={{ maxHeight: 400 }}>
             <Table stickyHeader aria-label="pending registrations table">
               <TableHead>
                 <TableRow>
-                  <TableCell>User Email</TableCell>
-                  <TableCell>User Role</TableCell>
-                  <TableCell>Event Title</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Channel</TableCell>
-                  <TableCell>Language</TableCell>
-                  <TableCell>Location</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell>{t("registrationDialog.table.userEmail")}</TableCell>
+                  <TableCell>{t("registrationDialog.table.userRole")}</TableCell>
+                  <TableCell>{t("registrationDialog.table.eventTitle")}</TableCell>
+                  <TableCell>{t("registrationDialog.table.date")}</TableCell>
+                  <TableCell>{t("registrationDialog.table.channel")}</TableCell>
+                  <TableCell>{t("registrationDialog.table.language")}</TableCell>
+                  <TableCell>{t("registrationDialog.table.location")}</TableCell>
+                  <TableCell>{t("registrationDialog.table.status")}</TableCell>
+                  <TableCell>{t("registrationDialog.table.actions")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {isLoading ? (
-                    Array.from({ length: 4 }).map((_, index) => (
+                  Array.from({ length: 4 }).map((_, index) => (
                     <RegistrationManagementRowSkeleton key={index} />
-                    ))
+                  ))
                 ) : eventPendingRegistrations.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={9} align="center">
-                      <Typography>No pending registrations for this event.</Typography>
+                      <Typography>{t("registrationDialog.noPending")}</Typography>
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -120,14 +127,14 @@ export default function RegistrationDialog({ open, eventId, onClose }: Registrat
                       <TableCell>{reg.status}</TableCell>
                       <TableCell>
                         <IconButton
-                          aria-label="approve"
+                          aria-label={t("common.approve")}
                           color="success"
                           onClick={() => handleApprove(reg.user_id)}
                         >
                           <CheckIcon />
                         </IconButton>
                         <IconButton
-                          aria-label="reject"
+                          aria-label={t("common.reject")}
                           color="error"
                           onClick={() => handleReject(reg.user_id)}
                         >
@@ -142,7 +149,7 @@ export default function RegistrationDialog({ open, eventId, onClose }: Registrat
           </TableContainer>
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button variant="contained" onClick={onClose}>
-              Close
+              {t("common.close")}
             </Button>
           </Box>
         </Box>

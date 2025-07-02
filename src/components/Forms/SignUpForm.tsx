@@ -14,8 +14,11 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../hooks";
 import { SignupData } from "../../types";
+import { useTranslation } from "react-i18next";
 
 function SignUpForm() {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState<SignupData>({
     firstName: "",
     lastName: "",
@@ -28,12 +31,12 @@ function SignUpForm() {
   });
 
   const languages = [
-    { label: "Hebrew", value: "Hebrew" },
-    { label: "English", value: "English" },
-    { label: "Arabic", value: "Arabic" },
-    { label: "Russian", value: "Russian" },
-    { label: "French", value: "French" },
-    { label: "Spanish", value: "Spanish" },
+    { label: t("signUp.languages.hebrew"), value: "Hebrew" },
+    { label: t("signUp.languages.english"), value: "English" },
+    { label: t("signUp.languages.arabic"), value: "Arabic" },
+    { label: t("signUp.languages.russian"), value: "Russian" },
+    { label: t("signUp.languages.french"), value: "French" },
+    { label: t("signUp.languages.spanish"), value: "Spanish" },
   ];
 
   const [disableSubmit, setDisableSubmit] = useState(true);
@@ -46,11 +49,10 @@ function SignUpForm() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      setPasswordError("Passwords do not match.");
+      setPasswordError(t("signUp.errors.passwordMismatch"));
       return;
     }
 
-    // Create sanitized payload
     const payload = {
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -98,29 +100,30 @@ function SignUpForm() {
         formData.confirmPassword &&
         formData.password !== formData.confirmPassword
       ) {
-        setPasswordError("Passwords do not match.");
+        setPasswordError(t("signUp.errors.passwordMismatch"));
       } else {
         setPasswordError("");
       }
     }
-  }, [formData.password, formData.confirmPassword]);
+  }, [formData.password, formData.confirmPassword, t]);
 
   const columns = 4;
   const columnSize = Math.ceil(languages.length / columns);
   const languageColumns = Array.from({ length: columns }, (_, i) =>
     languages.slice(i * columnSize, (i + 1) * columnSize)
   );
+
   return (
     <Box sx={{ mt: "30dvh" }}>
       <form onSubmit={handleSubmit}>
         <Typography variant="h4" gutterBottom>
-          Create Your Account
+          {t("signUp.title")}
         </Typography>
 
         <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
           <TextField
             name="firstName"
-            label="First Name"
+            label={t("signUp.firstName")}
             size="small"
             value={formData.firstName}
             onChange={handleChange}
@@ -131,7 +134,7 @@ function SignUpForm() {
 
           <TextField
             name="lastName"
-            label="Last Name"
+            label={t("signUp.lastName")}
             size="small"
             value={formData.lastName}
             onChange={handleChange}
@@ -144,7 +147,7 @@ function SignUpForm() {
         <TextField
           name="email"
           type="email"
-          label="Email"
+          label={t("signUp.email")}
           size="small"
           value={formData.email}
           onChange={handleChange}
@@ -155,7 +158,7 @@ function SignUpForm() {
 
         <TextField
           name="phoneNumber"
-          label="Phone Number"
+          label={t("signUp.phoneNumber")}
           size="small"
           value={formData.phoneNumber}
           onChange={handleChange}
@@ -166,7 +169,7 @@ function SignUpForm() {
         <TextField
           name="password"
           type="password"
-          label="Password"
+          label={t("signUp.password")}
           size="small"
           value={formData.password}
           onChange={handleChange}
@@ -179,7 +182,7 @@ function SignUpForm() {
         <TextField
           name="confirmPassword"
           type="password"
-          label="Confirm Password"
+          label={t("signUp.confirmPassword")}
           size="small"
           value={formData.confirmPassword}
           onChange={handleChange}
@@ -189,8 +192,9 @@ function SignUpForm() {
           error={!!passwordError}
           helperText={passwordError}
         />
+
         <Typography variant="subtitle1" sx={{ mt: 2 }}>
-          Role:
+          {t("signUp.role")}
         </Typography>
 
         <ToggleButtonGroup
@@ -202,35 +206,24 @@ function SignUpForm() {
               setFormData((prev) => ({ ...prev, role: newRole }));
             }
           }}
-          aria-label="Role"
+          aria-label={t("signUp.role")}
           sx={{ my: 1 }}
         >
-          <ToggleButton value="Family Representative">Family Rep</ToggleButton>
-          <ToggleButton value="Guide">Guide</ToggleButton>
+          <ToggleButton value="Family Representative">
+            {t("signUp.roles.familyRep")}
+          </ToggleButton>
+          <ToggleButton value="Guide">{t("signUp.roles.guide")}</ToggleButton>
         </ToggleButtonGroup>
+
         <Typography variant="subtitle1" sx={{ mt: 2 }}>
-          Preferred Languages:
+          {t("signUp.preferredLanguages")}
         </Typography>
 
-        <Grid
-          container
-          spacing={2}
-          sx={{ mt: 1 }}
-          justifyContent="space-between"
-        >
+        <Grid container spacing={2} sx={{ mt: 1 }} justifyContent="space-between">
           {languageColumns.map((column, columnIndex) => (
-            <Grid
-              sx={{
-                xs: 12,
-                sm: 6,
-              }}
-              key={`column-${columnIndex}`}
-            >
+            <Grid sx={{ xs: 12, sm: 6 }} key={`column-${columnIndex}`}>
               {column.map((lang) => (
-                <Box
-                  key={lang.value}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
+                <Box key={lang.value} sx={{ display: "flex", alignItems: "center" }}>
                   <Checkbox
                     checked={formData.preferredLanguages.includes(lang.value)}
                     onChange={() => handleLanguageChange(lang.value)}
@@ -249,15 +242,16 @@ function SignUpForm() {
           disabled={isLoading || disableSubmit}
           sx={{ mt: 2 }}
         >
-          {isLoading ? <CircularProgress size={24} /> : "Sign Up"}
+          {isLoading ? <CircularProgress size={24} /> : t("signUp.signUpButton")}
         </Button>
+
         <Button
           variant="contained"
           fullWidth
           onClick={() => navigate("/login")}
           sx={{ mt: 2 }}
         >
-          Already have an account? Log in
+          {t("signUp.alreadyHaveAccount")}
         </Button>
       </form>
     </Box>
