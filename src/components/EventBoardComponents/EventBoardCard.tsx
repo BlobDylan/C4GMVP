@@ -3,20 +3,20 @@ import { Event } from "../../types";
 import { useEvents } from "../../hooks";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
 
 function EventBoardCard(event: Event) {
+  const { t } = useTranslation();
   const { registerToEvent, isLoadingRegisterID, pendingRegistrations } = useEvents();
   const [isHovered, setIsHovered] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const isPending = pendingRegistrations.some(
-    (reg) => reg.eventId === event.id && reg.status === 'pending'
+    (reg) => reg.eventId === event.id && reg.status === "pending"
   );
 
   const truncateDescription = (text: string, maxLength: number = 60) => {
-    return text.length > maxLength
-      ? `${text.substring(0, maxLength)}...`
-      : text;
+    return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
   };
 
   return (
@@ -89,16 +89,16 @@ function EventBoardCard(event: Event) {
         }}
       >
         <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          Location: {event.location}
+          {t("eventBoard.location")}: {event.location}
         </Typography>
         <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          Channel: {event.channel}
+          {t("eventBoard.channel")}: {event.channel}
         </Typography>
         <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          Group Size: {event.group_size}
+          {t("eventBoard.groupSize")}: {event.group_size}
         </Typography>
         <Typography variant="body2" sx={{ marginBottom: 1 }}>
-          Language: {event.language}
+          {t("eventBoard.language")}: {event.language}
         </Typography>
       </Box>
 
@@ -107,14 +107,14 @@ function EventBoardCard(event: Event) {
           sx={{
             marginTop: isHovered ? 2 : "auto",
             opacity: isHovered ? 1 : 0,
-            color: 'orange',
-            fontWeight: 'bold',
-            textAlign: 'center',
+            color: "orange",
+            fontWeight: "bold",
+            textAlign: "center",
             transition: "opacity 0.6s ease, transform 0.6s ease",
             pointerEvents: isHovered ? "auto" : "none",
           }}
         >
-          Pending
+          {t("eventBoard.pending")}
         </Typography>
       ) : (
         <Button
@@ -124,11 +124,18 @@ function EventBoardCard(event: Event) {
             try {
               const status = await registerToEvent(event.id);
               enqueueSnackbar(
-                status === 'pending' ? 'Your registration is pending approval.' : 'Registered successfully!',
-                { variant: 'success' }
+                status === "pending"
+                  ? t("eventBoard.notifications.pendingApproval")
+                  : t("eventBoard.notifications.registeredSuccess"),
+                { variant: "success" }
               );
             } catch (err: unknown) {
-              enqueueSnackbar(err instanceof Error ? err.message : 'Failed to register.', { variant: 'error' });
+              enqueueSnackbar(
+                err instanceof Error
+                  ? err.message
+                  : t("eventBoard.notifications.registerFailed"),
+                { variant: "error" }
+              );
             }
           }}
           sx={{
@@ -142,7 +149,7 @@ function EventBoardCard(event: Event) {
           {isLoadingRegisterID === event.id ? (
             <CircularProgress size={24} sx={{ color: "white" }} />
           ) : (
-            "Register"
+            t("eventBoard.register")
           )}
         </Button>
       )}

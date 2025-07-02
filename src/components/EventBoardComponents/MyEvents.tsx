@@ -1,8 +1,10 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { MyEventsCard, FilterBar, EventBoardCardSkeleton } from "../../components";
 import { useEvents } from "../../hooks/useEvents";
+import { useTranslation } from "react-i18next";
 
 function MyEvents() {
+  const { t } = useTranslation();
   const { myEvents, isLoading, filters } = useEvents();
   const numCardsToLoad = 4;
 
@@ -41,7 +43,7 @@ function MyEvents() {
         }}
       >
         <Typography variant="h3" sx={{ marginBottom: 2 }}>
-          My Events
+          {t("myEvents.title")}
         </Typography>
         <FilterBar />
         <Grid
@@ -53,19 +55,21 @@ function MyEvents() {
             flexGrow: 1,
           }}
         >
-          {isLoading
-            ? Array.from({ length: numCardsToLoad }, (_, index) => (
-                <Grid key={index} size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
-                  <EventBoardCardSkeleton />
-                </Grid>
-              ))
-            : filteredMyEvents.length === 0
-            ? <Typography>No events registered.</Typography>
-            : filteredMyEvents.map((event) => (
-                <Grid key={event.id} size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
-                  <MyEventsCard {...event} />
-                </Grid>
-              ))}
+          {isLoading ? (
+            Array.from({ length: numCardsToLoad }, (_, index) => (
+              <Grid key={index} size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
+                <EventBoardCardSkeleton />
+              </Grid>
+            ))
+          ) : filteredMyEvents.length === 0 ? (
+            <Typography>{t("myEvents.noEventsRegistered")}</Typography>
+          ) : (
+            filteredMyEvents.map((event) => (
+              <Grid key={event.id} size={{ xs: 12, md: 6, lg: 4, xl: 3 }}>
+                <MyEventsCard {...event} />
+              </Grid>
+            ))
+          )}
         </Grid>
       </Box>
     </Box>

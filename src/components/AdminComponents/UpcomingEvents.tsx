@@ -15,6 +15,7 @@ import PreviewIcon from "@mui/icons-material/Preview";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
 
 import {
   EventDialog,
@@ -36,6 +37,7 @@ export type DialogType = "none" | "view" | "new" | "delete";
 
 function UpcomingEvents() {
   const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslation();
   const [activeDialog, setActiveDialog] = useState<DialogType>("none");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
@@ -45,6 +47,7 @@ function UpcomingEvents() {
       setSelectedEvent(event);
     }
   };
+
   const handleClose = () => {
     setActiveDialog("none");
     setSelectedEvent(null);
@@ -59,12 +62,7 @@ function UpcomingEvents() {
 
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          padding: 2,
-        }}
-      >
+      <Box sx={{ width: "100%", padding: 2 }}>
         <Box
           sx={{
             display: "flex",
@@ -81,37 +79,37 @@ function UpcomingEvents() {
               flexDirection: "row",
               justifyContent: "space-between",
               width: "100%",
+              alignItems: "center",
+              mb: 2,
             }}
           >
-            <Typography variant="h3" sx={{ marginBottom: 2 }}>
-              Upcoming Events
-            </Typography>
+            <Typography variant="h3">{t("upcomingEvents.title")}</Typography>
             <FilterBar />
             <IconButton
-              aria-label="add"
+              aria-label={t("common.add")}
               size="large"
               onClick={() => handleOpenDialog("new")}
-              sx={{ marginBottom: 2 }}
             >
               <AddIcon fontSize="inherit" />
             </IconButton>
           </Box>
+
           <TableContainer sx={{ maxHeight: 400, width: "100%" }}>
-            <Table stickyHeader aria-label="sticky table">
+            <Table stickyHeader aria-label="upcoming events table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Channel</TableCell>
-                  <TableCell>Language</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Time</TableCell>
-                  <TableCell>Location</TableCell>
-                  <TableCell>Group Size</TableCell>
-                  <TableCell>Instructors Needed</TableCell>
-                  <TableCell>Representatives Needed</TableCell>
-                  <TableCell>Target Audience</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell>{t("upcomingEvents.table.title")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.channel")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.language")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.date")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.time")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.location")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.groupSize")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.instructorsNeeded")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.representativesNeeded")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.targetAudience")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.status")}</TableCell>
+                  <TableCell>{t("upcomingEvents.table.actions")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -141,14 +139,14 @@ function UpcomingEvents() {
                         <TableCell>{event.status}</TableCell>
                         <TableCell>
                           <IconButton
-                            aria-label="view"
+                            aria-label={t("common.view")}
                             size="small"
                             onClick={() => handleOpenDialog("view", event)}
                           >
                             <PreviewIcon fontSize="inherit" />
                           </IconButton>
                           <IconButton
-                            aria-label="delete"
+                            aria-label={t("common.delete")}
                             size="small"
                             onClick={() => handleOpenDialog("delete", event)}
                           >
@@ -162,6 +160,7 @@ function UpcomingEvents() {
           </TableContainer>
         </Box>
       </Box>
+
       <Dialog open={activeDialog === "view"} onClose={handleClose} fullWidth>
         <EventDialog event={selectedEvent} onClose={handleClose} />
       </Dialog>

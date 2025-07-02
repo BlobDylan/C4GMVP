@@ -7,11 +7,12 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import EventIcon from "@mui/icons-material/Event";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useTranslation } from "react-i18next";
 
 function Navbar() {
   const navigate = useNavigate();
-
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -28,7 +29,7 @@ function Navbar() {
               fontSize: "1.5rem",
             }}
           >
-            Volunteer Manager
+            {t("navbar.title")}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Stack direction={"row"} spacing={2}>
@@ -36,6 +37,7 @@ function Navbar() {
               (user.permissions === "admin" ||
                 user.permissions === "super_admin") && (
                 <IconButton
+                  aria-label={t("navbar.adminPanel")}
                   sx={{
                     color: "#fff",
                     "&:hover": { backgroundColor: "transparent" },
@@ -48,6 +50,7 @@ function Navbar() {
                 </IconButton>
               )}
             <IconButton
+              aria-label={t("navbar.myEvents")}
               sx={{
                 color: "#fff",
                 "&:hover": { backgroundColor: "transparent" },
@@ -59,6 +62,7 @@ function Navbar() {
               <EventIcon />
             </IconButton>
             <IconButton
+              aria-label={t("navbar.home")}
               sx={{
                 color: "#fff",
                 "&:hover": { backgroundColor: "transparent" },
@@ -72,8 +76,11 @@ function Navbar() {
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {user ? (
                 <>
-                  <Typography>{"Welcome, " + user.firstName}</Typography>
+                  <Typography sx={{ color: "#fff", marginRight: 1 }}>
+                    {t("navbar.welcome")}, {user.firstName}
+                  </Typography>
                   <IconButton
+                    aria-label={t("navbar.logout")}
                     sx={{
                       color: "#fff",
                       "&:hover": { backgroundColor: "transparent" },
@@ -88,6 +95,7 @@ function Navbar() {
                 </>
               ) : (
                 <IconButton
+                  aria-label={t("navbar.login")}
                   sx={{
                     color: "#fff",
                     "&:hover": { backgroundColor: "transparent" },

@@ -9,13 +9,14 @@ import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { Toggle } from "rsuite";
+import { useTranslation } from "react-i18next";
 
 function AdminPage() {
   const { error } = useEvents();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!user) {
@@ -51,15 +52,15 @@ function AdminPage() {
       }}
     >
       <ToggleButtonGroup
-        value="view"
+        value={view}
         exclusive
         onChange={handleViewChange}
-        aria-label="view mode"
+        aria-label={t("adminPage.viewMode")}
       >
-        <ToggleButton value="calendar" aria-label="calendar view">
+        <ToggleButton value="calendar" aria-label={t("adminPage.calendarView")}>
           <CalendarViewWeekIcon />
         </ToggleButton>
-        <ToggleButton value="list" aria-label="list view">
+        <ToggleButton value="list" aria-label={t("adminPage.listView")}>
           <ViewListIcon />
         </ToggleButton>
       </ToggleButtonGroup>
