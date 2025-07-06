@@ -1,4 +1,4 @@
-import { Box, Toolbar, Stack, Typography, IconButton } from "@mui/material";
+import { Box, Toolbar, Stack, Typography, IconButton, useTheme, useMediaQuery } from "@mui/material";
 import { AppBar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks";
@@ -13,26 +13,33 @@ function Navbar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <>
       <AppBar>
-        <Toolbar sx={{ display: "flex" }}>
+        <Toolbar sx={{ display: "flex", px: { xs: 1, sm: 2 } }}>
           <Typography
-            variant="h6"
+            variant={isMobile ? "h6" : "h6"}
             onClick={() => {
               navigate("/");
             }}
             sx={{
               cursor: "pointer",
               fontWeight: "bold",
-              fontSize: "1.5rem",
+              fontSize: { xs: "1.2rem", sm: "1.5rem" },
+              flexShrink: 0,
             }}
           >
             {t("navbar.title")}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Stack direction={"row"} spacing={2}>
+          <Stack 
+            direction={"row"} 
+            spacing={{ xs: 1, sm: 2 }}
+            sx={{ flexShrink: 0 }}
+          >
             {user &&
               (user.permissions === "admin" ||
                 user.permissions === "super_admin") && (
@@ -41,12 +48,13 @@ function Navbar() {
                   sx={{
                     color: "#fff",
                     "&:hover": { backgroundColor: "transparent" },
+                    padding: { xs: 0.5, sm: 1 },
                   }}
                   onClick={() => {
                     navigate("/admin");
                   }}
                 >
-                  <AdminPanelSettingsIcon />
+                  <AdminPanelSettingsIcon sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }} />
                 </IconButton>
               )}
             <IconButton
@@ -54,29 +62,38 @@ function Navbar() {
               sx={{
                 color: "#fff",
                 "&:hover": { backgroundColor: "transparent" },
+                padding: { xs: 0.5, sm: 1 },
               }}
               onClick={() => {
                 navigate("/my-events");
               }}
             >
-              <EventIcon />
+              <EventIcon sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }} />
             </IconButton>
             <IconButton
               aria-label={t("navbar.home")}
               sx={{
                 color: "#fff",
                 "&:hover": { backgroundColor: "transparent" },
+                padding: { xs: 0.5, sm: 1 },
               }}
               onClick={() => {
                 navigate("/");
               }}
             >
-              <HomeIcon />
+              <HomeIcon sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }} />
             </IconButton>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {user ? (
                 <>
-                  <Typography sx={{ color: "#fff", marginRight: 1 }}>
+                  <Typography 
+                    sx={{ 
+                      color: "#fff", 
+                      marginRight: { xs: 0.5, sm: 1 },
+                      fontSize: { xs: "0.8rem", sm: "1rem" },
+                      display: { xs: "none", md: "block" }
+                    }}
+                  >
                     {t("navbar.welcome")}, {user.firstName}
                   </Typography>
                   <IconButton
@@ -84,13 +101,14 @@ function Navbar() {
                     sx={{
                       color: "#fff",
                       "&:hover": { backgroundColor: "transparent" },
+                      padding: { xs: 0.5, sm: 1 },
                     }}
                     onClick={() => {
                       logout();
                       navigate("/login");
                     }}
                   >
-                    <LogoutIcon />
+                    <LogoutIcon sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }} />
                   </IconButton>
                 </>
               ) : (
@@ -99,12 +117,13 @@ function Navbar() {
                   sx={{
                     color: "#fff",
                     "&:hover": { backgroundColor: "transparent" },
+                    padding: { xs: 0.5, sm: 1 },
                   }}
                   onClick={() => {
                     navigate("/login");
                   }}
                 >
-                  <LoginIcon />
+                  <LoginIcon sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }} />
                 </IconButton>
               )}
             </Box>
@@ -115,7 +134,7 @@ function Navbar() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: { xs: 1, sm: 3 },
           marginTop: "10px",
         }}
       ></Box>

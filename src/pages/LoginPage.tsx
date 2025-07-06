@@ -9,8 +9,9 @@ function Login() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        height: "90dvh",
-        width: "100dvw",
+        minHeight: "90vh",
+        width: "100%",
+        padding: { xs: 2, sm: 4 },
       }}
     >
       <Box
@@ -19,8 +20,8 @@ function Login() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          height: "100vh",
-          width: "50vw",
+          width: { xs: "100%", sm: "400px", md: "450px" },
+          maxWidth: "100%",
         }}
       >
         <LoginForm />

@@ -9,6 +9,8 @@ import {
   Box,
   FormControlLabel,
   Checkbox,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useEvents } from "../../hooks";
@@ -23,6 +25,8 @@ interface SelectedFilters {
 
 function FilterBar() {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { channels, languages, locations, filterEvents, resetFilters } =
     useEvents();
   const [currentDialog, setCurrentDialog] = useState<
@@ -94,18 +98,34 @@ function FilterBar() {
   return (
     <>
       <Stack
-        direction="row"
-        spacing={2}
-        sx={{ width: "100%", justifyContent: "center" }}
+        direction={{ xs: "column", sm: "row" }}
+        spacing={{ xs: 1, sm: 2 }}
+        sx={{ 
+          width: "100%", 
+          justifyContent: "center",
+          mb: { xs: 2, sm: 3 }
+        }}
       >
         <IconButton
           color="primary"
           aria-label={t("filters.filterByChannel")}
-          size="large"
+          size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("channels")}
+          sx={{
+            justifyContent: "flex-start",
+            width: { xs: "100%", sm: "auto" },
+            padding: { xs: "8px 12px", sm: "12px 16px" },
+          }}
         >
-          <FilterListIcon fontSize="inherit" />
-          <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
+          <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
+          <Typography 
+            variant={isMobile ? "body1" : "h6"} 
+            sx={{ 
+              fontWeight: "bold", 
+              ml: 1,
+              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+            }}
+          >
             {t("filters.channels")}
           </Typography>
         </IconButton>
@@ -113,11 +133,23 @@ function FilterBar() {
         <IconButton
           color="primary"
           aria-label={t("filters.filterByLanguage")}
-          size="large"
+          size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("languages")}
+          sx={{
+            justifyContent: "flex-start",
+            width: { xs: "100%", sm: "auto" },
+            padding: { xs: "8px 12px", sm: "12px 16px" },
+          }}
         >
-          <FilterListIcon fontSize="inherit" />
-          <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
+          <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
+          <Typography 
+            variant={isMobile ? "body1" : "h6"} 
+            sx={{ 
+              fontWeight: "bold", 
+              ml: 1,
+              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+            }}
+          >
             {t("filters.languages")}
           </Typography>
         </IconButton>
@@ -125,22 +157,52 @@ function FilterBar() {
         <IconButton
           color="primary"
           aria-label={t("filters.filterByLocation")}
-          size="large"
+          size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("locations")}
+          sx={{
+            justifyContent: "flex-start",
+            width: { xs: "100%", sm: "auto" },
+            padding: { xs: "8px 12px", sm: "12px 16px" },
+          }}
         >
-          <FilterListIcon fontSize="inherit" />
-          <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
+          <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
+          <Typography 
+            variant={isMobile ? "body1" : "h6"} 
+            sx={{ 
+              fontWeight: "bold", 
+              ml: 1,
+              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+            }}
+          >
             {t("filters.locations")}
           </Typography>
         </IconButton>
       </Stack>
 
-      <Dialog open={!!currentDialog} onClose={handleCancel}>
-        <Box sx={{ width: "100%", padding: 2 }}>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+      <Dialog 
+        open={!!currentDialog} 
+        onClose={handleCancel}
+        fullScreen={isMobile}
+        maxWidth="sm"
+        fullWidth
+      >
+        <Box sx={{ 
+          width: "100%", 
+          padding: { xs: 2, sm: 3 },
+          maxHeight: isMobile ? "100vh" : "70vh",
+          overflow: "auto"
+        }}>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              mb: 2, 
+              fontWeight: "bold",
+              fontSize: { xs: "1.25rem", sm: "1.5rem" }
+            }}
+          >
             {getDialogTitle()}
           </Typography>
-          <Stack direction="column" spacing={2}>
+          <Stack direction="column" spacing={1}>
             {getCurrentChoices().map((choice, index) => (
               <FormControlLabel
                 key={index}
@@ -150,10 +212,17 @@ function FilterBar() {
                       selectedFilters[currentDialog!]?.includes(choice) || false
                     }
                     onChange={() => handleToggleFilter(choice)}
+                    size={isMobile ? "small" : "medium"}
                   />
                 }
                 label={
-                  <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                  <Typography 
+                    variant="body1" 
+                    sx={{ 
+                      fontWeight: "bold",
+                      fontSize: { xs: "0.875rem", sm: "1rem" }
+                    }}
+                  >
                     {choice}
                   </Typography>
                 }
@@ -161,11 +230,19 @@ function FilterBar() {
             ))}
           </Stack>
         </Box>
-        <DialogActions>
-          <Button onClick={handleCancel} color="secondary">
+        <DialogActions sx={{ padding: { xs: 2, sm: 3 } }}>
+          <Button 
+            onClick={handleCancel} 
+            color="secondary"
+            size={isMobile ? "small" : "medium"}
+          >
             {t("common.cancel")}
           </Button>
-          <Button onClick={handleApply} color="primary">
+          <Button 
+            onClick={handleApply} 
+            color="primary"
+            size={isMobile ? "small" : "medium"}
+          >
             {t("filters.apply")}
           </Button>
         </DialogActions>

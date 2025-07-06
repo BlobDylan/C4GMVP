@@ -48,7 +48,7 @@ function AdminPage() {
     <Box
       sx={{
         width: "100%",
-        padding: 2,
+        padding: { xs: 1, sm: 2 },
       }}
     >
       <ToggleButtonGroup
@@ -56,12 +56,20 @@ function AdminPage() {
         exclusive
         onChange={handleViewChange}
         aria-label={t("adminPage.viewMode")}
+        size="small"
+        sx={{
+          mb: { xs: 2, sm: 3 },
+          '& .MuiToggleButton-root': {
+            fontSize: { xs: '0.75rem', sm: '0.875rem' },
+            padding: { xs: '6px 12px', sm: '8px 16px' },
+          }
+        }}
       >
         <ToggleButton value="calendar" aria-label={t("adminPage.calendarView")}>
-          <CalendarViewWeekIcon />
+          <CalendarViewWeekIcon sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />
         </ToggleButton>
         <ToggleButton value="list" aria-label={t("adminPage.listView")}>
-          <ViewListIcon />
+          <ViewListIcon sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />
         </ToggleButton>
       </ToggleButtonGroup>
 
