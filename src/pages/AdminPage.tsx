@@ -15,7 +15,7 @@ function AdminPage() {
     <Box
       sx={{
         width: "100%",
-        padding: 2,
+        padding: { xs: 1, sm: 2 },
       }}
     >
       <UpcomingEvents />

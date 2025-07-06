@@ -18,11 +18,11 @@ function MyEvents() {
           flexDirection: "column",
           alignItems: "center",
           backgroundColor: "background.paper",
-          padding: 4,
+          padding: { xs: 2, sm: 4 },
           borderRadius: 2,
         }}
       >
-        <Typography variant="h3" sx={{ marginBottom: 2 }}>
+        <Typography variant="h3" sx={{ marginBottom: 2, textAlign: "center" }}>
           My Events
         </Typography>
         <Stack

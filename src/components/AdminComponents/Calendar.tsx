@@ -16,6 +16,8 @@ import {
   Paper,
   Box,
   Dialog,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -32,6 +34,8 @@ function Calendar() {
   const days = eachDayOfInterval({ start: weekStart, end: weekEnd });
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleOpen = (event: Event) => {
     setSelectedEvent(event);
@@ -62,7 +66,7 @@ function Calendar() {
       <Box
         sx={{
           width: "100%",
-          padding: 2,
+          padding: { xs: 1, sm: 2 },
         }}
       >
         <Box
@@ -71,70 +75,86 @@ function Calendar() {
             flexDirection: "column",
             alignItems: "center",
             backgroundColor: "background.paper",
-            padding: 4,
+            padding: { xs: 2, sm: 4 },
             borderRadius: 2,
           }}
         >
-          <Typography variant="h3" sx={{ marginBottom: 2 }}>
+          <Typography variant="h3" sx={{ marginBottom: 2, textAlign: "center" }}>
             Weekly Calendar
           </Typography>
           <Stack
-            direction="row"
+            direction={isMobile ? "column" : "row"}
             justifyContent="space-between"
-            alignItems="center"
+            alignItems={isMobile ? "center" : "center"}
             mb={2}
+            spacing={isMobile ? 2 : 0}
+            sx={{ width: "100%" }}
           >
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="white" sx={{ textAlign: { xs: "center", sm: "left" } }}>
               {format(weekStart, "MMMM d")} - {format(weekEnd, "MMMM d, yyyy")}
             </Typography>
             <Stack direction="row" spacing={1}>
-              <IconButton onClick={handlePreviousWeek}>
+              <IconButton onClick={handlePreviousWeek} size={isMobile ? "small" : "medium"}>
                 <ChevronLeftIcon />
               </IconButton>
               <Button
                 onClick={() => onWeekChange(new Date())}
                 variant="contained"
                 color="warning"
+                size={isMobile ? "small" : "medium"}
               >
                 Today
               </Button>
-              <IconButton onClick={handleNextWeek}>
+              <IconButton onClick={handleNextWeek} size={isMobile ? "small" : "medium"}>
                 <ChevronRightIcon />
               </IconButton>
             </Stack>
           </Stack>
 
-          <Box className="grid grid-cols-7 gap-1">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-              <Paper
-                key={day}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  minWidth: "13dvw",
-                }}
-              >
-                {day}
-              </Paper>
-            ))}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "repeat(7, 1fr)", sm: "repeat(7, 1fr)" },
+              gap: { xs: 1, sm: 2 },
+              width: "100%",
+            }}
+          >
             {days.map((day) => {
               const dayEvents = events.filter((event) => {
-                return isSameDay(event.date, day);
+                return isSameDay(new Date(event.date), day);
               });
 
               return (
                 <Paper
-                  key={day.toISOString()}
+                  key={day.toString()}
                   sx={{
-                    minHeight: "50vh",
-                    minWidth: "13dvw",
-                    backgroundColor: isToday(day)
-                      ? "background.paper"
-                      : "background.default",
+                    padding: { xs: 1, sm: 2 },
+                    minHeight: { xs: "80px", sm: "120px" },
+                    backgroundColor: isToday(day) ? "custom.pending" : "background.default",
+                    display: "flex",
+                    flexDirection: "column",
                   }}
-                  elevation={3}
                 >
-                  <Typography>{format(day, "d")}</Typography>
+                  <Typography
+                    variant={isMobile ? "body2" : "body1"}
+                    sx={{
+                      fontWeight: isToday(day) ? "bold" : "normal",
+                      textAlign: "center",
+                      marginBottom: 1,
+                    }}
+                  >
+                    {format(day, "EEE")}
+                  </Typography>
+                  <Typography
+                    variant={isMobile ? "caption" : "body2"}
+                    sx={{
+                      fontWeight: isToday(day) ? "bold" : "normal",
+                      textAlign: "center",
+                      marginBottom: 1,
+                    }}
+                  >
+                    {format(day, "d")}
+                  </Typography>
                   <Box>
                     {dayEvents
                       .sort((a, b) => a.date.getTime() - b.date.getTime())
@@ -143,20 +163,23 @@ function Calendar() {
                           key={event.id}
                           sx={{
                             borderRadius: "5px",
-                            padding: 1,
-                            margin: 0.5,
+                            padding: { xs: 0.5, sm: 1 },
+                            margin: { xs: 0.25, sm: 0.5 },
                             backgroundColor:
                               event.status === EventStatus.PENDING
                                 ? "custom.pending"
                                 : "custom.approved",
+                            fontSize: { xs: "0.7rem", sm: "0.875rem" },
                           }}
                           onClick={() => handleOpen(event)}
                           className="cursor-pointer"
                         >
-                          <Typography color="black">
+                          <Typography color="black" sx={{ fontSize: { xs: "0.7rem", sm: "0.875rem" } }}>
                             {format(new Date(event.date), "HH:mm")}
                           </Typography>
-                          <Typography color="black">{event.title}</Typography>
+                          <Typography color="black" sx={{ fontSize: { xs: "0.7rem", sm: "0.875rem" } }}>
+                            {event.title}
+                          </Typography>
                         </Box>
                       ))}
                   </Box>

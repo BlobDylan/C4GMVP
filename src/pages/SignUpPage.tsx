@@ -9,8 +9,9 @@ function SignUpPage() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        height: "60dvh",
-        width: "100dvw",
+        minHeight: "90vh",
+        width: "100%",
+        padding: { xs: 2, sm: 4 },
       }}
     >
       <Box
@@ -19,7 +20,8 @@ function SignUpPage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          width: "40dvw",
+          width: { xs: "100%", sm: "80%", md: "60%", lg: "50%" },
+          maxWidth: "600px",
         }}
       >
         <SignUpForm />
