@@ -37,11 +37,28 @@ function LoginForm() {
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
-      <Typography variant="h4" component="h1" gutterBottom align="center">
+      <Typography 
+        variant="h4" 
+        component="h1" 
+        gutterBottom 
+        align="center"
+        sx={{ 
+          fontSize: { xs: "1.75rem", sm: "2.125rem" },
+          mb: 2
+        }}
+      >
         {t("login.title")}
       </Typography>
 
-      <Typography variant="h5" gutterBottom align="center" sx={{ mb: 4 }}>
+      <Typography 
+        variant="h5" 
+        gutterBottom 
+        align="center" 
+        sx={{ 
+          mb: 4,
+          fontSize: { xs: "1.25rem", sm: "1.5rem" }
+        }}
+      >
         {t("login.subtitle")}
       </Typography>
 
@@ -54,6 +71,7 @@ function LoginForm() {
         onChange={handleChange}
         margin="normal"
         required
+        size="small"
       />
 
       <TextField
@@ -65,6 +83,7 @@ function LoginForm() {
         onChange={handleChange}
         margin="normal"
         required
+        size="small"
       />
 
       {error && (
@@ -79,7 +98,11 @@ function LoginForm() {
         variant="contained"
         size="large"
         disabled={isLoading}
-        sx={{ mt: 2 }}
+        sx={{ 
+          mt: 2,
+          fontSize: { xs: "0.875rem", sm: "1rem" },
+          padding: { xs: "10px 16px", sm: "12px 24px" }
+        }}
       >
         {isLoading ? <CircularProgress size={24} color="inherit" /> : t("login.loginButton")}
       </Button>
@@ -88,7 +111,11 @@ function LoginForm() {
         variant="contained"
         fullWidth
         onClick={() => navigate("/signup")}
-        sx={{ mt: 2 }}
+        sx={{ 
+          mt: 2,
+          fontSize: { xs: "0.875rem", sm: "1rem" },
+          padding: { xs: "10px 16px", sm: "12px 24px" }
+        }}
       >
         {t("login.signupButton")}
       </Button>

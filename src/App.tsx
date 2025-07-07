@@ -26,11 +26,34 @@ function App() {
             <CssBaseline />
             <div dir={i18n.language === "he" ? "rtl" : "ltr"}>
               <Navbar />
-              <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mt: 2 }}>
-                <Button variant="outlined" onClick={() => i18n.changeLanguage("en")}>
+              <Box sx={{ 
+                display: "flex", 
+                justifyContent: "center", 
+                gap: { xs: 1, sm: 1 }, 
+                mt: 2,
+                px: { xs: 1, sm: 2 },
+                flexWrap: "wrap",
+              }}>
+                <Button 
+                  variant="outlined" 
+                  onClick={() => i18n.changeLanguage("en")}
+                  size="small"
+                  sx={{ 
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                    padding: { xs: "4px 8px", sm: "6px 16px" },
+                  }}
+                >
                   English
                 </Button>
-                <Button variant="outlined" onClick={() => i18n.changeLanguage("he")}>
+                <Button 
+                  variant="outlined" 
+                  onClick={() => i18n.changeLanguage("he")}
+                  size="small"
+                  sx={{ 
+                    fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                    padding: { xs: "4px 8px", sm: "6px 16px" },
+                  }}
+                >
                   עברית
                 </Button>
               </Box>

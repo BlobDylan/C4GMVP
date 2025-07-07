@@ -6,7 +6,7 @@ import { useAuth } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-function EventBoardPage() {
+function MyEventsPage() {
   const { error } = useEvents();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ function EventBoardPage() {
     <Box
       sx={{
         width: "100%",
-        padding: 2,
+        padding: { xs: 1, sm: 2 },
       }}
     >
       <MyEvents />
@@ -40,4 +40,4 @@ function EventBoardPage() {
   );
 }
 
-export default EventBoardPage;
+export default MyEventsPage;
