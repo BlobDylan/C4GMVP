@@ -20,7 +20,7 @@ function Navbar() {
         <Toolbar sx={{ display: "flex", alignItems: "center" }}>
           <img
             src="/logo.png"
-            alt="סמל מטה משפחות החטופים"
+            alt="HQ logo"
             style={{ height: "40px", marginLeft: "10px", cursor: "pointer" }}
             onClick={() => navigate("/")}
           />
