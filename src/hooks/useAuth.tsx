@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (token) {
         try {
           setIsLoading(true);
-          const response = await fetch("http://localhost:5000/me", {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/me`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signup = async (data: SignupData) => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/signup", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -119,7 +119,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const token = localStorage.getItem("access_token");
       if (token) {
-        await fetch("http://localhost:5000/logout", {
+        await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
