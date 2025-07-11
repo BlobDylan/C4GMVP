@@ -23,9 +23,9 @@ function AvailableEvents() {
         borderRadius: 2,
       }}
     >
-      <Typography 
-        variant="h3" 
-        sx={{ 
+      <Typography
+        variant="h3"
+        sx={{
           marginBottom: 2,
           fontSize: { xs: "1.75rem", sm: "2.125rem", md: "3rem" },
           textAlign: "center",
@@ -33,7 +33,9 @@ function AvailableEvents() {
       >
         {t("availableEvents.title")}
       </Typography>
-      <FilterBar />
+      <Box>
+        <FilterBar />
+      </Box>
       <Grid
         container
         columns={{ xs: 12 }}

@@ -73,6 +73,8 @@ function UpcomingEvents() {
             borderRadius: 2,
           }}
         >
+          <Typography variant="h3">{t("upcomingEvents.title")}</Typography>
+          <FilterBar />
           <Box
             sx={{
               display: "flex",
@@ -83,8 +85,6 @@ function UpcomingEvents() {
               mb: 2,
             }}
           >
-            <Typography variant="h3">{t("upcomingEvents.title")}</Typography>
-            <FilterBar />
             <IconButton
               aria-label={t("common.add")}
               size="large"
@@ -105,9 +105,15 @@ function UpcomingEvents() {
                   <TableCell>{t("upcomingEvents.table.time")}</TableCell>
                   <TableCell>{t("upcomingEvents.table.location")}</TableCell>
                   <TableCell>{t("upcomingEvents.table.groupSize")}</TableCell>
-                  <TableCell>{t("upcomingEvents.table.instructorsNeeded")}</TableCell>
-                  <TableCell>{t("upcomingEvents.table.representativesNeeded")}</TableCell>
-                  <TableCell>{t("upcomingEvents.table.targetAudience")}</TableCell>
+                  <TableCell>
+                    {t("upcomingEvents.table.instructorsNeeded")}
+                  </TableCell>
+                  <TableCell>
+                    {t("upcomingEvents.table.representativesNeeded")}
+                  </TableCell>
+                  <TableCell>
+                    {t("upcomingEvents.table.targetAudience")}
+                  </TableCell>
                   <TableCell>{t("upcomingEvents.table.status")}</TableCell>
                   <TableCell>{t("upcomingEvents.table.actions")}</TableCell>
                 </TableRow>
