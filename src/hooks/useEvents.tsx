@@ -105,7 +105,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/events");
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/events`);
       const data = await response.json();
       if (!response.ok) {
         console.error("Failed to fetch events:", response.status, data);
@@ -139,7 +139,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       if (!token) {
         throw new Error("No token found for fetching user-specific events.");
       }
-      const response = await fetch("http://localhost:5000/me/events", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/me/events`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -185,7 +185,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       if (!token) {
         throw new Error("No token found for fetching pending registrations.");
       }
-      const response = await fetch("http://localhost:5000/me/events", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/me/events`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -250,7 +250,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
-        const response = await fetch("http://localhost:5000/admin/new", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/new`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -293,7 +293,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/edit/${eventId}`,
+          `${import.meta.env.VITE_API_URL}/admin/edit/${eventId}`,
           {
             method: "PUT",
             headers: {
@@ -331,7 +331,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/delete/${eventId}`,
+          `${import.meta.env.VITE_API_URL}/admin/delete/${eventId}`,
           {
             method: "DELETE",
             headers: {
@@ -364,7 +364,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/approve/${eventId}`,
+          `${import.meta.env.VITE_API_URL}/admin/approve/${eventId}`,
           {
             method: "PUT",
             headers: { Authorization: `Bearer ${token}` },
@@ -393,7 +393,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/unapprove/${eventId}`,
+          `${import.meta.env.VITE_API_URL}/admin/unapprove/${eventId}`,
           {
             method: "PUT",
             headers: { Authorization: `Bearer ${token}` },
@@ -425,7 +425,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/events/${eventId}/register`,
+          `${import.meta.env.VITE_API_URL}/events/${eventId}/register`,
           {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` },
@@ -458,7 +458,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/events/${eventId}/unregister`,
+          `${import.meta.env.VITE_API_URL}/events/${eventId}/unregister`,
           {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },
@@ -497,7 +497,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           );
         }
         const response = await fetch(
-          `http://localhost:5000/events/${eventId}/registrations/pending`,
+          `${import.meta.env.VITE_API_URL}/events/${eventId}/registrations/pending`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -549,7 +549,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/approve-registration/${eventId}/${userId}`,
+          `${import.meta.env.VITE_API_URL}/admin/approve-registration/${eventId}/${userId}`,
           {
             method: "PUT",
             headers: { Authorization: `Bearer ${token}` },
@@ -594,7 +594,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
         const response = await fetch(
-          `http://localhost:5000/admin/reject-registration/${eventId}/${userId}`,
+          `${import.meta.env.VITE_API_URL}/admin/reject-registration/${eventId}/${userId}`,
           {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` },

@@ -18,7 +18,9 @@ import {
 } from "./pages";
 
 function App() {
-  const { i18n } = useTranslation();
+  
+  console.log("VITE_API_URL =", import.meta.env.VITE_API_URL);
+  const { i18n, t } = useTranslation();
 
   return (
     <ThemeProvider theme={theme}>
