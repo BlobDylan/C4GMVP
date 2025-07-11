@@ -9,9 +9,12 @@ import {
   Box,
   FormControlLabel,
   Checkbox,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useEvents } from "../../hooks";
+import { useTranslation } from "react-i18next";
 
 // Define filter options structure
 interface SelectedFilters {
@@ -21,13 +24,15 @@ interface SelectedFilters {
 }
 
 function FilterBar() {
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { channels, languages, locations, filterEvents, resetFilters } =
     useEvents();
   const [currentDialog, setCurrentDialog] = useState<
     "channels" | "languages" | "locations" | null
   >(null);
 
-  // Track selected filters for ALL categories
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     channels: [],
     languages: [],
@@ -43,7 +48,6 @@ function FilterBar() {
   };
 
   const handleApply = () => {
-    // Apply all selected filters
     filterEvents(selectedFilters);
     setCurrentDialog(null);
   };
@@ -51,7 +55,6 @@ function FilterBar() {
   const handleToggleFilter = (value: string) => {
     if (!currentDialog) return;
 
-    // Update filters for the current category
     setSelectedFilters((prev) => ({
       ...prev,
       [currentDialog]: prev[currentDialog].includes(value)
@@ -74,63 +77,132 @@ function FilterBar() {
   };
 
   useEffect(() => {
-    // Reset filters when component unmounts
     return () => {
       resetFilters();
     };
   }, [resetFilters]);
 
+  const getDialogTitle = () => {
+    switch (currentDialog) {
+      case "channels":
+        return t("filters.channels");
+      case "languages":
+        return t("filters.languages");
+      case "locations":
+        return t("filters.locations");
+      default:
+        return "";
+    }
+  };
+
   return (
     <>
       <Stack
-        direction="row"
-        spacing={2}
-        sx={{ width: "100%", justifyContent: "center" }}
+        direction={{ xs: "column", sm: "row" }}
+        spacing={{ xs: 1, sm: 2 }}
+        sx={{ 
+          width: "100%", 
+          justifyContent: "center",
+          mb: { xs: 2, sm: 3 }
+        }}
       >
-        {/* Channel Filter Button */}
         <IconButton
           color="primary"
-          aria-label="filter channel"
-          size="large"
+          aria-label={t("filters.filterByChannel")}
+          size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("channels")}
+          sx={{
+            justifyContent: "flex-start",
+            width: { xs: "100%", sm: "auto" },
+            padding: { xs: "8px 12px", sm: "12px 16px" },
+          }}
         >
-          <FilterListIcon fontSize="inherit" />
-          <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
-            Channel
+          <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
+          <Typography 
+            variant={isMobile ? "body1" : "h6"} 
+            sx={{ 
+              fontWeight: "bold", 
+              ml: 1,
+              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+            }}
+          >
+            {t("filters.channels")}
           </Typography>
         </IconButton>
 
-        {/* Language Filter Button */}
         <IconButton
           color="primary"
-          aria-label="filter language"
-          size="large"
+          aria-label={t("filters.filterByLanguage")}
+          size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("languages")}
+          sx={{
+            justifyContent: "flex-start",
+            width: { xs: "100%", sm: "auto" },
+            padding: { xs: "8px 12px", sm: "12px 16px" },
+          }}
         >
-          <FilterListIcon fontSize="inherit" />
-          <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
-            Language
+          <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
+          <Typography 
+            variant={isMobile ? "body1" : "h6"} 
+            sx={{ 
+              fontWeight: "bold", 
+              ml: 1,
+              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+            }}
+          >
+            {t("filters.languages")}
           </Typography>
         </IconButton>
 
-        {/* Location Filter Button */}
         <IconButton
           color="primary"
-          aria-label="filter location"
-          size="large"
+          aria-label={t("filters.filterByLocation")}
+          size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("locations")}
+          sx={{
+            justifyContent: "flex-start",
+            width: { xs: "100%", sm: "auto" },
+            padding: { xs: "8px 12px", sm: "12px 16px" },
+          }}
         >
-          <FilterListIcon fontSize="inherit" />
-          <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>
-            Location
+          <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
+          <Typography 
+            variant={isMobile ? "body1" : "h6"} 
+            sx={{ 
+              fontWeight: "bold", 
+              ml: 1,
+              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+            }}
+          >
+            {t("filters.locations")}
           </Typography>
         </IconButton>
       </Stack>
 
-      {/* Filter Dialog */}
-      <Dialog open={!!currentDialog} onClose={handleCancel}>
-        <Box sx={{ width: "100%", padding: 2 }}>
-          <Stack direction="column" spacing={2}>
+      <Dialog 
+        open={!!currentDialog} 
+        onClose={handleCancel}
+        fullScreen={isMobile}
+        maxWidth="sm"
+        fullWidth
+      >
+        <Box sx={{ 
+          width: "100%", 
+          padding: { xs: 2, sm: 3 },
+          maxHeight: isMobile ? "100vh" : "70vh",
+          overflow: "auto"
+        }}>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              mb: 2, 
+              fontWeight: "bold",
+              fontSize: { xs: "1.25rem", sm: "1.5rem" }
+            }}
+          >
+            {getDialogTitle()}
+          </Typography>
+          <Stack direction="column" spacing={1}>
             {getCurrentChoices().map((choice, index) => (
               <FormControlLabel
                 key={index}
@@ -140,10 +212,17 @@ function FilterBar() {
                       selectedFilters[currentDialog!]?.includes(choice) || false
                     }
                     onChange={() => handleToggleFilter(choice)}
+                    size={isMobile ? "small" : "medium"}
                   />
                 }
                 label={
-                  <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                  <Typography 
+                    variant="body1" 
+                    sx={{ 
+                      fontWeight: "bold",
+                      fontSize: { xs: "0.875rem", sm: "1rem" }
+                    }}
+                  >
                     {choice}
                   </Typography>
                 }
@@ -151,12 +230,20 @@ function FilterBar() {
             ))}
           </Stack>
         </Box>
-        <DialogActions>
-          <Button onClick={handleCancel} color="secondary">
-            Cancel
+        <DialogActions sx={{ padding: { xs: 2, sm: 3 } }}>
+          <Button 
+            onClick={handleCancel} 
+            color="secondary"
+            size={isMobile ? "small" : "medium"}
+          >
+            {t("common.cancel")}
           </Button>
-          <Button onClick={handleApply} color="primary">
-            Apply Filters
+          <Button 
+            onClick={handleApply} 
+            color="primary"
+            size={isMobile ? "small" : "medium"}
+          >
+            {t("filters.apply")}
           </Button>
         </DialogActions>
       </Dialog>

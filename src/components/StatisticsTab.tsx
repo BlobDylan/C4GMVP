@@ -1,20 +1,23 @@
 import { PieChart } from "@mui/x-charts/PieChart";
-import { Stack, Box, Typography } from "@mui/material";
+import { Stack, Box, Typography, Button } from "@mui/material";
 import { Event } from "../types";
 import { DateRangePicker } from "rsuite";
 import { useState, useEffect } from "react";
 import "rsuite/dist/rsuite.min.css";
+import { useTranslation } from "react-i18next";
 
 function StatisticsTab({ events }: { events: Event[] }) {
+  const { t, i18n } = useTranslation();
+
   const [dateRange, setDateRange] = useState<Date[]>(() => {
     const today = new Date();
     return [today, today];
   });
 
   const [pieData, setPieData] = useState([
-    { id: 0, value: 0, label: "Approved", color: "#86efac" },
-    { id: 1, value: 0, label: "Pending", color: "#ffdf20" },
-    { id: 2, value: 0, label: "Unassigned", color: "#f87171" },
+    { id: 0, value: 0, label: t("statistics.labels.approved"), color: "#86efac" },
+    { id: 1, value: 0, label: t("statistics.labels.pending"), color: "#ffdf20" },
+    { id: 2, value: 0, label: t("statistics.labels.unassigned"), color: "#f87171" },
   ]);
 
   const calculateStatistics = (start: Date, end: Date) => {
@@ -42,9 +45,9 @@ function StatisticsTab({ events }: { events: Event[] }) {
     });
 
     return [
-      { id: 0, value: approved, label: "Approved", color: "#86efac" },
-      { id: 1, value: pending, label: "Pending", color: "#ffdf20" },
-      { id: 2, value: unassigned, label: "Unassigned", color: "#f87171" },
+      { id: 0, value: approved, label: t("statistics.labels.approved"), color: "#86efac" },
+      { id: 1, value: pending, label: t("statistics.labels.pending"), color: "#ffdf20" },
+      { id: 2, value: unassigned, label: t("statistics.labels.unassigned"), color: "#f87171" },
     ];
   };
 
@@ -57,32 +60,36 @@ function StatisticsTab({ events }: { events: Event[] }) {
 
   useEffect(() => {
     handleApply();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="bg-black p-4 rounded-lg">
-      <h2 className="text-lg font-semibold text-white mb-4">Statistics</h2>
+    <Box className="bg-black p-4 rounded-lg">
+      <Typography variant="h5" color="white" mb={3} textAlign="center">
+        {t("statistics.title")}
+      </Typography>
       <Stack spacing={4} alignItems="center" justifyContent="center">
         <Stack spacing={2} width="100%" maxWidth={300}>
           <DateRangePicker
             ranges={[]}
             onChange={(range) => setDateRange(range || dateRange)}
+            locale={i18n.language === "he" ? "he_IL" : undefined}
+            style={{ width: "100%" }}
           />
-          <button
-            className="bg-yellow-300 text-black p-2 rounded hover:bg-yellow-400 w-full"
+          <Button
+            variant="contained"
+            color="warning"
             onClick={handleApply}
+            fullWidth
           >
-            Apply
-          </button>
+            {t("statistics.apply")}
+          </Button>
         </Stack>
 
-        <div className="mx-auto w-[300px]">
-          {Array.from(pieData.values()).reduce(
-            (acc, item) => acc + item.value,
-            0
-          ) === 0 ? (
+        <Box className="mx-auto" sx={{ width: 300, height: 200 }}>
+          {pieData.reduce((acc, item) => acc + item.value, 0) === 0 ? (
             <Typography variant="body2" color="white" textAlign="center">
-              No data available for the selected date range.
+              {t("statistics.noData")}
             </Typography>
           ) : (
             <PieChart
@@ -102,14 +109,9 @@ function StatisticsTab({ events }: { events: Event[] }) {
               height={200}
             />
           )}
-        </div>
+        </Box>
 
-        {Array.from(pieData.values()).reduce(
-          (acc, item) => acc + item.value,
-          0
-        ) === 0 ? (
-          <></>
-        ) : (
+        {pieData.reduce((acc, item) => acc + item.value, 0) === 0 ? null : (
           <Stack spacing={1} alignItems="flex-start">
             {pieData.map((item) => (
               <Box key={item.id} display="flex" alignItems="center" gap={1}>
@@ -127,7 +129,7 @@ function StatisticsTab({ events }: { events: Event[] }) {
           </Stack>
         )}
       </Stack>
-    </div>
+    </Box>
   );
 }
 

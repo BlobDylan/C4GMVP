@@ -1,4 +1,4 @@
-import { Box, Toolbar, Stack, Typography, IconButton } from "@mui/material";
+import { Box, Toolbar, Stack, IconButton } from "@mui/material";
 import { AppBar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks";
@@ -7,76 +7,76 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import EventIcon from "@mui/icons-material/Event";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useTranslation } from "react-i18next";
 
 function Navbar() {
   const navigate = useNavigate();
-
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <>
-      <AppBar>
-        <Toolbar sx={{ display: "flex" }}>
-          <Typography
-            variant="h6"
-            onClick={() => {
-              navigate("/");
-            }}
-            sx={{
-              cursor: "pointer",
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-            }}
-          >
-            Volunteer Manager
-          </Typography>
+      <AppBar sx={{ backgroundColor: "#1976d2" }}>
+        <Toolbar sx={{ display: "flex", alignItems: "center" }}>
+          <img
+            src="/logo.png"
+            alt="HQ logo"
+            style={{ height: "40px", marginLeft: "10px", cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          />
+
           <Box sx={{ flexGrow: 1 }} />
+
           <Stack direction={"row"} spacing={2}>
             {user &&
               (user.permissions === "admin" ||
                 user.permissions === "super_admin") && (
                 <IconButton
+                  aria-label={t("navbar.adminPanel")}
                   sx={{
                     color: "#fff",
                     "&:hover": { backgroundColor: "transparent" },
+                    fontFamily: `'Inter', sans-serif`,
                   }}
-                  onClick={() => {
-                    navigate("/admin");
-                  }}
+                  onClick={() => navigate("/admin")}
                 >
                   <AdminPanelSettingsIcon />
                 </IconButton>
               )}
             <IconButton
+              aria-label={t("navbar.myEvents")}
               sx={{
                 color: "#fff",
                 "&:hover": { backgroundColor: "transparent" },
+                fontFamily: `'Inter', sans-serif`,
               }}
-              onClick={() => {
-                navigate("/available-events");
-              }}
+              onClick={() => navigate("/my-events")}
             >
               <EventIcon />
             </IconButton>
             <IconButton
+              aria-label={t("navbar.home")}
               sx={{
                 color: "#fff",
                 "&:hover": { backgroundColor: "transparent" },
+                fontFamily: `'Inter', sans-serif`,
               }}
-              onClick={() => {
-                navigate("/");
-              }}
+              onClick={() => navigate("/")}
             >
               <HomeIcon />
             </IconButton>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               {user ? (
                 <>
-                  <Typography>{"Welcome, " + user.firstName}</Typography>
+                  <Box sx={{ color: "#fff", marginRight: 1, fontFamily: `'Heebo', sans-serif` }}>
+                    {t("navbar.welcome")}, {user.firstName}
+                  </Box>
                   <IconButton
+                    aria-label={t("navbar.logout")}
                     sx={{
                       color: "#fff",
                       "&:hover": { backgroundColor: "transparent" },
+                      fontFamily: `'Inter', sans-serif`,
                     }}
                     onClick={() => {
                       logout();
@@ -88,13 +88,13 @@ function Navbar() {
                 </>
               ) : (
                 <IconButton
+                  aria-label={t("navbar.login")}
                   sx={{
                     color: "#fff",
                     "&:hover": { backgroundColor: "transparent" },
+                    fontFamily: `'Inter', sans-serif`,
                   }}
-                  onClick={() => {
-                    navigate("/login");
-                  }}
+                  onClick={() => navigate("/login")}
                 >
                   <LoginIcon />
                 </IconButton>

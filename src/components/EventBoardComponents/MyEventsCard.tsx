@@ -2,22 +2,42 @@ import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { EventStatus, Event } from "../../types";
 import { useEvents, useAuth } from "../../hooks";
 import { useSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
 
-function MyEventsCard({ id, title, description, date, location, channel, group_size, language, num_instructors_needed, num_representatives_needed, status, registrationStatus }: Event) {
+function MyEventsCard({
+  id,
+  title,
+  description,
+  date,
+  location,
+  channel,
+  group_size,
+  language,
+  num_instructors_needed,
+  num_representatives_needed,
+  status,
+  registrationStatus,
+}: Event) {
   const { unregisterFromEvent, isLoadingUnregisterID } = useEvents();
   const { enqueueSnackbar } = useSnackbar();
 
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const isGuide = user?.role === "Guide";
-  const isPending = isGuide && registrationStatus === 'pending';
+  const isPending = isGuide && registrationStatus === "pending";
 
   const handleUnregisterButton = async () => {
     try {
       await unregisterFromEvent(id);
-      enqueueSnackbar("Unregistered successfully!", { variant: "success" });
+      enqueueSnackbar(t("myEventsCard.notifications.unregisteredSuccess"), {
+        variant: "success",
+      });
     } catch (err: unknown) {
       enqueueSnackbar(
-        err instanceof Error ? err.message : "Failed to unregister.",
+        err instanceof Error
+          ? err.message
+          : t("myEventsCard.notifications.unregisterFailed"),
         { variant: "error" }
       );
     }
@@ -47,50 +67,50 @@ function MyEventsCard({ id, title, description, date, location, channel, group_s
         {description}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Date: {date.toLocaleDateString()}
+        {t("myEventsCard.date")}: {date.toLocaleDateString()}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Time: {date.toLocaleTimeString([], {
+        {t("myEventsCard.time")}:{" "}
+        {date.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         })}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Location: {location}
+        {t("myEventsCard.location")}: {location}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Channel: {channel}
+        {t("myEventsCard.channel")}: {channel}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Group Size: {group_size}
+        {t("myEventsCard.groupSize")}: {group_size}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Language: {language}
+        {t("myEventsCard.language")}: {language}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Instructors Needed: {num_instructors_needed}
+        {t("myEventsCard.instructorsNeeded")}: {num_instructors_needed}
       </Typography>
       <Typography variant="body2" sx={{ marginBottom: 2 }}>
-        Representatives Needed: {num_representatives_needed}
+        {t("myEventsCard.representativesNeeded")}: {num_representatives_needed}
       </Typography>
-      <Typography
-        variant="body2"
-        sx={{
-          marginBottom: 2,
-        }}
-      >
-        Event Status: {status === EventStatus.APPROVED ? "Approved" : "Pending"}
+      <Typography variant="body2" sx={{ marginBottom: 2 }}>
+        {t("myEventsCard.eventStatus")}:{" "}
+        {status === EventStatus.APPROVED
+          ? t("common.approved")
+          : t("common.pending")}
       </Typography>
       {isGuide && (
         <Typography
           variant="body2"
           sx={{
             marginBottom: 2,
-            color: isPending ? 'orange' : 'green',
-            fontWeight: 'bold',
+            color: isPending ? "orange" : "green",
+            fontWeight: "bold",
           }}
         >
-          My Registration Status: {isPending ? 'Pending Approval' : 'Approved'}
+          {t("myEventsCard.myRegistrationStatus")}:{" "}
+          {isPending ? t("myEventsCard.pendingApproval") : t("common.approved")}
         </Typography>
       )}
       <Button
@@ -102,7 +122,7 @@ function MyEventsCard({ id, title, description, date, location, channel, group_s
         {isLoadingUnregisterID === id ? (
           <CircularProgress size={24} sx={{ color: "white" }} />
         ) : (
-          "Unregister"
+          t("myEventsCard.unregister")
         )}
       </Button>
     </Box>

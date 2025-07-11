@@ -1,0 +1,234 @@
+{
+  "common": {
+    "close": "סגור",
+    "view": "הצג",
+    "delete": "מחק",
+    "add": "הוסף",
+    "approve": "אשר",
+    "reject": "דחה",
+    "cancel": "ביטול"
+  },
+  "calendar": {
+    "weeklyCalendar": "לוח שבועי",
+    "today": "היום",
+    "days": ["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "שבת"]
+  },
+  "eventDialog": {
+    "date": "תאריך",
+    "time": "שעה",
+    "channel": "ערוץ",
+    "language": "שפה",
+    "groupSize": "גודל קבוצה",
+    "instructorsNeeded": "כמות מדריכים נדרשת",
+    "representativesNeeded": "כמות נציגים נדרשת",
+    "location": "מיקום",
+    "status": "סטטוס",
+    "approve": "אשר",
+    "unapprove": "בטל אישור",
+    "manageRegistrations": "ניהול הרשמות"
+  },
+  "upcomingEvents": {
+    "title": "אירועים קרובים",
+    "table": {
+      "title": "כותרת",
+      "channel": "ערוץ",
+      "language": "שפה",
+      "date": "תאריך",
+      "time": "שעה",
+      "location": "מיקום",
+      "groupSize": "גודל קבוצה",
+      "instructorsNeeded": "מדריכים נדרשים",
+      "representativesNeeded": "נציגים נדרשים",
+      "targetAudience": "קהלי יעד",
+      "status": "סטטוס",
+      "actions": "פעולות"
+    }
+  },
+  "registrationDialog": {
+    "title": "הרשמות ממתינות",
+    "noPending": "אין הרשמות ממתינות לאירוע זה.",
+    "approvedSuccess": "ההרשמה אושרה בהצלחה!",
+    "rejectedSuccess": "ההרשמה נדחתה בהצלחה!",
+    "approveFail": "האישור נכשל",
+    "rejectFail": "הדחייה נכשלה",
+    "table": {
+      "userEmail": "אימייל משתמש",
+      "userRole": "תפקיד משתמש",
+      "eventTitle": "שם האירוע",
+      "date": "תאריך",
+      "channel": "ערוץ",
+      "language": "שפה",
+      "location": "מיקום",
+      "status": "סטטוס",
+      "actions": "פעולות"
+    }
+  },
+  "navbar": {
+    "title": "מנהל מתנדבים",
+    "adminPanel": "פאנל ניהול",
+    "myEvents": "האירועים שלי",
+    "home": "דף הבית",
+    "login": "התחברות",
+    "logout": "התנתקות",
+    "welcome": "ברוך הבא"
+  },
+  "filters": {
+    "channels": "ערוצים",
+    "languages": "שפות",
+    "locations": "מיקומים",
+    "filterByChannel": "סנן לפי ערוץ",
+    "filterByLanguage": "סנן לפי שפה",
+    "filterByLocation": "סנן לפי מיקום",
+    "apply": "החל סינון"
+  },
+  "areYouSure": {
+  "title": "האם אתה בטוח?",
+  "confirm": "אישור מחיקה"
+},
+"login": {
+  "title": "ברוך הבא למערכת ניהול מתנדבים",
+  "subtitle": "התחבר לחשבון שלך",
+  "email": "אימייל",
+  "password": "סיסמה",
+  "loginButton": "התחבר",
+  "signupButton": "צור חשבון"
+},
+"newEvent": {
+  "createNewEvent": "צור אירוע חדש",
+  "title": "כותרת",
+  "description": "תיאור",
+  "date": "תאריך",
+  "time": "שעה",
+  "channels": {
+    "hostagesSquare": "כיכר החטופים",
+    "businessSector": "מגזר עסקי",
+    "donations": "תרומות",
+    "religiousZionism": "ציונות דתית",
+    "virtual": "וירטואלי"
+  },
+  "languages": {
+    "hebrew": "עברית",
+    "english": "אנגלית",
+    "arabic": "ערבית",
+    "russian": "רוסית",
+    "french": "צרפתית",
+    "spanish": "ספרדית",
+    "other": "אחר"
+  },
+  "locations": {
+    "hostagesSquare": "כיכר החטופים",
+    "zoom": "זום",
+    "north": "צפון",
+    "south": "דרום",
+    "offices": "משרדים",
+    "jerusalem": "ירושלים",
+    "center": "מרכז",
+    "shfela": "שפלה",
+    "acrossGreenLine": "מעבר לקו הירוק"
+  },
+  "targetAudiences": {
+    "religiousSector": "מגזר דתי",
+    "highSchools": "חטיבות ביניים ותיכונים",
+    "universities": "אוניברסיטאות",
+    "businessSector": "מגזר עסקי",
+    "army": "צבא",
+    "donors": "תורמים"
+  },
+  "groupDescription": "תיאור הקבוצה",
+  "additionalNotes": "הערות נוספות",
+  "groupSize": "גודל קבוצה",
+  "numInstructorsNeeded": "מספר מדריכים נדרשים",
+  "numRepresentativesNeeded": "מספר נציגים נדרשים",
+  "submit": "שלח"
+},
+"signUp": {
+  "title": "צור חשבון",
+  "firstName": "שם פרטי",
+  "lastName": "שם משפחה",
+  "email": "אימייל",
+  "phoneNumber": "מספר טלפון",
+  "password": "סיסמה",
+  "confirmPassword": "אישור סיסמה",
+  "role": "תפקיד",
+  "roles": {
+    "familyRep": "נציג משפחה",
+    "guide": "מדריך"
+  },
+  "preferredLanguages": "שפות מועדפות",
+  "signUpButton": "הרשמה",
+  "alreadyHaveAccount": "כבר יש לך חשבון? התחבר",
+  "errors": {
+    "passwordMismatch": "הסיסמאות אינן תואמות."
+  }
+},
+"availableEvents": {
+    "title": "אירועים זמינים"
+},
+"eventBoard": {
+"location": "מיקום",
+"channel": "ערוץ",
+"groupSize": "גודל קבוצה",
+"language": "שפה",
+"pending": "בהמתנה",
+"register": "הרשם",
+  "notifications": {
+    "pendingApproval": "הרשמתך ממתינה לאישור.",
+    "registeredSuccess": "נרשמת בהצלחה!",
+    "registerFailed": "הרשמה נכשלה."
+  }
+},
+
+  "myEvents": {
+    "title": "האירועים שלי",
+    "noEventsRegistered": "לא נרשמו אירועים."
+  },
+   "myEventsCard": {
+    "date": "תאריך",
+    "time": "שעה",
+    "location": "מיקום",
+    "channel": "ערוץ",
+    "groupSize": "גודל קבוצה",
+    "language": "שפה",
+    "instructorsNeeded": "מדריכים נדרשים",
+    "representativesNeeded": "נציגים נדרשים",
+    "eventStatus": "סטטוס אירוע",
+    "unregister": "בטל הרשמה",
+    "notifications": {
+      "unregisteredSuccess": "ההסרה מהאירוע בוצעה בהצלחה!",
+      "unregisterFailed": "נכשל ביטול ההרשמה."
+    },
+
+    "common": {
+    "approved": "מאושר",
+    "pending": "בהמתנה"
+  }
+},
+  "statistics": {
+    "title": "סטטיסטיקות",
+    "apply": "החל",
+    "noData": "אין נתונים לתקופת הזמן שנבחרה.",
+    "labels": {
+      "approved": "מאושרים",
+      "pending": "בהמתנה",
+      "unassigned": "לא הוקצו"
+    
+  }
+},
+
+  "adminPage": {
+    "viewMode": "מצב תצוגה",
+    "calendarView": "תצוגת לוח שנה",
+    "listView": "תצוגת רשימה"
+  
+}
+
+}
+
+  
+
+
+
+
+
+
+

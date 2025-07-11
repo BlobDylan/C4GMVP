@@ -5,8 +5,10 @@ import {
   FilterBar,
 } from "../../components";
 import { useEvents } from "../../hooks";
+import { useTranslation } from "react-i18next";
 
 function AvailableEvents() {
+  const { t } = useTranslation();
   const { events, myEvents, isLoading, filteredEvents } = useEvents();
   const numCardsToLoad = 4;
 
@@ -17,18 +19,25 @@ function AvailableEvents() {
         flexDirection: "column",
         alignItems: "center",
         backgroundColor: "background.paper",
-        padding: 4,
+        padding: { xs: 2, sm: 4 },
         borderRadius: 2,
       }}
     >
-      <Typography variant="h3" sx={{ marginBottom: 2 }}>
-        Available Events
+      <Typography 
+        variant="h3" 
+        sx={{ 
+          marginBottom: 2,
+          fontSize: { xs: "1.75rem", sm: "2.125rem", md: "3rem" },
+          textAlign: "center",
+        }}
+      >
+        {t("availableEvents.title")}
       </Typography>
       <FilterBar />
       <Grid
         container
         columns={{ xs: 12 }}
-        spacing={3}
+        spacing={{ xs: 2, sm: 3 }}
         sx={{
           width: "100%",
           flexGrow: 1,
@@ -46,7 +55,7 @@ function AvailableEvents() {
                   !myEvents.some(
                     (myEvent) =>
                       myEvent.id === event.id &&
-                      myEvent.registrationStatus === 'approved'
+                      myEvent.registrationStatus === "approved"
                   )
               )
               .map((event) => (

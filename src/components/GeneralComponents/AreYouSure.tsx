@@ -1,6 +1,7 @@
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
 import { Event } from "../../types";
 import { useEvents } from "../../hooks";
+import { useTranslation } from "react-i18next";
 
 interface DeleteDialogProps {
   event: Event | null;
@@ -9,6 +10,7 @@ interface DeleteDialogProps {
 
 function AreYouSure({ event, onClose }: DeleteDialogProps) {
   const { deleteEvent, isLoading } = useEvents();
+  const { t } = useTranslation();
 
   const handleDelete = async () => {
     if (event) {
@@ -23,14 +25,14 @@ function AreYouSure({ event, onClose }: DeleteDialogProps) {
       {!isLoading && (
         <>
           <Typography variant="h4" gutterBottom>
-            Are you sure?
+            {t("areYouSure.title")}
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
             <Button variant="contained" onClick={onClose}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button variant="contained" color="error" onClick={handleDelete}>
-              Yes
+              {t("areYouSure.confirm")}
             </Button>
           </Box>
         </>
@@ -40,3 +42,4 @@ function AreYouSure({ event, onClose }: DeleteDialogProps) {
 }
 
 export default AreYouSure;
+

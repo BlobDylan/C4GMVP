@@ -68,7 +68,9 @@ const EventsContext = createContext<EventsContextType>({
   deleteEvent: async () => {},
   approveEvent: async () => {},
   unapproveEvent: async () => {},
-  registerToEvent: async (eventId: string): Promise<string> => { return "approved"; },
+  registerToEvent: async (eventId: string): Promise<string> => {
+    return "approved";
+  },
   unregisterFromEvent: async () => {},
   refetchEvents: async () => {},
   refetchMyEvents: async () => {},
@@ -84,26 +86,27 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   const { user, isLoading: authIsLoading } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [myEvents, setMyEvents] = useState<Event[]>([]);
-  const [pendingRegistrations, setPendingRegistrations] = useState<{ eventId: string; status: string }[]>([]);
-  const [eventPendingRegistrations, setEventPendingRegistrations] = useState<Registration[]>([]);
+  const [pendingRegistrations, setPendingRegistrations] = useState<
+    { eventId: string; status: string }[]
+  >([]);
+  const [eventPendingRegistrations, setEventPendingRegistrations] = useState<
+    Registration[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingRegisterID, setIsLoadingRegisterID] = useState<string | null>(null);
-  const [isLoadingUnregisterID, setIsLoadingUnregisterID] = useState<string | null>(null);
+  const [isLoadingRegisterID, setIsLoadingRegisterID] = useState<string | null>(
+    null
+  );
+  const [isLoadingUnregisterID, setIsLoadingUnregisterID] = useState<
+    string | null
+  >(null);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<FilterOptions>({});
 
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
     try {
-      console.log("Fetching all events...");
       const response = await fetch("http://localhost:5000/events");
       const data = await response.json();
-      console.log("Fetch events response:", {
-        status: response.status,
-        ok: response.ok,
-        data: data,
-      });
-
       if (!response.ok) {
         console.error("Failed to fetch events:", response.status, data);
         throw new Error(data.message || "Failed to fetch events");
@@ -114,8 +117,6 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         date: new Date(event.date),
         id: event.id.toString(),
       }));
-      console.log("Mapped events:", mappedEvents);
-
       setEvents(mappedEvents);
       setError(null);
     } catch (err) {
@@ -127,9 +128,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const fetchMyEvents = useCallback(async () => {
-    console.log("Fetching my events...");
     if (!user) {
-      console.log("No user found, clearing my events and pending registrations");
       setMyEvents([]);
       setPendingRegistrations([]);
       return;
@@ -151,7 +150,6 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(errorData.message || "Failed to fetch my events");
       }
       const data = await response.json();
-      console.log("Received my events data:", data);
       setMyEvents(
         data.events.map((event: any) => ({
           ...event,
@@ -162,7 +160,7 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       );
       setPendingRegistrations(
         data.events
-          .filter((event: any) => event.registration_status === 'pending')
+          .filter((event: any) => event.registration_status === "pending")
           .map((event: any) => ({
             eventId: event.id.toString(),
             status: event.registration_status,
@@ -178,43 +176,50 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   }, [user]);
 
   const fetchPendingRegistrations = useCallback(async () => {
-  console.log("Fetching pending registrations...");
-  if (!user) {
-    console.log("No user found, clearing pending registrations");
-    setPendingRegistrations([]);
-    return;
-  }
-  try {
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      throw new Error("No token found for fetching pending registrations.");
+    if (!user) {
+      setPendingRegistrations([]);
+      return;
     }
-    const response = await fetch("http://localhost:5000/me/events", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error("Failed to fetch pending registrations:", response.status, errorData);
-      throw new Error(errorData.message || "Failed to fetch pending registrations");
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        throw new Error("No token found for fetching pending registrations.");
+      }
+      const response = await fetch("http://localhost:5000/me/events", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error(
+          "Failed to fetch pending registrations:",
+          response.status,
+          errorData
+        );
+        throw new Error(
+          errorData.message || "Failed to fetch pending registrations"
+        );
+      }
+      const data = await response.json();
+      setPendingRegistrations(
+        data.events
+          .filter((event: any) => event.registration_status === "pending")
+          .map((event: any) => ({
+            eventId: event.id.toString(),
+            status: event.registration_status,
+          }))
+      );
+      setError(null);
+    } catch (err) {
+      console.error("Error in fetchPendingRegistrations:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to load pending registrations"
+      );
     }
-    const data = await response.json();
-    console.log("Received pending registrations data:", data);
-    setPendingRegistrations(
-      data.events
-        .filter((event: any) => event.registration_status === 'pending')
-        .map((event: any) => ({
-          eventId: event.id.toString(),
-          status: event.registration_status,
-        }))
-    );
-    setError(null);
-  } catch (err) {
-    console.error("Error in fetchPendingRegistrations:", err);
-    setError(err instanceof Error ? err.message : "Failed to load pending registrations");
-  }
-}, [user]);
+  }, [user]);
 
   useEffect(() => {
     fetchEvents();
@@ -223,12 +228,15 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!authIsLoading) {
       if (user) {
-        Promise.all([fetchMyEvents(), fetchPendingRegistrations()])
-          .catch((err) => {
+        Promise.all([fetchMyEvents(), fetchPendingRegistrations()]).catch(
+          (err) => {
             setError(
-              err instanceof Error ? err.message : "Failed to fetch events or registrations"
+              err instanceof Error
+                ? err.message
+                : "Failed to fetch events or registrations"
             );
-          });
+          }
+        );
       } else {
         setMyEvents([]);
         setPendingRegistrations([]);
@@ -242,7 +250,6 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
       try {
         const token = localStorage.getItem("access_token");
         if (!token) throw new Error("Authentication token not found.");
-        console.log("Creating event with data:", eventData);
         const response = await fetch("http://localhost:5000/admin/new", {
           method: "POST",
           headers: {
@@ -256,11 +263,6 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
         });
 
         const responseData = await response.json();
-        console.log("Create event response:", {
-          status: response.status,
-          ok: response.ok,
-          data: responseData,
-        });
 
         if (!response.ok) {
           console.error(
@@ -271,12 +273,10 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
           throw new Error(responseData.message || "Failed to create event");
         }
 
-        console.log("Event created successfully, fetching updated events...");
         await Promise.all([
           fetchEvents(),
           user ? fetchMyEvents() : Promise.resolve(),
         ]);
-        console.log("Events updated successfully");
       } catch (err) {
         console.error("Error in createEvent:", err);
         throw err instanceof Error ? err : new Error("Failed to create event");
@@ -482,111 +482,156 @@ export const EventsProvider = ({ children }: { children: ReactNode }) => {
     [fetchEvents, fetchMyEvents]
   );
 
-const fetchEventPendingRegistrations = useCallback(async (eventId: string) => {
-  console.log(`Fetching pending registrations for event ${eventId}...`);
-  if (!user || !['admin', 'super_admin'].includes(user.permissions)) {
-    console.log("User not admin, clearing event pending registrations");
-    setEventPendingRegistrations([]);
-    return;
-  }
-  setIsLoading(true);
-  try {
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      throw new Error("No token found for fetching event pending registrations.");
-    }
-    const response = await fetch(`http://localhost:5000/events/${eventId}/registrations/pending`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error("Failed to fetch event pending registrations:", response.status, errorData);
-      throw new Error(errorData.message || "Failed to fetch event pending registrations");
-    }
-    const data = await response.json();
-    console.log("Received event pending registrations data:", data);
-    setEventPendingRegistrations(
-      data.registrations.map((reg: any) => ({
-        user_id: reg.user_id.toString(),
-        user_email: reg.user_email,
-        user_role: reg.user_role,
-        event_id: reg.event_id.toString(),
-        event_title: reg.event_title,
-        event_date: new Date(reg.event_date),
-        event_channel: reg.event_channel,
-        event_language: reg.event_language,
-        event_location: reg.event_location,
-        status: reg.status,
-      }))
-    );
-    setError(null);
-  } catch (err) {
-    console.error("Error in fetchEventPendingRegistrations:", err);
-    setError(err instanceof Error ? err.message : "Failed to load event pending registrations");
-  } finally {
-    setIsLoading(false);
-  }
-}, [user]);
-
-const approveRegistration = useCallback(
-  async (eventId: string, userId: string) => {
-    console.log(`Approving registration for event ${eventId}, user ${userId}...`);
-    try {
-      const token = localStorage.getItem("access_token");
-      if (!token) throw new Error("Authentication token not found.");
-      const response = await fetch(`http://localhost:5000/admin/approve-registration/${eventId}/${userId}`, {
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({ message: "Failed to approve registration" }));
-        console.error("Failed to approve registration:", response.status, errorBody);
-        throw new Error(errorBody.message);
+  const fetchEventPendingRegistrations = useCallback(
+    async (eventId: string) => {
+      if (!user || !["admin", "super_admin"].includes(user.permissions)) {
+        setEventPendingRegistrations([]);
+        return;
       }
-      console.log("Registration approved successfully");
-      await Promise.all([
-        fetchEvents(),
-        user ? fetchMyEvents() : Promise.resolve(),
-        user ? fetchPendingRegistrations() : Promise.resolve(),
-        user ? fetchEventPendingRegistrations(eventId) : Promise.resolve(),
-      ]);
-    } catch (err) {
-      console.error("Error in approveRegistration:", err);
-      throw err instanceof Error ? err : new Error("Failed to approve registration");
-    }
-  },
-  [fetchEvents, fetchMyEvents, fetchPendingRegistrations, fetchEventPendingRegistrations, user]
-);
-
-const rejectRegistration = useCallback(
-  async (eventId: string, userId: string) => {
-    console.log(`Rejecting registration for event ${eventId}, user ${userId}...`);
-    try {
-      const token = localStorage.getItem("access_token");
-      if (!token) throw new Error("Authentication token not found.");
-      const response = await fetch(`http://localhost:5000/admin/reject-registration/${eventId}/${userId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({ message: "Failed to reject registration" }));
-        console.error("Failed to reject registration:", response.status, errorBody);
-        throw new Error(errorBody.message);
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          throw new Error(
+            "No token found for fetching event pending registrations."
+          );
+        }
+        const response = await fetch(
+          `http://localhost:5000/events/${eventId}/registrations/pending`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error(
+            "Failed to fetch event pending registrations:",
+            response.status,
+            errorData
+          );
+          throw new Error(
+            errorData.message || "Failed to fetch event pending registrations"
+          );
+        }
+        const data = await response.json();
+        setEventPendingRegistrations(
+          data.registrations.map((reg: any) => ({
+            user_id: reg.user_id.toString(),
+            user_email: reg.user_email,
+            user_role: reg.user_role,
+            event_id: reg.event_id.toString(),
+            event_title: reg.event_title,
+            event_date: new Date(reg.event_date),
+            event_channel: reg.event_channel,
+            event_language: reg.event_language,
+            event_location: reg.event_location,
+            status: reg.status,
+          }))
+        );
+        setError(null);
+      } catch (err) {
+        console.error("Error in fetchEventPendingRegistrations:", err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to load event pending registrations"
+        );
+      } finally {
+        setIsLoading(false);
       }
-      console.log("Registration rejected successfully");
-      await Promise.all([
-        fetchEvents(),
-        user ? fetchMyEvents() : Promise.resolve(),
-        user ? fetchPendingRegistrations() : Promise.resolve(),
-        user ? fetchEventPendingRegistrations(eventId) : Promise.resolve(),
-      ]);
-    } catch (err) {
-      console.error("Error in rejectRegistration:", err);
-      throw err instanceof Error ? err : new Error("Failed to reject registration");
-    }
-  },
-  [fetchEvents, fetchMyEvents, fetchPendingRegistrations, fetchEventPendingRegistrations, user]
-);
+    },
+    [user]
+  );
+
+  const approveRegistration = useCallback(
+    async (eventId: string, userId: string) => {
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
+        const response = await fetch(
+          `http://localhost:5000/admin/approve-registration/${eventId}/${userId}`,
+          {
+            method: "PUT",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to approve registration" }));
+          console.error(
+            "Failed to approve registration:",
+            response.status,
+            errorBody
+          );
+          throw new Error(errorBody.message);
+        }
+        await Promise.all([
+          fetchEvents(),
+          user ? fetchMyEvents() : Promise.resolve(),
+          user ? fetchPendingRegistrations() : Promise.resolve(),
+          user ? fetchEventPendingRegistrations(eventId) : Promise.resolve(),
+        ]);
+      } catch (err) {
+        console.error("Error in approveRegistration:", err);
+        throw err instanceof Error
+          ? err
+          : new Error("Failed to approve registration");
+      }
+    },
+    [
+      fetchEvents,
+      fetchMyEvents,
+      fetchPendingRegistrations,
+      fetchEventPendingRegistrations,
+      user,
+    ]
+  );
+
+  const rejectRegistration = useCallback(
+    async (eventId: string, userId: string) => {
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Authentication token not found.");
+        const response = await fetch(
+          `http://localhost:5000/admin/reject-registration/${eventId}/${userId}`,
+          {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!response.ok) {
+          const errorBody = await response
+            .json()
+            .catch(() => ({ message: "Failed to reject registration" }));
+          console.error(
+            "Failed to reject registration:",
+            response.status,
+            errorBody
+          );
+          throw new Error(errorBody.message);
+        }
+        await Promise.all([
+          fetchEvents(),
+          user ? fetchMyEvents() : Promise.resolve(),
+          user ? fetchPendingRegistrations() : Promise.resolve(),
+          user ? fetchEventPendingRegistrations(eventId) : Promise.resolve(),
+        ]);
+      } catch (err) {
+        console.error("Error in rejectRegistration:", err);
+        throw err instanceof Error
+          ? err
+          : new Error("Failed to reject registration");
+      }
+    },
+    [
+      fetchEvents,
+      fetchMyEvents,
+      fetchPendingRegistrations,
+      fetchEventPendingRegistrations,
+      user,
+    ]
+  );
 
   const channelOptions = [
     { label: "Hostages Square", value: "Hostages Square" },
