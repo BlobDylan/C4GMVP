@@ -103,15 +103,30 @@ function Calendar() {
               {format(weekEnd, "d MMMM yyyy", { locale: getLocale() })}
             </Typography>
             <Stack direction="row" spacing={1}>
-              <IconButton onClick={handlePreviousWeek}>
-                <ChevronLeftIcon />
-              </IconButton>
-              <Button onClick={() => onWeekChange(new Date())} variant="contained">
+              {i18n.language === "he" ? (
+                <IconButton onClick={handlePreviousWeek}>
+                  <ChevronRightIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={handlePreviousWeek}>
+                  <ChevronLeftIcon />
+                </IconButton>
+              )}
+              <Button
+                onClick={() => onWeekChange(new Date())}
+                variant="contained"
+              >
                 {t("calendar.today")}
               </Button>
-              <IconButton onClick={handleNextWeek}>
-                <ChevronRightIcon />
-              </IconButton>
+              {i18n.language === "he" ? (
+                <IconButton onClick={handleNextWeek}>
+                  <ChevronLeftIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={handleNextWeek}>
+                  <ChevronRightIcon />
+                </IconButton>
+              )}
             </Stack>
           </Box>
 

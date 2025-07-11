@@ -26,7 +26,7 @@ interface SelectedFilters {
 function FilterBar() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { channels, languages, locations, filterEvents, resetFilters } =
     useEvents();
   const [currentDialog, setCurrentDialog] = useState<
@@ -98,12 +98,12 @@ function FilterBar() {
   return (
     <>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
+        direction={{ xs: "row", sm: "row" }}
         spacing={{ xs: 1, sm: 2 }}
-        sx={{ 
-          width: "100%", 
+        sx={{
+          width: "100%",
           justifyContent: "center",
-          mb: { xs: 2, sm: 3 }
+          mb: { xs: 2, sm: 3 },
         }}
       >
         <IconButton
@@ -111,19 +111,14 @@ function FilterBar() {
           aria-label={t("filters.filterByChannel")}
           size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("channels")}
-          sx={{
-            justifyContent: "flex-start",
-            width: { xs: "100%", sm: "auto" },
-            padding: { xs: "8px 12px", sm: "12px 16px" },
-          }}
         >
           <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
-          <Typography 
-            variant={isMobile ? "body1" : "h6"} 
-            sx={{ 
-              fontWeight: "bold", 
+          <Typography
+            variant={isMobile ? "body1" : "h6"}
+            sx={{
+              fontWeight: "bold",
               ml: 1,
-              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+              fontSize: { xs: "0.800rem", sm: "1.15rem" },
             }}
           >
             {t("filters.channels")}
@@ -135,19 +130,14 @@ function FilterBar() {
           aria-label={t("filters.filterByLanguage")}
           size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("languages")}
-          sx={{
-            justifyContent: "flex-start",
-            width: { xs: "100%", sm: "auto" },
-            padding: { xs: "8px 12px", sm: "12px 16px" },
-          }}
         >
           <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
-          <Typography 
-            variant={isMobile ? "body1" : "h6"} 
-            sx={{ 
-              fontWeight: "bold", 
+          <Typography
+            variant={isMobile ? "body1" : "h6"}
+            sx={{
+              fontWeight: "bold",
               ml: 1,
-              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+              fontSize: { xs: "0.800rem", sm: "1.15rem" },
             }}
           >
             {t("filters.languages")}
@@ -159,19 +149,14 @@ function FilterBar() {
           aria-label={t("filters.filterByLocation")}
           size={isMobile ? "medium" : "large"}
           onClick={() => handleOpen("locations")}
-          sx={{
-            justifyContent: "flex-start",
-            width: { xs: "100%", sm: "auto" },
-            padding: { xs: "8px 12px", sm: "12px 16px" },
-          }}
         >
           <FilterListIcon fontSize={isMobile ? "small" : "medium"} />
-          <Typography 
-            variant={isMobile ? "body1" : "h6"} 
-            sx={{ 
-              fontWeight: "bold", 
+          <Typography
+            variant={isMobile ? "body1" : "h6"}
+            sx={{
+              fontWeight: "bold",
               ml: 1,
-              fontSize: { xs: "0.875rem", sm: "1.25rem" }
+              fontSize: { xs: "0.800rem", sm: "1.15rem" },
             }}
           >
             {t("filters.locations")}
@@ -179,25 +164,27 @@ function FilterBar() {
         </IconButton>
       </Stack>
 
-      <Dialog 
-        open={!!currentDialog} 
+      <Dialog
+        open={!!currentDialog}
         onClose={handleCancel}
         fullScreen={isMobile}
         maxWidth="sm"
         fullWidth
       >
-        <Box sx={{ 
-          width: "100%", 
-          padding: { xs: 2, sm: 3 },
-          maxHeight: isMobile ? "100vh" : "70vh",
-          overflow: "auto"
-        }}>
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              mb: 2, 
+        <Box
+          sx={{
+            width: "100%",
+            padding: { xs: 2, sm: 3 },
+            maxHeight: isMobile ? "100vh" : "70vh",
+            overflow: "auto",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 2,
               fontWeight: "bold",
-              fontSize: { xs: "1.25rem", sm: "1.5rem" }
+              fontSize: { xs: "1.25rem", sm: "1.5rem" },
             }}
           >
             {getDialogTitle()}
@@ -216,11 +203,11 @@ function FilterBar() {
                   />
                 }
                 label={
-                  <Typography 
-                    variant="body1" 
-                    sx={{ 
+                  <Typography
+                    variant="body1"
+                    sx={{
                       fontWeight: "bold",
-                      fontSize: { xs: "0.875rem", sm: "1rem" }
+                      fontSize: { xs: "0.875rem", sm: "1rem" },
                     }}
                   >
                     {choice}
@@ -230,16 +217,18 @@ function FilterBar() {
             ))}
           </Stack>
         </Box>
-        <DialogActions sx={{ padding: { xs: 2, sm: 3 } }}>
-          <Button 
-            onClick={handleCancel} 
+        <DialogActions
+          sx={{ padding: { xs: 2, sm: 3 }, justifyContent: "space-between" }}
+        >
+          <Button
+            onClick={handleCancel}
             color="secondary"
             size={isMobile ? "small" : "medium"}
           >
             {t("common.cancel")}
           </Button>
-          <Button 
-            onClick={handleApply} 
+          <Button
+            onClick={handleApply}
             color="primary"
             size={isMobile ? "small" : "medium"}
           >

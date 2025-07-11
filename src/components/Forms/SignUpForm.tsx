@@ -12,7 +12,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { useAuth } from "../../hooks";
 import { SignupData } from "../../types";
@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 function SignUpForm() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [formData, setFormData] = useState<SignupData>({
     firstName: "",
@@ -118,24 +118,25 @@ function SignUpForm() {
   );
 
   return (
-    <Box sx={{ mt: { xs: "10vh", sm: "30vh" } }}>
+    <Box>
       <form onSubmit={handleSubmit}>
-        <Typography 
-          variant="h4" 
+        <Typography
+          variant="h4"
           gutterBottom
-          sx={{ 
+          sx={{
             fontSize: { xs: "1.75rem", sm: "2.125rem" },
             textAlign: "center",
-            mb: 3
+            mb: 3,
           }}
         >
           {t("signUp.title")}
         </Typography>
 
-        <Stack 
-          direction={{ xs: "column", sm: "row" }} 
-          spacing={2} 
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={2}
           sx={{ mb: 2 }}
+          dir="ltr"
         >
           <TextField
             name="firstName"
@@ -209,11 +210,11 @@ function SignUpForm() {
           helperText={passwordError}
         />
 
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
+        <Typography
+          variant="subtitle1"
+          sx={{
             mt: 2,
-            fontSize: { xs: "1rem", sm: "1.25rem" }
+            fontSize: { xs: "1rem", sm: "1.25rem" },
           }}
         >
           {t("signUp.role")}
@@ -221,6 +222,7 @@ function SignUpForm() {
 
         <ToggleButtonGroup
           color="primary"
+          dir="ltr"
           value={formData.role}
           exclusive
           onChange={(e, newRole) => {
@@ -229,13 +231,13 @@ function SignUpForm() {
             }
           }}
           aria-label={t("signUp.role")}
-          sx={{ 
+          sx={{
             my: 1,
             width: "100%",
-            '& .MuiToggleButton-root': {
-              fontSize: { xs: '0.75rem', sm: '0.875rem' },
-              padding: { xs: '8px 12px', sm: '10px 16px' },
-            }
+            "& .MuiToggleButton-root": {
+              fontSize: { xs: "0.75rem", sm: "0.875rem" },
+              padding: { xs: "8px 12px", sm: "10px 16px" },
+            },
           }}
         >
           <ToggleButton value="Family Representative" sx={{ flex: 1 }}>
@@ -246,27 +248,37 @@ function SignUpForm() {
           </ToggleButton>
         </ToggleButtonGroup>
 
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
+        <Typography
+          variant="subtitle1"
+          sx={{
             mt: 2,
-            fontSize: { xs: "1rem", sm: "1.25rem" }
+            fontSize: { xs: "1rem", sm: "1.25rem" },
           }}
         >
           {t("signUp.preferredLanguages")}
         </Typography>
 
-        <Grid container spacing={2} sx={{ mt: 1 }} justifyContent="space-between">
+        <Grid
+          container
+          spacing={2}
+          sx={{ mt: 1 }}
+          justifyContent="space-between"
+        >
           {languageColumns.map((column, columnIndex) => (
-            <Grid item xs={6} sm={3} key={`column-${columnIndex}`}>
+            <Grid sx={{ xs: 6, sm: 3 }} key={`column-${columnIndex}`}>
               {column.map((lang) => (
-                <Box key={lang.value} sx={{ display: "flex", alignItems: "center" }}>
+                <Box
+                  key={lang.value}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
                   <Checkbox
                     checked={formData.preferredLanguages.includes(lang.value)}
                     onChange={() => handleLanguageChange(lang.value)}
                     size="small"
                   />
-                  <Typography sx={{ fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+                  <Typography
+                    sx={{ fontSize: { xs: "0.8rem", sm: "0.875rem" } }}
+                  >
                     {lang.label}
                   </Typography>
                 </Box>
@@ -280,23 +292,27 @@ function SignUpForm() {
           variant="contained"
           fullWidth
           disabled={isLoading || disableSubmit}
-          sx={{ 
+          sx={{
             mt: 3,
             fontSize: { xs: "0.875rem", sm: "1rem" },
-            padding: { xs: "10px 16px", sm: "12px 24px" }
+            padding: { xs: "10px 16px", sm: "12px 24px" },
           }}
         >
-          {isLoading ? <CircularProgress size={24} /> : t("signUp.signUpButton")}
+          {isLoading ? (
+            <CircularProgress size={24} />
+          ) : (
+            t("signUp.signUpButton")
+          )}
         </Button>
 
         <Button
           variant="contained"
           fullWidth
           onClick={() => navigate("/login")}
-          sx={{ 
+          sx={{
             mt: 2,
             fontSize: { xs: "0.875rem", sm: "1rem" },
-            padding: { xs: "10px 16px", sm: "12px 24px" }
+            padding: { xs: "10px 16px", sm: "12px 24px" },
           }}
         >
           {t("signUp.alreadyHaveAccount")}
