@@ -13,7 +13,7 @@ export default function EditEventForm({
   onClose: () => void;
   initialEvent: Event;
 }) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const direction = i18n.language === "he" ? "rtl" : "ltr";
   const { updateEvent } = useEvents();
   const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({
@@ -45,9 +45,9 @@ export default function EditEventForm({
   };
 
   return (
-  <Box component="form" onSubmit={handleSubmit}>
+  <Box component="form" onSubmit={handleSubmit} dir={direction}>
     <TextField
-      label="Title"
+      label={t("title")}
       value={formData.title}
       onChange={(e) =>
         setFormData({ ...formData, title: e.target.value })
@@ -56,7 +56,7 @@ export default function EditEventForm({
       margin="normal"
     />
     <TextField
-      label="Channel"
+      label={t("channel")}
       value={formData.channel}
       onChange={(e) =>
         setFormData({ ...formData, channel: e.target.value })
@@ -65,7 +65,7 @@ export default function EditEventForm({
       margin="normal"
     />
     <TextField
-      label="Language"
+      label={t("language")}
       value={formData.language}
       onChange={(e) =>
         setFormData({ ...formData, language: e.target.value })
@@ -74,7 +74,7 @@ export default function EditEventForm({
       margin="normal"
     />
     <TextField
-      label="Location"
+      label={t("location")}
       value={formData.location}
       onChange={(e) =>
         setFormData({ ...formData, location: e.target.value })
@@ -83,7 +83,7 @@ export default function EditEventForm({
       margin="normal"
     />
     <TextField
-      label="Target Audience"
+      label={t("target_audience")}
       value={formData.target_audience}
       onChange={(e) =>
         setFormData({ ...formData, target_audience: e.target.value })
@@ -92,7 +92,7 @@ export default function EditEventForm({
       margin="normal"
     />
     <TextField
-      label="Group Size"
+      label={t("group_size")}
       type="number"
       value={formData.group_size}
       onChange={(e) =>
@@ -102,7 +102,7 @@ export default function EditEventForm({
       margin="normal"
     />
     <TextField
-      label="Instructors Needed"
+      label={t("num_instructors_needed")}
       type="number"
       value={formData.num_instructors_needed}
       onChange={(e) =>
@@ -115,7 +115,7 @@ export default function EditEventForm({
       margin="normal"
     />
     <TextField
-      label="Representatives Needed"
+      label={t("num_representatives_needed")}
       type="number"
       value={formData.num_representatives_needed}
       onChange={(e) =>
@@ -128,7 +128,7 @@ export default function EditEventForm({
       margin="normal"
     />
     <TextField
-      label="Group Description"
+      label={t("group_description")}
       value={formData.group_description}
       onChange={(e) =>
         setFormData({ ...formData, group_description: e.target.value })
@@ -139,7 +139,7 @@ export default function EditEventForm({
       rows={3}
     />
     <TextField
-      label="Additional Notes"
+      label={t("additional_notes")}
       value={formData.additional_notes}
       onChange={(e) =>
         setFormData({ ...formData, additional_notes: e.target.value })
@@ -149,7 +149,8 @@ export default function EditEventForm({
       multiline
       rows={2}
     />
-    <Button type="submit">Save</Button>
+    <Button type="submit">{t("save")}</Button>
   </Box>
-  );
+);
+
 }

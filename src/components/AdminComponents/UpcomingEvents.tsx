@@ -147,6 +147,7 @@ function UpcomingEvents() {
                         <TableCell>{event.target_audience}</TableCell>
                         <TableCell>{event.status}</TableCell>
                         <TableCell>
+                         <Box sx={{ display: "flex", gap: 1 }}>
                           <IconButton
                             aria-label={t("common.view")}
                             size="small"
@@ -170,6 +171,7 @@ function UpcomingEvents() {
                               <EditIcon fontSize="inherit" />
                             </IconButton>
                           )}
+                         </Box>
                         </TableCell>
                       </TableRow>
                     ))}
