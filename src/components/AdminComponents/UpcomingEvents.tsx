@@ -13,10 +13,11 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import PreviewIcon from "@mui/icons-material/Preview";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
-
+import EditEventForm from "../Forms/EditEventForm";
 import {
   EventDialog,
   NewEventForm,
@@ -25,6 +26,7 @@ import {
   FilterBar,
 } from "../";
 import { useEvents } from "../../hooks";
+import { useAuth } from "../../hooks";
 import { Event } from "../../types";
 
 export interface EventDialogProps {
@@ -33,11 +35,12 @@ export interface EventDialogProps {
   onClose: () => void;
 }
 
-export type DialogType = "none" | "view" | "new" | "delete";
+export type DialogType = "none" | "view" | "new" | "delete" | "edit";
 
 function UpcomingEvents() {
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
+  const { user } = useAuth();
   const [activeDialog, setActiveDialog] = useState<DialogType>("none");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
@@ -158,6 +161,15 @@ function UpcomingEvents() {
                           >
                             <DeleteIcon fontSize="inherit" />
                           </IconButton>
+                          {user?.permissions === "super_admin" && (
+                            <IconButton
+                              aria-label={t("common.edit")}
+                              size="small"
+                              onClick={() => handleOpenDialog("edit", event)}
+                            >
+                              <EditIcon fontSize="inherit" />
+                            </IconButton>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -175,6 +187,11 @@ function UpcomingEvents() {
       </Dialog>
       <Dialog open={activeDialog === "delete"} onClose={handleClose} fullWidth>
         <AreYouSure event={selectedEvent} onClose={handleClose} />
+      </Dialog>
+      <Dialog open={activeDialog === "edit"} onClose={handleClose} fullWidth>
+        {selectedEvent && (
+  <EditEventForm onClose={handleClose} initialEvent={selectedEvent} />
+)}
       </Dialog>
     </>
   );
