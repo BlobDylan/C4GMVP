@@ -18,7 +18,10 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
     { label: t("newEvent.channels.hostagesSquare"), value: "Hostages Square" },
     { label: t("newEvent.channels.businessSector"), value: "Business Sector" },
     { label: t("newEvent.channels.donations"), value: "Donations" },
-    { label: t("newEvent.channels.religiousZionism"), value: "Religious Zionism" },
+    {
+      label: t("newEvent.channels.religiousZionism"),
+      value: "Religious Zionism",
+    },
     { label: t("newEvent.channels.virtual"), value: "Virtual" },
   ];
 
@@ -41,14 +44,26 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
     { label: t("newEvent.locations.jerusalem"), value: "Jerusalem" },
     { label: t("newEvent.locations.center"), value: "Center" },
     { label: t("newEvent.locations.shfela"), value: "Shfela" },
-    { label: t("newEvent.locations.acrossGreenLine"), value: "Across the green line" },
+    {
+      label: t("newEvent.locations.acrossGreenLine"),
+      value: "Across the green line",
+    },
   ];
 
   const targetAudiences = [
-    { label: t("newEvent.targetAudiences.religiousSector"), value: "Religious Sector" },
+    {
+      label: t("newEvent.targetAudiences.religiousSector"),
+      value: "Religious Sector",
+    },
     { label: t("newEvent.targetAudiences.highSchools"), value: "High Schools" },
-    { label: t("newEvent.targetAudiences.universities"), value: "Universities" },
-    { label: t("newEvent.targetAudiences.businessSector"), value: "Business Sector" },
+    {
+      label: t("newEvent.targetAudiences.universities"),
+      value: "Universities",
+    },
+    {
+      label: t("newEvent.targetAudiences.businessSector"),
+      value: "Business Sector",
+    },
     { label: t("newEvent.targetAudiences.army"), value: "Army" },
     { label: t("newEvent.targetAudiences.donors"), value: "Donors" },
   ];
@@ -227,11 +242,11 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
 
       <TextField
         fullWidth
-        label={t("newEvent.additionalNotes")}
-        name="additional_notes"
+        label={t("newEvent.contactPhoneNumber")}
+        name="contact_phone_number"
         onChange={handleChange}
         margin="normal"
-        multiline
+        type="tel"
         minRows={2}
       />
 

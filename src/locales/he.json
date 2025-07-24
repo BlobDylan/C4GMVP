@@ -25,7 +25,8 @@
     "status": "סטטוס",
     "approve": "אשר",
     "unapprove": "בטל אישור",
-    "manageRegistrations": "ניהול הרשמות"
+    "manageRegistrations": "ניהול הרשמות",
+    "contactPhoneNumber": "מספר טלפון ליצירת קשר"
   },
   "upcomingEvents": {
     "title": "אירועים קרובים",
@@ -82,107 +83,108 @@
     "apply": "החל סינון"
   },
   "areYouSure": {
-  "title": "האם אתה בטוח?",
-  "confirm": "אישור מחיקה"
-},
-"login": {
-  "title": "ברוך הבא למערכת ניהול מתנדבים",
-  "subtitle": "התחבר לחשבון שלך",
-  "email": "אימייל",
-  "password": "סיסמה",
-  "loginButton": "התחבר",
-  "signupButton": "צור חשבון"
-},
-"newEvent": {
-  "createNewEvent": "צור אירוע חדש",
-  "title": "כותרת",
-  "description": "תיאור",
-  "date": "תאריך",
-  "time": "שעה",
-  "channels": {
-    "hostagesSquare": "כיכר החטופים",
-    "businessSector": "מגזר עסקי",
-    "donations": "תרומות",
-    "religiousZionism": "ציונות דתית",
-    "virtual": "וירטואלי"
+    "title": "האם אתה בטוח?",
+    "confirm": "אישור מחיקה"
   },
-  "languages": {
-    "hebrew": "עברית",
-    "english": "אנגלית",
-    "arabic": "ערבית",
-    "russian": "רוסית",
-    "french": "צרפתית",
-    "spanish": "ספרדית",
-    "other": "אחר"
+  "login": {
+    "title": "ברוך הבא למערכת ניהול מתנדבים",
+    "subtitle": "התחבר לחשבון שלך",
+    "email": "אימייל",
+    "password": "סיסמה",
+    "loginButton": "התחבר",
+    "signupButton": "צור חשבון"
   },
-  "locations": {
-    "hostagesSquare": "כיכר החטופים",
-    "zoom": "זום",
-    "north": "צפון",
-    "south": "דרום",
-    "offices": "משרדים",
-    "jerusalem": "ירושלים",
-    "center": "מרכז",
-    "shfela": "שפלה",
-    "acrossGreenLine": "מעבר לקו הירוק"
+  "newEvent": {
+    "createNewEvent": "צור אירוע חדש",
+    "title": "כותרת",
+    "description": "תיאור",
+    "date": "תאריך",
+    "time": "שעה",
+    "channels": {
+      "hostagesSquare": "כיכר החטופים",
+      "businessSector": "מגזר עסקי",
+      "donations": "תרומות",
+      "religiousZionism": "ציונות דתית",
+      "virtual": "וירטואלי"
+    },
+    "languages": {
+      "hebrew": "עברית",
+      "english": "אנגלית",
+      "arabic": "ערבית",
+      "russian": "רוסית",
+      "french": "צרפתית",
+      "spanish": "ספרדית",
+      "other": "אחר"
+    },
+    "locations": {
+      "hostagesSquare": "כיכר החטופים",
+      "zoom": "זום",
+      "north": "צפון",
+      "south": "דרום",
+      "offices": "משרדים",
+      "jerusalem": "ירושלים",
+      "center": "מרכז",
+      "shfela": "שפלה",
+      "acrossGreenLine": "מעבר לקו הירוק"
+    },
+    "targetAudiences": {
+      "religiousSector": "מגזר דתי",
+      "highSchools": "חטיבות ביניים ותיכונים",
+      "universities": "אוניברסיטאות",
+      "businessSector": "מגזר עסקי",
+      "army": "צבא",
+      "donors": "תורמים"
+    },
+    "groupDescription": "תיאור הקבוצה",
+    "additionalNotes": "הערות נוספות",
+    "contactPhoneNumber": "מספר טלפון ליצירת קשר",
+    "groupSize": "גודל קבוצה",
+    "numInstructorsNeeded": "מספר מדריכים נדרשים",
+    "numRepresentativesNeeded": "מספר נציגים נדרשים",
+    "submit": "שלח"
   },
-  "targetAudiences": {
-    "religiousSector": "מגזר דתי",
-    "highSchools": "חטיבות ביניים ותיכונים",
-    "universities": "אוניברסיטאות",
-    "businessSector": "מגזר עסקי",
-    "army": "צבא",
-    "donors": "תורמים"
+  "signUp": {
+    "title": "צור חשבון",
+    "firstName": "שם פרטי",
+    "lastName": "שם משפחה",
+    "email": "אימייל",
+    "phoneNumber": "מספר טלפון",
+    "password": "סיסמה",
+    "confirmPassword": "אישור סיסמה",
+    "role": "תפקיד",
+    "roles": {
+      "familyRep": "נציג משפחה",
+      "guide": "מדריך"
+    },
+    "preferredLanguages": "שפות מועדפות",
+    "signUpButton": "הרשמה",
+    "alreadyHaveAccount": "כבר יש לך חשבון? התחבר",
+    "errors": {
+      "passwordMismatch": "הסיסמאות אינן תואמות."
+    }
   },
-  "groupDescription": "תיאור הקבוצה",
-  "additionalNotes": "הערות נוספות",
-  "groupSize": "גודל קבוצה",
-  "numInstructorsNeeded": "מספר מדריכים נדרשים",
-  "numRepresentativesNeeded": "מספר נציגים נדרשים",
-  "submit": "שלח"
-},
-"signUp": {
-  "title": "צור חשבון",
-  "firstName": "שם פרטי",
-  "lastName": "שם משפחה",
-  "email": "אימייל",
-  "phoneNumber": "מספר טלפון",
-  "password": "סיסמה",
-  "confirmPassword": "אישור סיסמה",
-  "role": "תפקיד",
-  "roles": {
-    "familyRep": "נציג משפחה",
-    "guide": "מדריך"
-  },
-  "preferredLanguages": "שפות מועדפות",
-  "signUpButton": "הרשמה",
-  "alreadyHaveAccount": "כבר יש לך חשבון? התחבר",
-  "errors": {
-    "passwordMismatch": "הסיסמאות אינן תואמות."
-  }
-},
-"availableEvents": {
+  "availableEvents": {
     "title": "אירועים זמינים"
-},
-"eventBoard": {
-"location": "מיקום",
-"channel": "ערוץ",
-"groupSize": "גודל קבוצה",
-"language": "שפה",
-"pending": "בהמתנה",
-"register": "הרשם",
-  "notifications": {
-    "pendingApproval": "הרשמתך ממתינה לאישור.",
-    "registeredSuccess": "נרשמת בהצלחה!",
-    "registerFailed": "הרשמה נכשלה."
-  }
-},
+  },
+  "eventBoard": {
+    "location": "מיקום",
+    "channel": "ערוץ",
+    "groupSize": "גודל קבוצה",
+    "language": "שפה",
+    "pending": "בהמתנה",
+    "register": "הרשם",
+    "notifications": {
+      "pendingApproval": "הרשמתך ממתינה לאישור.",
+      "registeredSuccess": "נרשמת בהצלחה!",
+      "registerFailed": "הרשמה נכשלה."
+    }
+  },
 
   "myEvents": {
     "title": "האירועים שלי",
     "noEventsRegistered": "לא נרשמו אירועים."
   },
-   "myEventsCard": {
+  "myEventsCard": {
     "date": "תאריך",
     "time": "שעה",
     "location": "מיקום",
@@ -199,10 +201,10 @@
     },
 
     "common": {
-    "approved": "מאושר",
-    "pending": "בהמתנה"
-  }
-},
+      "approved": "מאושר",
+      "pending": "בהמתנה"
+    }
+  },
   "statistics": {
     "title": "סטטיסטיקות",
     "apply": "החל",
@@ -211,24 +213,12 @@
       "approved": "מאושרים",
       "pending": "בהמתנה",
       "unassigned": "לא הוקצו"
-    
-  }
-},
+    }
+  },
 
   "adminPage": {
     "viewMode": "מצב תצוגה",
     "calendarView": "תצוגת לוח שנה",
     "listView": "תצוגת רשימה"
-  
+  }
 }
-
-}
-
-  
-
-
-
-
-
-
-
