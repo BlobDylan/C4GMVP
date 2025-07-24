@@ -38,7 +38,8 @@ export interface Event {
   target_audience: string;
   group_description?: string;
   additional_notes?: string;
-  registrationStatus?: 'pending' | 'approved';
+  contact_phone_number?: string;
+  registrationStatus?: "pending" | "approved";
 }
 
 export interface CreateEventRequest {
