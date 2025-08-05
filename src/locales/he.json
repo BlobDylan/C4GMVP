@@ -42,7 +42,8 @@
       "representativesNeeded": "נציגים נדרשים",
       "targetAudience": "קהלי יעד",
       "status": "סטטוס",
-      "actions": "פעולות"
+      "actions": "פעולות",
+      "contact_phone_number": "מספר טלפון"
     }
   },
   "registrationDialog": {
@@ -220,5 +221,11 @@
     "viewMode": "מצב תצוגה",
     "calendarView": "תצוגת לוח שנה",
     "listView": "תצוגת רשימה"
+  },
+  
+  "editForm": {
+    "phone": "מספר טלפון",
+    "groupDescription": "תיאור הקבוצה",
+    "additionalNotes": "הערות נוספות"
   }
 }

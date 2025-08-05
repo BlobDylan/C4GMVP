@@ -236,5 +236,11 @@
     "viewMode": "View mode",
     "calendarView": "Calendar view",
     "listView": "List view"
+  },
+
+  "editForm": {
+    "phone": "Phone Number",
+    "groupDescription": "Group Description",
+    "additionalNotes": "Additional Notes"
   }
 }

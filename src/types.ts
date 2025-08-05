@@ -54,6 +54,7 @@ export interface CreateEventRequest {
   num_representatives_needed: number;
   group_description?: string;
   additional_notes?: string;
+  contact_phone_number: string;
 }
 
 export interface Registration {
