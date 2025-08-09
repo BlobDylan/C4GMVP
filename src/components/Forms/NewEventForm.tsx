@@ -70,6 +70,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
 
   const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({
     title: "",
+    description: "",
     channel: channels[0].value,
     language: languages[0].value,
     location: locations[0].value,

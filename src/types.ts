@@ -44,6 +44,7 @@ export interface Event {
 
 export interface CreateEventRequest {
   title: string;
+  description: string;
   date: Date;
   channel: string;
   language: string;
@@ -54,7 +55,7 @@ export interface CreateEventRequest {
   num_representatives_needed: number;
   group_description?: string;
   additional_notes?: string;
-  contact_phone_number: string;
+  contact_phone_number?: string;
 }
 
 export interface Registration {
