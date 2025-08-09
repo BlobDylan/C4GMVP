@@ -9,6 +9,7 @@ import {
   TableRow,
   IconButton,
   Dialog,
+  Stack,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -194,14 +195,7 @@ function UpcomingEvents() {
                         </TableCell>
                         <TableCell>{event.status}</TableCell>
                         <TableCell>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "row",
-                              gap: 1,
-                              flexWrap: "nowrap",
-                            }}
-                          >
+                          <Stack direction={{ xs: "column", sm: "row" }}>
                             <IconButton
                               aria-label={t("common.view")}
                               size="small"
@@ -225,7 +219,7 @@ function UpcomingEvents() {
                             >
                               <DeleteIcon fontSize="inherit" />
                             </IconButton>
-                          </Box>
+                          </Stack>
                         </TableCell>
                       </TableRow>
                     ))}

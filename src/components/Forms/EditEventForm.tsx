@@ -1,269 +1,311 @@
-import { useState, SyntheticEvent } from "react";
-import { Box, Button, TextField, IconButton, Fab, Snackbar, SnackbarCloseReason, Alert } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import LanguageIcon from "@mui/icons-material/Language";
-import { useEvents } from "../../hooks";
-import { Event, CreateEventRequest } from "../../types";
-import dayjs, { Dayjs } from "dayjs";
-import { useTranslation } from "react-i18next";
-import {
-    DateTimePicker,
-    LocalizationProvider
-} from "@mui/x-date-pickers";
+import { Box, Button, TextField, Typography, MenuItem } from "@mui/material";
+import { useState } from "react";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
+
+import { useEvents } from "../../hooks";
+import { CreateEventRequest, Event } from "../../types";
+import { useTranslation } from "react-i18next";
 
 interface EditEventFormProps {
-    onClose: () => void;
-    initialEvent: Event;
+  onClose: () => void;
+  initialEvent: Event;
 }
 
-export default function EditEventForm({ onClose, initialEvent }: EditEventFormProps) {
-    const { i18n, t } = useTranslation();
-    const direction = i18n.language === "he" ? "rtl" : "ltr";
-    const { updateEvent } = useEvents();
+function EditEventForm({ onClose, initialEvent }: EditEventFormProps) {
+  const { t } = useTranslation();
+  const { updateEvent } = useEvents();
 
-    const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({
-        title: initialEvent.title,
-        channel: initialEvent.channel,
-        language: initialEvent.language,
-        location: initialEvent.location,
-        target_audience: initialEvent.target_audience,
-        group_size: initialEvent.group_size,
-        num_instructors_needed: initialEvent.num_instructors_needed,
-        num_representatives_needed: initialEvent.num_representatives_needed,
-        group_description: initialEvent.group_description,
-        additional_notes: initialEvent.additional_notes,
-        contact_phone_number: initialEvent.contact_phone_number ?? "",
-    });
+  const channels = [
+    { label: t("newEvent.channels.hostagesSquare"), value: "Hostages Square" },
+    { label: t("newEvent.channels.businessSector"), value: "Business Sector" },
+    { label: t("newEvent.channels.donations"), value: "Donations" },
+    {
+      label: t("newEvent.channels.religiousZionism"),
+      value: "Religious Zionism",
+    },
+    { label: t("newEvent.channels.virtual"), value: "Virtual" },
+  ];
 
-    const [eventDate, setEventDate] = useState<Dayjs>(dayjs(initialEvent.date));
+  const languages = [
+    { label: t("newEvent.languages.hebrew"), value: "Hebrew" },
+    { label: t("newEvent.languages.english"), value: "English" },
+    { label: t("newEvent.languages.arabic"), value: "Arabic" },
+    { label: t("newEvent.languages.russian"), value: "Russian" },
+    { label: t("newEvent.languages.french"), value: "French" },
+    { label: t("newEvent.languages.spanish"), value: "Spanish" },
+    { label: t("newEvent.languages.other"), value: "Other" },
+  ];
 
-    // Snackbar state
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const locations = [
+    { label: t("newEvent.locations.hostagesSquare"), value: "Hostages Square" },
+    { label: t("newEvent.locations.zoom"), value: "Zoom" },
+    { label: t("newEvent.locations.north"), value: "North" },
+    { label: t("newEvent.locations.south"), value: "South" },
+    { label: t("newEvent.locations.offices"), value: "Offices" },
+    { label: t("newEvent.locations.jerusalem"), value: "Jerusalem" },
+    { label: t("newEvent.locations.center"), value: "Center" },
+    { label: t("newEvent.locations.shfela"), value: "Shfela" },
+    {
+      label: t("newEvent.locations.acrossGreenLine"),
+      value: "Across the green line",
+    },
+  ];
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            await updateEvent(initialEvent.id, {
-                ...formData,
-                date: eventDate.toDate(),
-            });
-            setSnackbarOpen(true); // Show success message
-            // Optionally, you can call onClose() after a delay if you want to close the form automatically
-        } catch (err) {
-            console.error("Failed to update event:", err);
-        }
+  const targetAudiences = [
+    {
+      label: t("newEvent.targetAudiences.religiousSector"),
+      value: "Religious Sector",
+    },
+    { label: t("newEvent.targetAudiences.highSchools"), value: "High Schools" },
+    {
+      label: t("newEvent.targetAudiences.universities"),
+      value: "Universities",
+    },
+    {
+      label: t("newEvent.targetAudiences.businessSector"),
+      value: "Business Sector",
+    },
+    { label: t("newEvent.targetAudiences.army"), value: "Army" },
+    { label: t("newEvent.targetAudiences.donors"), value: "Donors" },
+  ];
+
+  const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({
+    title: initialEvent.title,
+    description: initialEvent.description,
+    channel: initialEvent.channel,
+    language: initialEvent.language,
+    location: initialEvent.location,
+    target_audience: initialEvent.target_audience,
+    group_size: initialEvent.group_size,
+    num_instructors_needed: initialEvent.num_instructors_needed,
+    num_representatives_needed: initialEvent.num_representatives_needed,
+    group_description: initialEvent.group_description,
+    additional_notes: initialEvent.additional_notes,
+    contact_phone_number: initialEvent.contact_phone_number ?? "",
+  });
+  const [eventDate, setEventDate] = useState<Dayjs>(dayjs());
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name.includes("num_") || name === "group_size" ? +value : value,
+    }));
+  };
+
+  const handleDateChange = (newDate: Dayjs | null) => {
+    if (newDate) {
+      setEventDate((prev) => newDate.hour(prev.hour()).minute(prev.minute()));
+    }
+  };
+
+  const handleTimeChange = (newTime: Dayjs | null) => {
+    if (newTime) {
+      setEventDate((prev) =>
+        prev.hour(newTime.hour()).minute(newTime.minute())
+      );
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const submissionData: CreateEventRequest = {
+      ...formData,
+      date: eventDate.toDate(),
     };
+    try {
+      console.log("Submitting event data:", submissionData);
+      await updateEvent(initialEvent.id, submissionData);
+    } catch (err) {
+      console.error("Failed to update event:", err);
+    }
+    onClose();
+  };
 
-    const handleSnackbarClose = (
-        _event: SyntheticEvent<any> | globalThis.Event,
-        reason: SnackbarCloseReason
-    ) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setSnackbarOpen(false);
-    };
+  return (
+    <Box component="form" onSubmit={handleSubmit} p={3}>
+      <Typography variant="h4" component="h1" gutterBottom align="center">
+        Edit Event
+      </Typography>
 
-    const handleAlertClose = () => {
-    setSnackbarOpen(false);
-    };
+      <TextField
+        fullWidth
+        label={t("newEvent.title")}
+        name="title"
+        onChange={handleChange}
+        margin="normal"
+        defaultValue={initialEvent.title}
+        required
+      />
+      <TextField
+        fullWidth
+        label={t("newEvent.description")}
+        name="description"
+        onChange={handleChange}
+        margin="normal"
+        multiline
+        defaultValue={initialEvent.description}
+        required
+      />
 
-    // Floating language toggle button
-    const toggleLanguage = () => {
-        i18n.changeLanguage(i18n.language === "he" ? "en" : "he");
-    };
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Box sx={{ display: "flex", gap: 2, my: 2 }}>
+          <DatePicker
+            label={t("newEvent.date")}
+            value={eventDate}
+            onChange={handleDateChange}
+            sx={{ flex: 1 }}
+          />
+          <TimePicker
+            label={t("newEvent.time")}
+            value={eventDate}
+            onChange={handleTimeChange}
+            sx={{ flex: 1 }}
+          />
+        </Box>
+      </LocalizationProvider>
 
-    // Real labels for specific fields
-    const phoneLabel = t("editForm.phone");
-    const groupDescLabel = t("editForm.groupDescription");
-    const notesLabel = t("editForm.additionalNotes");
-    return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box
-                component="form"
-                onSubmit={handleSubmit}
-                sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    position: "relative",
-                    direction: direction,
-                    textAlign: direction === "rtl" ? "right" : "left",
-                }}
-                dir={direction}
-            >
-                {/* Exit Button */}
-                <IconButton
-                    onClick={onClose}
-                    sx={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        zIndex: 1,
-                    }}
-                    aria-label={t("common.exit") || "Exit"}
-                >
-                    <CloseIcon />
-                </IconButton>
+      <Box sx={{ display: "flex", gap: 2, my: 2 }}>
+        <TextField
+          fullWidth
+          label={t("newEvent.channel")}
+          name="channel"
+          select
+          value={formData.channel}
+          onChange={handleChange}
+          defaultValue={initialEvent.channel}
+          required
+        >
+          {channels.map((c) => (
+            <MenuItem key={c.value} value={c.value}>
+              {c.label}
+            </MenuItem>
+          ))}
+        </TextField>
 
-                {/* Floating Language Toggle Button */}
-                <Fab
-                    color="primary"
-                    size="small"
-                    onClick={toggleLanguage}
-                    sx={{
-                        position: "fixed",
-                        bottom: 24,
-                        right: 24,
-                        zIndex: 2000,
-                        direction: "ltr"
-                    }}
-                    aria-label={i18n.language === "he" ? "English" : "עברית"}
-                >
-                    <LanguageIcon />
-                </Fab>
+        <TextField
+          fullWidth
+          label={t("newEvent.language")}
+          name="language"
+          select
+          value={formData.language}
+          onChange={handleChange}
+          defaultValue={initialEvent.language}
+          required
+        >
+          {languages.map((l) => (
+            <MenuItem key={l.value} value={l.value}>
+              {l.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Box>
 
-                <TextField
-                    label={t("upcomingEvents.table.title")}
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
+      <TextField
+        fullWidth
+        label={t("newEvent.location")}
+        name="location"
+        select
+        value={formData.location}
+        onChange={handleChange}
+        defaultValue={initialEvent.location}
+        required
+      >
+        {locations.map((l) => (
+          <MenuItem key={l.value} value={l.value}>
+            {l.label}
+          </MenuItem>
+        ))}
+      </TextField>
 
-                <TextField
-                    label={t("upcomingEvents.table.channel")}
-                    value={formData.channel}
-                    onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
+      <TextField
+        fullWidth
+        label={t("newEvent.targetAudience")}
+        name="target_audience"
+        select
+        value={formData.target_audience}
+        onChange={handleChange}
+        required
+        defaultValue={initialEvent.target_audience}
+        margin="normal"
+      >
+        {targetAudiences.map((tgt) => (
+          <MenuItem key={tgt.value} value={tgt.value}>
+            {tgt.label}
+          </MenuItem>
+        ))}
+      </TextField>
 
-                <TextField
-                    label={t("upcomingEvents.table.language")}
-                    value={formData.language}
-                    onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
+      <TextField
+        fullWidth
+        label={t("newEvent.groupDescription")}
+        name="group_description"
+        onChange={handleChange}
+        margin="normal"
+        multiline
+        minRows={2}
+        defaultValue={initialEvent.group_description}
+      />
 
-                <TextField
-                    label={t("upcomingEvents.table.location")}
-                    value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
+      <TextField
+        fullWidth
+        label={t("newEvent.contactPhoneNumber")}
+        name="contact_phone_number"
+        onChange={handleChange}
+        margin="normal"
+        type="tel"
+        minRows={2}
+        defaultValue={initialEvent.contact_phone_number}
+      />
 
-                <DateTimePicker
-                    label={`${t("upcomingEvents.table.date")} & ${t("upcomingEvents.table.time")}`}
-                    value={eventDate}
-                    onChange={(newValue) => newValue && setEventDate(newValue)}
-                    slotProps={{ textField: { fullWidth: true, inputProps: { dir: direction } } }}
-                />
+      <TextField
+        fullWidth
+        label={t("newEvent.groupSize")}
+        name="group_size"
+        type="number"
+        onChange={handleChange}
+        margin="normal"
+        defaultValue={initialEvent.group_size}
+        required
+      />
+      <TextField
+        fullWidth
+        label={t("newEvent.numInstructorsNeeded")}
+        name="num_instructors_needed"
+        type="number"
+        onChange={handleChange}
+        margin="normal"
+        defaultValue={initialEvent.num_instructors_needed}
+        required
+      />
+      <TextField
+        fullWidth
+        label={t("newEvent.numRepresentativesNeeded")}
+        name="num_representatives_needed"
+        type="number"
+        onChange={handleChange}
+        margin="normal"
+        defaultValue={initialEvent.num_representatives_needed}
+        required
+      />
 
-                <TextField
-                    label={t("upcomingEvents.table.groupSize")}
-                    type="number"
-                    value={formData.group_size}
-                    onChange={(e) => setFormData({ ...formData, group_size: Number(e.target.value) })}
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
-
-                <TextField
-                    label={t("upcomingEvents.table.instructorsNeeded")}
-                    type="number"
-                    value={formData.num_instructors_needed}
-                    onChange={(e) =>
-                        setFormData({ ...formData, num_instructors_needed: Number(e.target.value) })
-                    }
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
-
-                <TextField
-                    label={t("upcomingEvents.table.representativesNeeded")}
-                    type="number"
-                    value={formData.num_representatives_needed}
-                    onChange={(e) =>
-                        setFormData({ ...formData, num_representatives_needed: Number(e.target.value) })
-                    }
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
-
-                <TextField
-                    label={t("upcomingEvents.table.targetAudience")}
-                    value={formData.target_audience}
-                    onChange={(e) => setFormData({ ...formData, target_audience: e.target.value })}
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
-
-                <TextField
-                    label={phoneLabel}
-                    value={formData.contact_phone_number}
-                    onChange={(e) => setFormData({ ...formData, contact_phone_number: e.target.value })}
-                    fullWidth
-                    slotProps={{ input: { dir: direction } }}
-                />
-
-                <TextField
-                    label={groupDescLabel}
-                    value={formData.group_description}
-                    onChange={(e) => setFormData({ ...formData, group_description: e.target.value })}
-                    fullWidth
-                    multiline
-                    rows={3}
-                    slotProps={{ input: { dir: direction } }}
-                />
-
-                <TextField
-                    label={notesLabel}
-                    value={formData.additional_notes}
-                    onChange={(e) => setFormData({ ...formData, additional_notes: e.target.value })}
-                    fullWidth
-                    multiline
-                    rows={2}
-                    slotProps={{ input: { dir: direction } }}
-                />
-
-                <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                        backgroundColor: "#4caf50",
-                        color: "#fff",
-                        "&:hover": {
-                            backgroundColor: "#388e3c",
-                        },
-                    }}
-                >
-                    {t("save")}
-                </Button>
-
-                {/* Snackbar for success message */}
-                <Snackbar
-                    open={snackbarOpen}
-                    autoHideDuration={3000}
-                    onClose={handleSnackbarClose}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: direction === "rtl" ? "left" : "right",
-                    }}
-                >
-                    <Alert
-                        onClose={handleAlertClose}
-                        severity="success"
-                        sx={{ width: "100%", direction: direction, textAlign: direction === "rtl" ? "right" : "left" }}
-                    >
-                        {i18n.language === "he" ? "האירוע נשמר בהצלחה!" : "Event saved successfully!"}
-                    </Alert>
-                </Snackbar>
-            </Box>
-        </LocalizationProvider>
-    );
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        size="large"
+        sx={{ mt: 2 }}
+      >
+        {t("newEvent.submit")}
+      </Button>
+    </Box>
+  );
 }
+
+export default EditEventForm;
