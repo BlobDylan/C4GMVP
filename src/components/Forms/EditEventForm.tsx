@@ -7,12 +7,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 
 import { useEvents } from "../../hooks";
-import { CreateEventRequest } from "../../types";
+import { CreateEventRequest, Event } from "../../types";
 import { useTranslation } from "react-i18next";
 
-function NewEventForm({ onClose }: { onClose: () => void }) {
+interface EditEventFormProps {
+  onClose: () => void;
+  initialEvent: Event;
+}
+
+function EditEventForm({ onClose, initialEvent }: EditEventFormProps) {
   const { t } = useTranslation();
-  const { createEvent } = useEvents();
+  const { updateEvent } = useEvents();
 
   const channels = [
     { label: t("newEvent.channels.hostagesSquare"), value: "Hostages Square" },
@@ -69,19 +74,19 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
   ];
 
   const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({
-    title: "",
-    description: "",
-    channel: channels[0].value,
-    language: languages[0].value,
-    location: locations[0].value,
-    target_audience: targetAudiences[0].value,
-    group_size: 0,
-    num_instructors_needed: 0,
-    num_representatives_needed: 0,
-    group_description: "",
-    additional_notes: "",
+    title: initialEvent.title,
+    description: initialEvent.description,
+    channel: initialEvent.channel,
+    language: initialEvent.language,
+    location: initialEvent.location,
+    target_audience: initialEvent.target_audience,
+    group_size: initialEvent.group_size,
+    num_instructors_needed: initialEvent.num_instructors_needed,
+    num_representatives_needed: initialEvent.num_representatives_needed,
+    group_description: initialEvent.group_description,
+    additional_notes: initialEvent.additional_notes,
+    contact_phone_number: initialEvent.contact_phone_number ?? "",
   });
-
   const [eventDate, setEventDate] = useState<Dayjs>(dayjs());
 
   const handleChange = (
@@ -116,9 +121,9 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
     };
     try {
       console.log("Submitting event data:", submissionData);
-      await createEvent(submissionData);
+      await updateEvent(initialEvent.id, submissionData);
     } catch (err) {
-      console.error("Failed to create event:", err);
+      console.error("Failed to update event:", err);
     }
     onClose();
   };
@@ -126,7 +131,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
   return (
     <Box component="form" onSubmit={handleSubmit} p={3}>
       <Typography variant="h4" component="h1" gutterBottom align="center">
-        {t("newEvent.createNewEvent")}
+        Edit Event
       </Typography>
 
       <TextField
@@ -135,6 +140,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         name="title"
         onChange={handleChange}
         margin="normal"
+        defaultValue={initialEvent.title}
         required
       />
       <TextField
@@ -144,6 +150,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         onChange={handleChange}
         margin="normal"
         multiline
+        defaultValue={initialEvent.description}
         required
       />
 
@@ -172,6 +179,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
           select
           value={formData.channel}
           onChange={handleChange}
+          defaultValue={initialEvent.channel}
           required
         >
           {channels.map((c) => (
@@ -188,6 +196,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
           select
           value={formData.language}
           onChange={handleChange}
+          defaultValue={initialEvent.language}
           required
         >
           {languages.map((l) => (
@@ -205,6 +214,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         select
         value={formData.location}
         onChange={handleChange}
+        defaultValue={initialEvent.location}
         required
       >
         {locations.map((l) => (
@@ -222,6 +232,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         value={formData.target_audience}
         onChange={handleChange}
         required
+        defaultValue={initialEvent.target_audience}
         margin="normal"
       >
         {targetAudiences.map((tgt) => (
@@ -239,6 +250,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         margin="normal"
         multiline
         minRows={2}
+        defaultValue={initialEvent.group_description}
       />
 
       <TextField
@@ -249,6 +261,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         margin="normal"
         type="tel"
         minRows={2}
+        defaultValue={initialEvent.contact_phone_number}
       />
 
       <TextField
@@ -258,6 +271,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         type="number"
         onChange={handleChange}
         margin="normal"
+        defaultValue={initialEvent.group_size}
         required
       />
       <TextField
@@ -267,6 +281,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         type="number"
         onChange={handleChange}
         margin="normal"
+        defaultValue={initialEvent.num_instructors_needed}
         required
       />
       <TextField
@@ -276,6 +291,7 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
         type="number"
         onChange={handleChange}
         margin="normal"
+        defaultValue={initialEvent.num_representatives_needed}
         required
       />
 
@@ -292,4 +308,4 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default NewEventForm;
+export default EditEventForm;
