@@ -245,12 +245,12 @@ function UpcomingEvents() {
                           </TableCell>
                         </TableRow>
                       ))}
+
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
       </Box>
-
       <Dialog open={activeDialog === "view"} onClose={handleClose} fullWidth>
         <EventDialog event={selectedEvent} onClose={handleClose} />
       </Dialog>
