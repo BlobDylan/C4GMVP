@@ -74,6 +74,7 @@
     "welcome": "Welcome"
   },
   "filters": {
+    "all": "All",
     "channels": "Channels",
     "languages": "Languages",
     "locations": "Locations",

@@ -115,7 +115,9 @@ function MyEventsCard({
       )}
       <Button
         variant="contained"
-        color="secondary"
+        sx={{
+          backgroundColor: "custom.neutral",
+        }}
         disabled={isLoadingUnregisterID === id}
         onClick={handleUnregisterButton}
       >

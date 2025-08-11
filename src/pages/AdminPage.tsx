@@ -34,7 +34,7 @@ function AdminPage() {
     return null;
   }
 
-  const [view, setView] = useState<string>("calendar");
+  const [view, setView] = useState<string>("list");
   const handleViewChange = (
     event: React.MouseEvent<HTMLElement>,
     newView: string

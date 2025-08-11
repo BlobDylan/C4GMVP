@@ -148,81 +148,103 @@ function UpcomingEvents() {
                   ? Array.from({ length: numRowsToLoad }, (_, index) => (
                       <UpcomingEventRowSkeleton key={index} />
                     ))
-                  : filteredEvents.map((event) => (
-                      <TableRow key={event.id}>
-                        <TableCell>{event.title}</TableCell>
-                        <TableCell
-                          sx={{ display: { xs: "none", sm: "table-cell" } }}
-                        >
-                          {event.channel}
-                        </TableCell>
-                        <TableCell
-                          sx={{ display: { xs: "none", sm: "table-cell" } }}
-                        >
-                          {event.language}
-                        </TableCell>
-                        <TableCell>{event.date.toLocaleDateString()}</TableCell>
-                        <TableCell>
-                          {event.date.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </TableCell>
-                        <TableCell
-                          sx={{ display: { xs: "none", md: "table-cell" } }}
-                        >
-                          {event.location}
-                        </TableCell>
-                        <TableCell
-                          sx={{ display: { xs: "none", md: "table-cell" } }}
-                        >
-                          {event.group_size}
-                        </TableCell>
-                        <TableCell
-                          sx={{ display: { xs: "none", md: "table-cell" } }}
-                        >
-                          {event.num_instructors_needed}
-                        </TableCell>
-                        <TableCell
-                          sx={{ display: { xs: "none", md: "table-cell" } }}
-                        >
-                          {event.num_representatives_needed}
-                        </TableCell>
-                        <TableCell
-                          sx={{ display: { xs: "none", md: "table-cell" } }}
-                        >
-                          {event.target_audience}
-                        </TableCell>
-                        <TableCell>{event.status}</TableCell>
-                        <TableCell>
-                          <Stack direction={{ xs: "column", sm: "row" }}>
-                            <IconButton
-                              aria-label={t("common.view")}
-                              size="small"
-                              onClick={() => handleOpenDialog("view", event)}
-                            >
-                              <PreviewIcon fontSize="inherit" />
-                            </IconButton>
-                            {user?.permissions === "super_admin" && (
+                  : filteredEvents
+                      .sort(
+                        (a: Event, b: Event) =>
+                          b.date.getTime() - a.date.getTime()
+                      )
+                      .map((event) => (
+                        <TableRow key={event.id}>
+                          <TableCell>{event.title}</TableCell>
+                          <TableCell
+                            sx={{
+                              display: { xs: "none", sm: "table-cell" },
+                            }}
+                          >
+                            {event.channel}
+                          </TableCell>
+                          <TableCell
+                            sx={{ display: { xs: "none", sm: "table-cell" } }}
+                          >
+                            {event.language}
+                          </TableCell>
+                          <TableCell>
+                            {event.date.toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>
+                            {event.date.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </TableCell>
+                          <TableCell
+                            sx={{ display: { xs: "none", md: "table-cell" } }}
+                          >
+                            {event.location}
+                          </TableCell>
+                          <TableCell
+                            sx={{ display: { xs: "none", md: "table-cell" } }}
+                          >
+                            {event.group_size}
+                          </TableCell>
+                          <TableCell
+                            sx={{ display: { xs: "none", md: "table-cell" } }}
+                          >
+                            {event.num_instructors_needed}
+                          </TableCell>
+                          <TableCell
+                            sx={{ display: { xs: "none", md: "table-cell" } }}
+                          >
+                            {event.num_representatives_needed}
+                          </TableCell>
+                          <TableCell
+                            sx={{ display: { xs: "none", md: "table-cell" } }}
+                          >
+                            {event.target_audience}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              backgroundColor: {
+                                approved: "custom.approved",
+                                pending: "custom.pending",
+                              }[event.status],
+                            }}
+                          >
+                            {event.status}
+                          </TableCell>
+                          <TableCell>
+                            <Stack direction={{ xs: "column", sm: "row" }}>
                               <IconButton
-                                aria-label={t("common.edit")}
+                                aria-label={t("common.view")}
                                 size="small"
-                                onClick={() => handleOpenDialog("edit", event)}
+                                onClick={() => handleOpenDialog("view", event)}
                               >
-                                <EditIcon fontSize="inherit" />
+                                <PreviewIcon fontSize="inherit" />
                               </IconButton>
-                            )}
-                            <IconButton
-                              aria-label={t("common.delete")}
-                              size="small"
-                              onClick={() => handleOpenDialog("delete", event)}
-                            >
-                              <DeleteIcon fontSize="inherit" />
-                            </IconButton>
-                          </Stack>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                              {user?.permissions === "super_admin" && (
+                                <IconButton
+                                  aria-label={t("common.edit")}
+                                  size="small"
+                                  onClick={() =>
+                                    handleOpenDialog("edit", event)
+                                  }
+                                >
+                                  <EditIcon fontSize="inherit" />
+                                </IconButton>
+                              )}
+                              <IconButton
+                                aria-label={t("common.delete")}
+                                size="small"
+                                onClick={() =>
+                                  handleOpenDialog("delete", event)
+                                }
+                              >
+                                <DeleteIcon fontSize="inherit" />
+                              </IconButton>
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      ))}
               </TableBody>
             </Table>
           </TableContainer>

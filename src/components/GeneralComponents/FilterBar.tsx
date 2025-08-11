@@ -39,6 +39,20 @@ function FilterBar() {
     locations: [],
   });
 
+  // Determine if "All" should be checked or indeterminate
+  const getAllCheckboxState = () => {
+    if (!currentDialog) return { checked: false, indeterminate: false };
+
+    const currentChoices = getCurrentChoices();
+    const selectedCount = selectedFilters[currentDialog].length;
+    const totalCount = currentChoices.length;
+
+    return {
+      checked: selectedCount === totalCount && totalCount > 0,
+      indeterminate: selectedCount > 0 && selectedCount < totalCount,
+    };
+  };
+
   const handleOpen = (type: "channels" | "languages" | "locations") => {
     setCurrentDialog(type);
   };
@@ -60,6 +74,19 @@ function FilterBar() {
       [currentDialog]: prev[currentDialog].includes(value)
         ? prev[currentDialog].filter((v) => v !== value)
         : [...prev[currentDialog], value],
+    }));
+  };
+
+  // Toggle all filters in the current category
+  const handleToggleAll = () => {
+    if (!currentDialog) return;
+
+    const currentChoices = getCurrentChoices();
+    const { checked } = getAllCheckboxState();
+
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [currentDialog]: checked ? [] : [...currentChoices],
     }));
   };
 
@@ -190,6 +217,30 @@ function FilterBar() {
             {getDialogTitle()}
           </Typography>
           <Stack direction="column" spacing={1}>
+            {/* "All" option */}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getAllCheckboxState().checked}
+                  indeterminate={getAllCheckboxState().indeterminate}
+                  onChange={handleToggleAll}
+                  size={isMobile ? "small" : "medium"}
+                />
+              }
+              label={
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                  }}
+                >
+                  {t("filters.all")}
+                </Typography>
+              }
+            />
+
+            {/* Individual options */}
             {getCurrentChoices().map((choice, index) => (
               <FormControlLabel
                 key={index}
