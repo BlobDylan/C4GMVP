@@ -21,7 +21,6 @@ function EditEventForm({ onClose, initialEvent }: EditEventFormProps) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-
   const channels = [
     { label: t("newEvent.channels.hostagesSquare"), value: "Hostages Square" },
     { label: t("newEvent.channels.businessSector"), value: "Business Sector" },

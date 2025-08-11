@@ -39,8 +39,8 @@ function EventBoardCard(event: Event) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        maxHeight: isHovered && !isMobile ? "600px" : "200px",
-        minHeight: isMobile ? "300px" : "200px",
+        maxHeight: isHovered && !isMobile ? "800px" : "200px",
+        minHeight: isMobile ? "300px" : "250px",
         alignContent: "center",
         justifyContent: "space-between",
         padding: { xs: 1.5, sm: 2 },
@@ -142,12 +142,12 @@ function EventBoardCard(event: Event) {
         <Typography
           sx={{
             marginTop: isHovered || isMobile ? 2 : "auto",
-            opacity: isHovered || isMobile ? 1 : 0,
+            opacity: 1,
             color: "orange",
             fontWeight: "bold",
             textAlign: "center",
             transition: "opacity 0.6s ease, transform 0.6s ease",
-            pointerEvents: isHovered || isMobile ? "auto" : "none",
+            pointerEvents: "auto",
             fontSize: { xs: "0.9rem", sm: "1rem" },
           }}
         >
@@ -177,11 +177,10 @@ function EventBoardCard(event: Event) {
           }}
           sx={{
             marginTop: isHovered || isMobile ? 2 : "auto",
-            opacity: isHovered || isMobile ? 1 : 0,
-            transform:
-              isHovered || isMobile ? "translateY(0)" : "translateY(10px)",
+            opacity: 1,
+            transform: "translateY(0)",
             transition: "opacity 0.6s ease, transform 0.6s ease",
-            pointerEvents: isHovered || isMobile ? "auto" : "none",
+            pointerEvents: "auto",
             fontSize: { xs: "0.875rem", sm: "1rem" },
             padding: { xs: "8px 16px", sm: "10px 20px" },
           }}
