@@ -57,7 +57,7 @@ function EventBoardCard(event: Event) {
         zIndex: isHovered ? 10 : 1,
         backgroundColor: "#fff",
         maxWidth: "100%",
-        cursor: isMobile ? "default" : "pointer",
+        cursor: "default",
       }}
       onMouseEnter={() => !isMobile && setIsHovered(true)}
       onMouseLeave={() => !isMobile && setIsHovered(false)}

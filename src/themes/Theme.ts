@@ -13,7 +13,7 @@ declare module "@mui/material/styles" {
     custom?: {
       pending: string;
       approved: string;
-      unassigned: string;
+      neutral: string;
     };
   }
 }
@@ -40,7 +40,7 @@ const theme = createTheme({
     custom: {
       pending: "#ffb74d", // Soft orange
       approved: "#81c784", // Soft green
-      unassigned: "#e57373", // Soft red
+      neutral: "#8f8f8fff", // Soft gray
     },
   },
   shape: {

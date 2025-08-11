@@ -60,7 +60,7 @@ function MyEventsCard({
         boxSizing: "border-box",
       }}
     >
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
+      <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: "bold" }}>
         {title}
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 2 }}>
@@ -115,7 +115,9 @@ function MyEventsCard({
       )}
       <Button
         variant="contained"
-        color="secondary"
+        sx={{
+          backgroundColor: "custom.neutral",
+        }}
         disabled={isLoadingUnregisterID === id}
         onClick={handleUnregisterButton}
       >
