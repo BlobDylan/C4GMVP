@@ -5,6 +5,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
+import { useSnackbar } from "notistack";
 
 import { useEvents } from "../../hooks";
 import { CreateEventRequest, Event } from "../../types";
@@ -18,6 +19,7 @@ interface EditEventFormProps {
 function EditEventForm({ onClose, initialEvent }: EditEventFormProps) {
   const { t } = useTranslation();
   const { updateEvent } = useEvents();
+  const { enqueueSnackbar } = useSnackbar();
 
   const channels = [
     { label: t("newEvent.channels.hostagesSquare"), value: "Hostages Square" },
@@ -122,8 +124,10 @@ function EditEventForm({ onClose, initialEvent }: EditEventFormProps) {
     try {
       console.log("Submitting event data:", submissionData);
       await updateEvent(initialEvent.id, submissionData);
+      enqueueSnackbar(t("editEvent.success"), { variant: "success" });
     } catch (err) {
       console.error("Failed to update event:", err);
+      enqueueSnackbar(t("editEvent.error"), { variant: "error" });
     }
     onClose();
   };

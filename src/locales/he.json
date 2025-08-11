@@ -69,12 +69,13 @@
     "title": "מנהל מתנדבים",
     "adminPanel": "פאנל ניהול",
     "myEvents": "האירועים שלי",
-    "home": "דף הבית",
+    "home": "אירועים זמינים",
     "login": "התחברות",
     "logout": "התנתקות",
     "welcome": "ברוך הבא"
   },
   "filters": {
+    "reset": "איפוס",
     "all": "הכל",
     "channels": "ערוצים",
     "languages": "שפות",
@@ -85,6 +86,7 @@
     "apply": "החל סינון"
   },
   "areYouSure": {
+    "success": "האירוע נמחק בהצלחה",
     "title": "האם אתה בטוח?",
     "confirm": "אישור מחיקה"
   },
@@ -96,7 +98,13 @@
     "loginButton": "התחבר",
     "signupButton": "צור חשבון"
   },
+  "editEvent": {
+    "success": "האירוע עודכן בהצלחה",
+    "error": "שגיאה בעדכון האירוע"
+  },
   "newEvent": {
+    "createSuccess": "האירוע נוצר בהצלחה",
+    "createError": "שגיאה ביצירת האירוע",
     "createNewEvent": "צור אירוע חדש",
     "title": "כותרת",
     "description": "תיאור",

@@ -60,7 +60,7 @@ function MyEventsCard({
         boxSizing: "border-box",
       }}
     >
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
+      <Typography variant="h5" sx={{ marginBottom: 2, fontWeight: "bold" }}>
         {title}
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 2 }}>

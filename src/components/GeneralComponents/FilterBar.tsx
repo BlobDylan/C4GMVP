@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useEvents } from "../../hooks";
 import { useTranslation } from "react-i18next";
 
@@ -64,6 +65,15 @@ function FilterBar() {
   const handleApply = () => {
     filterEvents(selectedFilters);
     setCurrentDialog(null);
+  };
+
+  const handleReset = () => {
+    resetFilters();
+    setSelectedFilters({
+      channels: [],
+      languages: [],
+      locations: [],
+    });
   };
 
   const handleToggleFilter = (value: string) => {
@@ -187,6 +197,24 @@ function FilterBar() {
             }}
           >
             {t("filters.locations")}
+          </Typography>
+        </IconButton>
+        <IconButton
+          color="primary"
+          aria-label={t("filters.resetFilters")}
+          size={isMobile ? "medium" : "large"}
+          onClick={handleReset}
+        >
+          <RestartAltIcon fontSize={isMobile ? "small" : "medium"} />
+          <Typography
+            variant={isMobile ? "body1" : "h6"}
+            sx={{
+              fontWeight: "bold",
+              ml: 1,
+              fontSize: { xs: "0.800rem", sm: "1.15rem" },
+            }}
+          >
+            {t("filters.reset")}
           </Typography>
         </IconButton>
       </Stack>

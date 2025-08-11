@@ -68,12 +68,13 @@
     "title": "Volunteer Manager",
     "adminPanel": "Admin Panel",
     "myEvents": "My Events",
-    "home": "Home",
+    "home": "Available Events",
     "login": "Login",
     "logout": "Logout",
     "welcome": "Welcome"
   },
   "filters": {
+    "reset": "Reset",
     "all": "All",
     "channels": "Channels",
     "languages": "Languages",
@@ -84,6 +85,7 @@
     "apply": "Apply Filters"
   },
   "areYouSure": {
+    "success": "Event deleted successfully",
     "title": "Are you sure?",
     "confirm": "Yes"
   },
@@ -95,8 +97,13 @@
     "loginButton": "Login",
     "signupButton": "Create an Account"
   },
-
+  "editEvent": {
+    "success": "Event updated successfully",
+    "error": "Error updating event"
+  },
   "newEvent": {
+    "createSuccess": "Event created successfully",
+    "createError": "Error creating event",
     "createNewEvent": "Create a New Event",
     "title": "Title",
     "description": "Description",

@@ -6,6 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 
+import { useSnackbar } from "notistack";
 import { useEvents } from "../../hooks";
 import { CreateEventRequest } from "../../types";
 import { useTranslation } from "react-i18next";
@@ -13,6 +14,7 @@ import { useTranslation } from "react-i18next";
 function NewEventForm({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation();
   const { createEvent } = useEvents();
+  const { enqueueSnackbar } = useSnackbar();
 
   const channels = [
     { label: t("newEvent.channels.hostagesSquare"), value: "Hostages Square" },
@@ -117,8 +119,10 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
     try {
       console.log("Submitting event data:", submissionData);
       await createEvent(submissionData);
+      enqueueSnackbar(t("newEvent.createSuccess"), { variant: "success" });
     } catch (err) {
       console.error("Failed to create event:", err);
+      enqueueSnackbar(t("newEvent.createError"), { variant: "error" });
     }
     onClose();
   };
