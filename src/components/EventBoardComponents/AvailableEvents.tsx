@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 function AvailableEvents() {
   const { t } = useTranslation();
-  const { events, myEvents, isLoading, filteredEvents } = useEvents();
+  const { myEvents, isLoading, filteredEvents } = useEvents();
   const numCardsToLoad = 4;
 
   return (

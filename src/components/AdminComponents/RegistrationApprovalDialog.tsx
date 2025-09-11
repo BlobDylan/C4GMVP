@@ -59,11 +59,15 @@ export default function RegistrationApprovalDialog({
     if (!eventId) return;
     try {
       await approveRegistration(eventId, userId);
-      enqueueSnackbar(t("registrationDialog.approvedSuccess"), { variant: "success" });
+      enqueueSnackbar(t("registrationDialog.approvedSuccess"), {
+        variant: "success",
+      });
       await refetchEventPendingRegistrations(eventId);
     } catch (err) {
       enqueueSnackbar(
-        err instanceof Error ? err.message : t("registrationDialog.approveFail"),
+        err instanceof Error
+          ? err.message
+          : t("registrationDialog.approveFail"),
         { variant: "error" }
       );
     }
@@ -73,7 +77,9 @@ export default function RegistrationApprovalDialog({
     if (!eventId) return;
     try {
       await rejectRegistration(eventId, userId);
-      enqueueSnackbar(t("registrationDialog.rejectedSuccess"), { variant: "success" });
+      enqueueSnackbar(t("registrationDialog.rejectedSuccess"), {
+        variant: "success",
+      });
       await refetchEventPendingRegistrations(eventId);
     } catch (err) {
       enqueueSnackbar(
@@ -92,13 +98,23 @@ export default function RegistrationApprovalDialog({
             <Table stickyHeader aria-label="pending registrations table">
               <TableHead>
                 <TableRow>
-                  <TableCell>{t("registrationDialog.table.userEmail")}</TableCell>
-                  <TableCell>{t("registrationDialog.table.userRole")}</TableCell>
-                  <TableCell>{t("registrationDialog.table.eventTitle")}</TableCell>
+                  <TableCell>
+                    {t("registrationDialog.table.userEmail")}
+                  </TableCell>
+                  <TableCell>
+                    {t("registrationDialog.table.userRole")}
+                  </TableCell>
+                  <TableCell>
+                    {t("registrationDialog.table.eventTitle")}
+                  </TableCell>
                   <TableCell>{t("registrationDialog.table.date")}</TableCell>
                   <TableCell>{t("registrationDialog.table.channel")}</TableCell>
-                  <TableCell>{t("registrationDialog.table.language")}</TableCell>
-                  <TableCell>{t("registrationDialog.table.location")}</TableCell>
+                  <TableCell>
+                    {t("registrationDialog.table.language")}
+                  </TableCell>
+                  <TableCell>
+                    {t("registrationDialog.table.location")}
+                  </TableCell>
                   <TableCell>{t("registrationDialog.table.status")}</TableCell>
                   <TableCell>{t("registrationDialog.table.actions")}</TableCell>
                 </TableRow>
@@ -111,7 +127,9 @@ export default function RegistrationApprovalDialog({
                 ) : eventPendingRegistrations.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={9} align="center">
-                      <Typography>{t("registrationDialog.noPending")}</Typography>
+                      <Typography>
+                        {t("registrationDialog.noPending")}
+                      </Typography>
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -120,14 +138,16 @@ export default function RegistrationApprovalDialog({
                       <TableCell>{reg.user_email}</TableCell>
                       <TableCell>{reg.user_role}</TableCell>
                       <TableCell>{reg.event_title}</TableCell>
-                      <TableCell>{reg.event_date.toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        {reg.event_date.toLocaleDateString()}
+                      </TableCell>
                       <TableCell>{reg.event_channel}</TableCell>
                       <TableCell>{reg.event_language}</TableCell>
                       <TableCell>{reg.event_location}</TableCell>
                       <TableCell>{reg.status}</TableCell>
                       <TableCell>
                         <IconButton
-                          aria-label={t("common.approve")}
+                          aria-label={t("common.approved")}
                           color="success"
                           onClick={() => handleApprove(reg.user_id)}
                         >

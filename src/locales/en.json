@@ -25,7 +25,8 @@
     "status": "Status",
     "approve": "Approve",
     "unapprove": "Unapprove",
-    "manageRegistrations": "Manage Registrations"
+    "manageRegistrations": "Manage Registrations",
+    "contactPhoneNumber": "Contact Phone Number"
   },
   "upcomingEvents": {
     "title": "Upcoming Events",
@@ -67,12 +68,14 @@
     "title": "Volunteer Manager",
     "adminPanel": "Admin Panel",
     "myEvents": "My Events",
-    "home": "Home",
+    "home": "Available Events",
     "login": "Login",
     "logout": "Logout",
     "welcome": "Welcome"
   },
   "filters": {
+    "reset": "Reset",
+    "all": "All",
     "channels": "Channels",
     "languages": "Languages",
     "locations": "Locations",
@@ -82,19 +85,25 @@
     "apply": "Apply Filters"
   },
   "areYouSure": {
-  "title": "Are you sure?",
-  "confirm": "Yes"
-},
-"login": {
-  "title": "Welcome to Volunteer Manager",
-  "subtitle": "Login to Your Account",
-  "email": "Email",
-  "password": "Password",
-  "loginButton": "Login",
-  "signupButton": "Create an Account"
-},
-
-"newEvent": {
+    "success": "Event deleted successfully",
+    "title": "Are you sure?",
+    "confirm": "Yes"
+  },
+  "login": {
+    "title": "Welcome to Volunteer Manager",
+    "subtitle": "Login to Your Account",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Login",
+    "signupButton": "Create an Account"
+  },
+  "editEvent": {
+    "success": "Event updated successfully",
+    "error": "Error updating event"
+  },
+  "newEvent": {
+    "createSuccess": "Event created successfully",
+    "createError": "Error creating event",
     "createNewEvent": "Create a New Event",
     "title": "Title",
     "description": "Description",
@@ -106,6 +115,7 @@
     "targetAudience": "Target Audience",
     "groupDescription": "Group Description",
     "additionalNotes": "Additional Notes",
+    "contactPhoneNumber": "Contact Phone Number",
     "groupSize": "Group Size",
     "numInstructorsNeeded": "Number of Instructors Needed",
     "numRepresentativesNeeded": "Number of Representatives Needed",
@@ -145,10 +155,9 @@
       "army": "Army",
       "donors": "Donors"
     }
+  },
 
-},
-
-"signUp": {
+  "signUp": {
     "title": "Create Your Account",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -175,11 +184,10 @@
       "french": "French",
       "spanish": "Spanish"
     }
-  
-},
+  },
   "availableEvents": {
     "title": "Available Events"
-},
+  },
   "eventBoard": {
     "location": "Location",
     "channel": "Channel",
@@ -197,7 +205,7 @@
     "title": "My Events",
     "noEventsRegistered": "No events registered."
   },
-  
+
   "myEventsCard": {
     "date": "Date",
     "time": "Time",
@@ -215,11 +223,11 @@
       "unregisteredSuccess": "Unregistered successfully!",
       "unregisterFailed": "Failed to unregister."
     },
-  "common": {
-    "approved": "Approved",
-    "pending": "Pending"
-  }
-},
+    "common": {
+      "approved": "Approved",
+      "pending": "Pending"
+    }
+  },
 
   "statistics": {
     "title": "Statistics",
@@ -231,13 +239,16 @@
       "unassigned": "Unassigned"
     }
   },
-  
+
   "adminPage": {
     "viewMode": "View mode",
     "calendarView": "Calendar view",
     "listView": "List view"
-  
-}
+  },
 
+  "editForm": {
+    "phone": "Phone Number",
+    "groupDescription": "Group Description",
+    "additionalNotes": "Additional Notes"
+  }
 }
-

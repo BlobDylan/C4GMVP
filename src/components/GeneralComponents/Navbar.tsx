@@ -13,6 +13,8 @@ import {
   useMediaQuery,
   Theme,
   Divider,
+  Button,
+  Typography,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -127,44 +129,50 @@ function Navbar() {
               {user &&
                 (user.permissions === "admin" ||
                   user.permissions === "super_admin") && (
-                  <IconButton
+                  <Button
                     aria-label={t("navbar.adminPanel")}
                     sx={{
                       color: "#fff",
                       "&:hover": { backgroundColor: "transparent" },
                       fontFamily: `'Inter', sans-serif`,
+                      textTransform: "none",
                     }}
                     onClick={() => navigate("/admin")}
+                    startIcon={<AdminPanelSettingsIcon />}
                   >
-                    <AdminPanelSettingsIcon />
-                  </IconButton>
+                    {t("navbar.adminPanel")}
+                  </Button>
                 )}
-              <IconButton
+              <Button
                 aria-label={t("navbar.myEvents")}
                 sx={{
                   color: "#fff",
                   "&:hover": { backgroundColor: "transparent" },
                   fontFamily: `'Inter', sans-serif`,
+                  textTransform: "none",
                 }}
                 onClick={() => navigate("/my-events")}
+                startIcon={<EventIcon />}
               >
-                <EventIcon />
-              </IconButton>
-              <IconButton
+                {t("navbar.myEvents")}
+              </Button>
+              <Button
                 aria-label={t("navbar.home")}
                 sx={{
                   color: "#fff",
                   "&:hover": { backgroundColor: "transparent" },
                   fontFamily: `'Inter', sans-serif`,
+                  textTransform: "none",
                 }}
                 onClick={() => navigate("/")}
+                startIcon={<HomeIcon />}
               >
-                <HomeIcon />
-              </IconButton>
+                {t("navbar.home")}
+              </Button>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 {user ? (
                   <>
-                    <Box
+                    <Typography
                       sx={{
                         color: "#fff",
                         marginRight: 1,
@@ -172,34 +180,38 @@ function Navbar() {
                       }}
                     >
                       {t("navbar.welcome")}, {user.firstName}
-                    </Box>
-                    <IconButton
+                    </Typography>
+                    <Button
                       aria-label={t("navbar.logout")}
                       sx={{
                         color: "#fff",
                         "&:hover": { backgroundColor: "transparent" },
                         fontFamily: `'Inter', sans-serif`,
+                        textTransform: "none",
                       }}
                       onClick={() => {
                         logout();
                         navigate("/login");
                       }}
+                      startIcon={<LogoutIcon />}
                     >
-                      <LogoutIcon />
-                    </IconButton>
+                      {t("navbar.logout")}
+                    </Button>
                   </>
                 ) : (
-                  <IconButton
+                  <Button
                     aria-label={t("navbar.login")}
                     sx={{
                       color: "#fff",
                       "&:hover": { backgroundColor: "transparent" },
                       fontFamily: `'Inter', sans-serif`,
+                      textTransform: "none",
                     }}
                     onClick={() => navigate("/login")}
+                    startIcon={<LoginIcon />}
                   >
-                    <LoginIcon />
-                  </IconButton>
+                    {t("navbar.login")}
+                  </Button>
                 )}
               </Box>
             </Stack>

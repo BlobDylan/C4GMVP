@@ -14,7 +14,8 @@ interface EventDialogProps {
 function EventDialog({ event, onClose }: EventDialogProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [isRegistrationDialogOpen, setIsRegistrationDialogOpen] = useState(false);
+  const [isRegistrationDialogOpen, setIsRegistrationDialogOpen] =
+    useState(false);
 
   const handleOpenRegistrationDialog = () => {
     setIsRegistrationDialogOpen(true);
@@ -68,7 +69,8 @@ function EventDialog({ event, onClose }: EventDialogProps) {
         {t("eventDialog.instructorsNeeded")}: {event.num_instructors_needed}
       </Typography>
       <Typography variant="body2" paragraph>
-        {t("eventDialog.representativesNeeded")}: {event.num_representatives_needed}
+        {t("eventDialog.representativesNeeded")}:{" "}
+        {event.num_representatives_needed}
       </Typography>
       <Typography variant="body2" paragraph>
         {t("eventDialog.location")}: {event.location}
@@ -76,7 +78,14 @@ function EventDialog({ event, onClose }: EventDialogProps) {
       <Typography variant="body2" paragraph>
         {t("eventDialog.status")}: {event.status}
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, gap: 2 }}>
+      <Typography variant="body2" paragraph>
+        {t("eventDialog.contactPhoneNumber")}:{" "}
+        {event.contact_phone_number || "N/A"}
+      </Typography>
+
+      <Box
+        sx={{ display: "flex", justifyContent: "space-between", mt: 2, gap: 2 }}
+      >
         {user && ["admin", "super_admin"].includes(user.permissions) && (
           <>
             <Button

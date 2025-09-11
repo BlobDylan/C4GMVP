@@ -6,6 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 
+import { useSnackbar } from "notistack";
 import { useEvents } from "../../hooks";
 import { CreateEventRequest } from "../../types";
 import { useTranslation } from "react-i18next";
@@ -13,12 +14,16 @@ import { useTranslation } from "react-i18next";
 function NewEventForm({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation();
   const { createEvent } = useEvents();
+  const { enqueueSnackbar } = useSnackbar();
 
   const channels = [
     { label: t("newEvent.channels.hostagesSquare"), value: "Hostages Square" },
     { label: t("newEvent.channels.businessSector"), value: "Business Sector" },
     { label: t("newEvent.channels.donations"), value: "Donations" },
-    { label: t("newEvent.channels.religiousZionism"), value: "Religious Zionism" },
+    {
+      label: t("newEvent.channels.religiousZionism"),
+      value: "Religious Zionism",
+    },
     { label: t("newEvent.channels.virtual"), value: "Virtual" },
   ];
 
@@ -41,20 +46,33 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
     { label: t("newEvent.locations.jerusalem"), value: "Jerusalem" },
     { label: t("newEvent.locations.center"), value: "Center" },
     { label: t("newEvent.locations.shfela"), value: "Shfela" },
-    { label: t("newEvent.locations.acrossGreenLine"), value: "Across the green line" },
+    {
+      label: t("newEvent.locations.acrossGreenLine"),
+      value: "Across the green line",
+    },
   ];
 
   const targetAudiences = [
-    { label: t("newEvent.targetAudiences.religiousSector"), value: "Religious Sector" },
+    {
+      label: t("newEvent.targetAudiences.religiousSector"),
+      value: "Religious Sector",
+    },
     { label: t("newEvent.targetAudiences.highSchools"), value: "High Schools" },
-    { label: t("newEvent.targetAudiences.universities"), value: "Universities" },
-    { label: t("newEvent.targetAudiences.businessSector"), value: "Business Sector" },
+    {
+      label: t("newEvent.targetAudiences.universities"),
+      value: "Universities",
+    },
+    {
+      label: t("newEvent.targetAudiences.businessSector"),
+      value: "Business Sector",
+    },
     { label: t("newEvent.targetAudiences.army"), value: "Army" },
     { label: t("newEvent.targetAudiences.donors"), value: "Donors" },
   ];
 
   const [formData, setFormData] = useState<Omit<CreateEventRequest, "date">>({
     title: "",
+    description: "",
     channel: channels[0].value,
     language: languages[0].value,
     location: locations[0].value,
@@ -101,8 +119,10 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
     try {
       console.log("Submitting event data:", submissionData);
       await createEvent(submissionData);
+      enqueueSnackbar(t("newEvent.createSuccess"), { variant: "success" });
     } catch (err) {
       console.error("Failed to create event:", err);
+      enqueueSnackbar(t("newEvent.createError"), { variant: "error" });
     }
     onClose();
   };
@@ -227,11 +247,11 @@ function NewEventForm({ onClose }: { onClose: () => void }) {
 
       <TextField
         fullWidth
-        label={t("newEvent.additionalNotes")}
-        name="additional_notes"
+        label={t("newEvent.contactPhoneNumber")}
+        name="contact_phone_number"
         onChange={handleChange}
         margin="normal"
-        multiline
+        type="tel"
         minRows={2}
       />
 

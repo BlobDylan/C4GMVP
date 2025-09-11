@@ -2,6 +2,7 @@ import { Box, Button, Typography, CircularProgress } from "@mui/material";
 import { Event } from "../../types";
 import { useEvents } from "../../hooks";
 import { useTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 
 interface DeleteDialogProps {
   event: Event | null;
@@ -11,10 +12,12 @@ interface DeleteDialogProps {
 function AreYouSure({ event, onClose }: DeleteDialogProps) {
   const { deleteEvent, isLoading } = useEvents();
   const { t } = useTranslation();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = async () => {
     if (event) {
       await deleteEvent(event.id);
+      enqueueSnackbar(t("areYouSure.success"), { variant: "success" });
       onClose();
     }
   };
@@ -42,4 +45,3 @@ function AreYouSure({ event, onClose }: DeleteDialogProps) {
 }
 
 export default AreYouSure;
-

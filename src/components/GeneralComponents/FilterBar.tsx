@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useEvents } from "../../hooks";
 import { useTranslation } from "react-i18next";
 
@@ -39,6 +40,20 @@ function FilterBar() {
     locations: [],
   });
 
+  // Determine if "All" should be checked or indeterminate
+  const getAllCheckboxState = () => {
+    if (!currentDialog) return { checked: false, indeterminate: false };
+
+    const currentChoices = getCurrentChoices();
+    const selectedCount = selectedFilters[currentDialog].length;
+    const totalCount = currentChoices.length;
+
+    return {
+      checked: selectedCount === totalCount && totalCount > 0,
+      indeterminate: selectedCount > 0 && selectedCount < totalCount,
+    };
+  };
+
   const handleOpen = (type: "channels" | "languages" | "locations") => {
     setCurrentDialog(type);
   };
@@ -52,6 +67,15 @@ function FilterBar() {
     setCurrentDialog(null);
   };
 
+  const handleReset = () => {
+    resetFilters();
+    setSelectedFilters({
+      channels: [],
+      languages: [],
+      locations: [],
+    });
+  };
+
   const handleToggleFilter = (value: string) => {
     if (!currentDialog) return;
 
@@ -60,6 +84,19 @@ function FilterBar() {
       [currentDialog]: prev[currentDialog].includes(value)
         ? prev[currentDialog].filter((v) => v !== value)
         : [...prev[currentDialog], value],
+    }));
+  };
+
+  // Toggle all filters in the current category
+  const handleToggleAll = () => {
+    if (!currentDialog) return;
+
+    const currentChoices = getCurrentChoices();
+    const { checked } = getAllCheckboxState();
+
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [currentDialog]: checked ? [] : [...currentChoices],
     }));
   };
 
@@ -162,6 +199,24 @@ function FilterBar() {
             {t("filters.locations")}
           </Typography>
         </IconButton>
+        <IconButton
+          color="primary"
+          aria-label={t("filters.resetFilters")}
+          size={isMobile ? "medium" : "large"}
+          onClick={handleReset}
+        >
+          <RestartAltIcon fontSize={isMobile ? "small" : "medium"} />
+          <Typography
+            variant={isMobile ? "body1" : "h6"}
+            sx={{
+              fontWeight: "bold",
+              ml: 1,
+              fontSize: { xs: "0.800rem", sm: "1.15rem" },
+            }}
+          >
+            {t("filters.reset")}
+          </Typography>
+        </IconButton>
       </Stack>
 
       <Dialog
@@ -190,6 +245,30 @@ function FilterBar() {
             {getDialogTitle()}
           </Typography>
           <Stack direction="column" spacing={1}>
+            {/* "All" option */}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={getAllCheckboxState().checked}
+                  indeterminate={getAllCheckboxState().indeterminate}
+                  onChange={handleToggleAll}
+                  size={isMobile ? "small" : "medium"}
+                />
+              }
+              label={
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                  }}
+                >
+                  {t("filters.all")}
+                </Typography>
+              }
+            />
+
+            {/* Individual options */}
             {getCurrentChoices().map((choice, index) => (
               <FormControlLabel
                 key={index}
