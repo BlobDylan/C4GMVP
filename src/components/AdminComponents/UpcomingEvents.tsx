@@ -190,7 +190,6 @@ function UpcomingEvents() {
                           <TableCell
                             sx={{ display: { xs: "none", md: "table-cell" } }}
                           >
-
                             {event.num_instructors_needed}
                           </TableCell>
                           <TableCell

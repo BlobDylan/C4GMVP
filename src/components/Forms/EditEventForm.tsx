@@ -18,7 +18,6 @@ interface EditEventFormProps {
 function EditEventForm({ onClose, initialEvent }: EditEventFormProps) {
   const { t } = useTranslation();
   const { updateEvent } = useEvents();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const channels = [
