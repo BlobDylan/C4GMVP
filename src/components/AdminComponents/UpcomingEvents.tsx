@@ -250,7 +250,6 @@ function UpcomingEvents() {
           </TableContainer>
         </Box>
       </Box>
-
       <Dialog open={activeDialog === "view"} onClose={handleClose} fullWidth>
         <EventDialog event={selectedEvent} onClose={handleClose} />
       </Dialog>
