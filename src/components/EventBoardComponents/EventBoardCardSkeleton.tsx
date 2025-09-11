@@ -6,14 +6,12 @@ function EventBoardCardSkeleton() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100%",
-        width: { xs: "100%", sm: "40dvw" },
+        height: "80%",
         alignContent: "center",
         justifyContent: "space-between",
         padding: 3,
         border: "1px solid #ccc",
         borderRadius: "8px",
-        boxSizing: "border-box",
       }}
     >
       <Skeleton variant="text" width="60%" height={60} />
